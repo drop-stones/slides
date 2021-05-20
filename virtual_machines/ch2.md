@@ -4,18 +4,9 @@ title: Virtual Machines Ch.2
 permalink: /ch2/
 ---
 
-<link href="/slides/virtual_machines/css/question.css" rel="stylesheet">
-
-<input id="acd-check1" class="acd-check" type="checkbox">
-<label class="acd-label" for="acd-check1">クリックで開く1</label>
-<div class="acd-content">
-  <p>hello.world!</p>
-</div>
-<input id="acd-check2" class="acd-check" type="checkbox">
-<label class="acd-label" for="acd-check2">クリックで開く2</label>
-<div class="acd-content">
-  <p>hello.world2!</p>
-</div>
+<head>
+  <link href="/slides/assets/css/question.css" rel="stylesheet">
+</head>
 
 # Emulation: Interpretation and Binary Translation
 
@@ -216,6 +207,15 @@ Reasons for high performance cost
 
 ##### Q. Answer the number of branch instructions in decode-and-dispatch when processing `LoadWordAndZero` instruction.
 \* Do not consider `extract()` as function.
+
+{::nomarkdown}
+<input id="acd-check1" class="acd-check" type="checkbox">
+<label class="acd-label" for="acd-check1">Answer</label>
+<div class="acd-content">
+  <p>5 times (switch, call, if, return, jump-to-head) + break?</p>
+</div>
+{:/}
+
 
 ## 2.2 Threaded Interpretation
 
@@ -495,8 +495,20 @@ loop:
   jl loop       ; jump to loop
 ```
 
-(Indirect) Threaded Interpreter: ? times
-Predecoding + Direct Threaded Interpreter: ? times
+{::nomarkdown}
+<input id="acd-check2" class="acd-check" type="checkbox">
+<label class="acd-label" for="acd-check2">Indirect Threaded Interpreter</label>
+<div class="acd-content">
+  <p>14 times = 2 + 4 * 3</p>
+</div>
+<input id="acd-check3" class="acd-check" type="checkbox">
+<label class="acd-label" for="acd-check3">Predecoding + Direct Threaded Interpreter</label>
+<div class="acd-content">
+  <p>6 times = 2 + 4</p>
+</div>
+{:/}
+
+
 
 ## 2.4 Interpreting a Complex Instruction Set
 
