@@ -4,6 +4,19 @@ title: Virtual Machines Ch.2
 permalink: /ch2/
 ---
 
+<link href="/slides/virtual_machines/css/question.css" rel="stylesheet">
+
+<input id="acd-check1" class="acd-check" type="checkbox">
+<label class="acd-label" for="acd-check1">クリックで開く1</label>
+<div class="acd-content">
+  <p>hello.world!</p>
+</div>
+<input id="acd-check2" class="acd-check" type="checkbox">
+<label class="acd-label" for="acd-check2">クリックで開く2</label>
+<div class="acd-content">
+  <p>hello.world2!</p>
+</div>
+
 # Emulation: Interpretation and Binary Translation
 
 ## Overview + Jargon
