@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Virtual Machines Ch.2
-permalink: /ch2/
+permalink: /VirtualMachines/ch2/
 ---
 
 <head>
