@@ -70,19 +70,19 @@ ISA(Instruction Set Architecture) is interface between software and hardware.
 - EPIC(Explicity Parallel Instruction Computing)  
 ...
 
-In this chapter, RISC and CISC are used to describe.  
+In this chapter, RISC and CISC are described.  
 In reality, RISC and CISC are most common ISA.
 
 ### RISC (Reduced Instruction Set Computer)
 - Instruction set philosopy
-  - Single instruction execute single operation
+  - Single instruction execute fewer operation
     - simple instructions
   - reduce the numbers of cpu cycles per one instruction
     - one cycle per one instruction
   - <span style="color: red">※</span>"reduced" doesn't mean a smaller set of instructions
 - Instruction format
   - Fixed-length instructions
-    - Fetch, encode, decode is <span style="color: green">easy</span>
+    - Fetch, decode is <span style="color: green">easy</span>
 - RISC family
   - ARM architecture
   - MIPS architecture
@@ -102,7 +102,7 @@ RA: source register
   - may take some cpu cycles per one instruction
 - Instruction format
   - Variable-length instructions
-    - Fetch, encode, decode is <span style="color: red">hard</span>
+    - Fetch, decode is <span style="color: red">hard</span>
 - CISC family
   - x86 (including IA-32 (used to describe))
   - z/Architecture
@@ -149,9 +149,9 @@ while (!halt && !interrupt) {
   opcode = extract(inst, 31, 6); // decode it
   switch(opcode) {
     // dispatch it to interpretation routine
-    case LoadWordAndZero: LoadWordAndZero(inst);  
-    case ALU: ALU(inst);
-    case Branch: Branch(inst);
+    case LoadWordAndZero: LoadWordAndZero(inst);  break;
+    case ALU:             ALU(inst);              break;
+    case Branch:          Branch(inst);           break;
     ...
   }
 }
@@ -521,7 +521,7 @@ loop:
 CISC have the following characteristics:
 - One instruction may perform many operations
 - Variable length of instructions
-  - Fetch, encode and decode is <span style="color: red">hard</span>.
+  - Fetch and decode is <span style="color: red">hard</span>.
 
 ex) Instruction format of IA-32
 ![](/slides/virtual_machines/assets/cisc_format.svg)
@@ -540,10 +540,10 @@ Decode-and-dispatch interpretation for CISC ISA is almost the same as it for RIS
 void cpu_loop() {
   while (!halt) {
     // decode
-    instr = IA-32_FetchDecode(PC);
+    instr = IA_32_FetchDecode(PC);
     
     // dispatch
-    if (!IA-32_string_instruction) {
+    if (!IA_32_string_instruction) {
       instr.execute();
     } else {
       while(need_to_repeat(instr.prefixmask)) {
@@ -562,7 +562,7 @@ Decoding for CISC ISA is hard because of complex format of CISC ISA.
 
 ```c
 // General instruction template (intermediate form)
-struct IA-32instr {
+struct IA_32instr {
   unsigned short opcode;
   unsigned short prefixmask;
   char ilen;    // instruction length
@@ -589,7 +589,7 @@ struct IA-32instr {
 // Big fetch_decode table indexed by the opcode
 //  - DecodeAction: format style(ModR/M, SIB, displacement, immediate, etc)
 //  - InterpreterFunctionPointer: pointer for the interpreter routine
-IA-32OpcodeInfo_t IA-32_fetch_decode_table[] = {
+IA_32OpcodeInfo_t IA_32_fetch_decode_table[] = {
   { DecodeAction, InterpreterFunctionPointer},
   { DecodeAction, InterpreterFunctionPointer},
   ...
@@ -599,26 +599,26 @@ IA-32OpcodeInfo_t IA-32_fetch_decode_table[] = {
 ```c
 // Decode instructions for CISC ISA
 // and fill in struct instr.
-IA-32instr
-IA-32_FetchDecode(PC) {
+IA_32instr
+IA_32_FetchDecode(PC) {
   fetch_ptr = PC;
   
   // 1. parse prefixes
-  byte = code[++fetch_ptr];
-  while (is_IA-32_prefix(byte)) {
+  byte = code[fetch_ptr++];
+  while (is_IA_32_prefix(byte)) {
     add_prefix_attribute(byte, instr);
-    byte = code[++fetch_ptr];
+    byte = code[fetch_ptr++];
   }
   
   // 2. parse opcode
   instr.opcode = byte;
   if (instr.opcode == 0x0f) {
-    instr.opcode = 0x100 | code[++fetch_ptr]; // 2 Byte opcode
+    instr.opcode = 0x100 | code[fetch_ptr++]; // 2 Byte opcode
   }
   
   // 3. Table look up based on opcode to find action and function pointer
-  decode_action = IA-32_fetch_decode_table[instr.opcode].DecodeAction;
-  instr.execute = IA-32_fetch_decode_table[instr.opcode].InterpreterFunctionPointer;
+  decode_action = IA_32_fetch_decode_table[instr.opcode].DecodeAction;
+  instr.execute = IA_32_fetch_decode_table[instr.opcode].InterpreterFunctionPointer;
   
   // 4. Operand Resolution -- setup the operandRI and operandRM fields above
   if (need_Mod_RM(decode_action)) {
@@ -643,32 +643,32 @@ IA-32_FetchDecode(PC) {
 
 ```c
 // ADD: register + Reg/Mem --> register
-//  - IA-32_GPR: General purpose register
+//  - IA_32_GPR: General purpose register
 //  - virtual_mem: Virtual memory address
-//  - IA-32_CC_FLAGS: Status register
+//  - IA_32_CC_FLAGS: Status register
 void
-ADD_RX_32b(IA-32instr instr) {
+ADD_RX_32b(IA_32instr instr) {
   unsigned op1_32, sum_32;
-  op1_32 = IA-32_GPR[instr.operandRI.regname];
+  op1_32 = IA_32_GPR[instr.operandRI.regname];
   if (mem_operand(instr.operandRM.mode)) {
     unsigned mem_addr = resolve_mem_address(instr);
     op2_32 = virtual_mem[mem_addr];
   } else {
-    op2_32 = IA-32_GPR[instr.operandRM.Rbase];
+    op2_32 = IA_32_GPR[instr.operandRM.Rbase];
   }
   sum_32 = op1_32 + op2_32;
-  IA-32_GPR[instr.operandRI.regname] = sum_32;
-  SET_IA-32_CC_FLAGS(op1_32, op2_32, sum_32, IA-32_INSTR_ADD32);
+  IA_32_GPR[instr.operandRI.regname] = sum_32;
+  SET_IA_32_CC_FLAGS(op1_32, op2_32, sum_32, IA_32_INSTR_ADD32);
 }
 
-void ADD_XR_32b(IA-32instr instr) { ... }
-void ADD_RI_32b(IA-32instr instr) { ... }
+void ADD_XR_32b(IA_32instr instr) { ... }
+void ADD_RI_32b(IA_32instr instr) { ... }
 ```
 
 ##### Pros and Cons
 
 <span style="color: green">Pros</span>: easy to understand  
-<span style="color: red">Cons</span>: quiet slow
+<span style="color: red">Cons</span>: quite slow
 
 One reason of its slowness is its generality.  
 General decoding is not needed for some simple instructions.  
@@ -732,7 +732,7 @@ Predecoding of CISC ISA is very difficult.
 
 There are two significant problems:
 - Predecoded instruction format become very large.
-  - `struct IA-32instr` consumes 24 bytes
+  - `struct IA_32instr` consumes 24 bytes
 - _Code discovery_ for CISC ISA is very hard.
   - It is not practical to identify all instructions boundaries or to separate data from instructions
 
