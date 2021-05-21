@@ -202,8 +202,9 @@ ALU(inst) {
 <span style="color: red">Cons</span>: very high performance cost
 
 Reasons for high performance cost:
-- Single PowerPC instruction → Tens of instruction in the target ISA
-- Many branch instructions (depending on hardware implemenations)
+- Single source instruction → Tens of instruction in the target ISA
+- Many branch instructions
+  - If they are hard to branch prediction, branch instructions reduce performance.
 
 ##### Q. Answer the number of branch instructions in decode-and-dispatch when processing `LoadWordAndZero` instruction.
 \* Do not consider `extract()` as function.
@@ -222,7 +223,8 @@ Reasons for high performance cost:
 **Threaded interpretation** reduce branch instructions from decode-and-dispatch interpretation.
 
 ### Threaded Interpretation Overview
-![](https://i.imgur.com/nSibfmi.png)
+![](/slides/virtual_machines/assets/threaded-interpreter.svg)
+
 
 
 Decode-and-dispatch interpreter have many branch instructions:
@@ -282,7 +284,8 @@ while (!halt && !interrupt) {
 We can delete "dispatch loop" by copying the code into the end of interpreter routines.  
 And use `goto` instead of function call to delete "branches to return from routines".
 
-![](https://i.imgur.com/2m0ZR74.png)
+
+![](/slides/virtual_machines/assets/copy-dispatch-loop.svg)
 
 
 ex) Threaded interpreter for PowerPC ISA
@@ -699,7 +702,7 @@ Threaded interpreter delete branch instructions by
 - <span style="color: gray">replacing `switch` with table access</span>
 - copying "dispatch loop" into the end of interpreter routines
 - replacing function call with `goto`
-![](https://i.imgur.com/2m0ZR74.png)
+![](/slides/virtual_machines/assets/copy-dispatch-loop.svg)
 
 We cannot apply _threaded interpretation_ directly to CISC ISA because of:
 - memory overhead
