@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Virtual Machines Ch.2
-permalink: /VirtualMachines/ch2/
 ---
 
 <head>
@@ -11,15 +10,18 @@ permalink: /VirtualMachines/ch2/
 # Emulation: Interpretation and Binary Translation
 
 ## Overview + Jargon
+
 **Goal of this chapter**: Understand mechanism of **instructions emulation**, the process on which virtual machines are based.
 
 - _Emulation_: the process of implementing interfaces and functionality for one system with different interfaces and functionality.
+
   - [Terminal emulator](https://en.wikipedia.org/wiki/Terminal_emulator) provide interfaces and functionality for terminal.
   - [Game Boy emulator](https://emulation.gametechwiki.com/index.php/Game_Boy/Game_Boy_Color_emulators) provide interfaces and functionality for Game Boy on different hadware(e.g., PC, Smartphone).
   - Virtual Machine provide interfaces and functionality for _guest_ system.
   - **Instruction set emulator** provide interfaces and functionality for _guest's_ ISA.
 
 - ISA (Instruction Set Architecture): interface between software and hardware
+
   - define
     - instructions
     - register and memory architecture
@@ -32,7 +34,7 @@ permalink: /VirtualMachines/ch2/
     - **user-level instructions emulation** (Chapter 2)
     - memory architecture, traps and interrupts emulation (Chapter 3, 4)
 
-![](/slides/virtual_machines/assets/host-guest-relation.svg)
+![](./assets/img/host-guest-relation.svg)
 
 - Methods of instruction set emulation
   - _Interpretation_
@@ -47,33 +49,36 @@ permalink: /VirtualMachines/ch2/
     - save it for repeated use
     - <span style="color: green">Pros</span>: smaller execution cost
     - <span style="color: red">Cons</span>: bigger initial cost
-  
+
 **Goal of my turn**: Understand **interpretation**, methods of instruction set emulation.
 (Binary translation is mainly explaned by Seo-san)
 
 ## Table of Contents
+
 2.1 Basic Interpretation  
 2.2 Threaded Interpretation  
 2.3 Predecoding and Direct Threaded Interpretation  
 2.4 Interpreting a Complex Instruction Set  
-2.5 Binary Translation  
+2.5 Binary Translation
 
 ## Fundamental Knowledge: ISA
 
 ISA(Instruction Set Architecture) is interface between software and hardware.
 
 ### Classification of ISAs
+
 - **RISC**(Reduced Instruction Set Computer)
 - **CISC**(Complex Instruction Set Computer)
 - MISC(Minimal Instruction Set Computer)
 - VLIW(Very Long Instruction Word)
 - EPIC(Explicity Parallel Instruction Computing)  
-...
+  ...
 
 In this chapter, RISC and CISC are described.  
 In reality, RISC and CISC are most common ISA.
 
 ### RISC (Reduced Instruction Set Computer)
+
 - Instruction set philosopy
   - Single instruction execute fewer operation
     - simple instructions
@@ -91,11 +96,12 @@ In reality, RISC and CISC are most common ISA.
 
 ex) Instruction format of PowerPC (D-form)  
 RT: target register  
-RA: source register  
+RA: source register
 
-![](/slides/virtual_machines/assets/risc_format.svg)
+![](./assets/img/risc_format.svg)
 
 ### CISC (Complex Instruction Set Computer)
+
 - Instruction set philosopy
   - Single instructions can execute multiple operations (such as a load from memory, an arithmetic operation, and a memory store)
     - complex instructions
@@ -108,10 +114,12 @@ RA: source register
   - z/Architecture
 
 ex) Instruction format of IA-32
-![](/slides/virtual_machines/assets/cisc_format.svg)
+![](./assets/img/cisc_format.svg)
 
 ##### Q. Check ISA of your PC. Answer the ISA is RISC or CISC.
+
 Hint:
+
 ```
 Linux or Mac) $ uname -m
 Windows)      $ systeminfo
@@ -122,26 +130,30 @@ Windows)      $ systeminfo
 **Decode-and-dispatch interpretation** is simple and basic interpretation.
 
 ### Interpreter Overview
-![](/slides/virtual_machines/assets/interpreter-overview.svg)
+
+![](./assets/img/interpreter-overview.svg)
 
 Interpreter code must perform the following:
+
 - emulate the complete architected state of a _guest_ machine
   - registers and memory architecture
   - trap and interrupt architecture
 - _interpret_ a source code and modify the source state
-
 
 ### Decode-and-Dispatch Interpreter: Simple interpreter
 
 Decode-and-dispatch interpreter interprets one instruction at a time, and repeats.
 
 ##### Method
+
 Decode-and-dispatch interpreter repeats the following:
+
 1. fetch a source instruction
 2. _decode_ it (to identify what the instruction is)
 3. _dispatch_ it to an interpretation routine (to modify the source state)
 
 ex) Decode-and-dispatch interpreter code for PowerPC ISA.
+
 ```c
 // main interpreter loop
 while (!halt && !interrupt) {
@@ -198,50 +210,56 @@ ALU(inst) {
 \* Example code is written in high-level language, but it can be written in assembly language for higher performance easily.
 
 ##### Pros and Cons
+
 <span style="color: green">Pros</span>: simple, easy to understand  
 <span style="color: red">Cons</span>: very high performance cost
 
 Reasons for high performance cost:
+
 - Single source instruction → Tens of instruction in the target ISA
 - Many branch instructions
   - If they are hard to branch prediction, branch instructions reduce performance.
 
 ##### Q. Answer the number of branch instructions in decode-and-dispatch when processing `LoadWordAndZero` instruction.
+
 \* Do not consider `extract()` as function.
 
 {::nomarkdown}
 <input id="acd-check1" class="acd-check" type="checkbox">
 <label class="acd-label" for="acd-check1">Answer</label>
+
 <div class="acd-content">
   <p>5 times (switch, call, if, return, jump-to-head) + break?</p>
 </div>
 {:/}
-
 
 ## 2.2 Threaded Interpretation
 
 **Threaded interpretation** reduce branch instructions from decode-and-dispatch interpretation.
 
 ### Threaded Interpretation Overview
-![](/slides/virtual_machines/assets/threaded-interpreter.svg)
 
-
+![](./assets/img/threaded-interpreter.svg)
 
 Decode-and-dispatch interpreter have many branch instructions:
+
 - a branch for switch statement
 - a branch to the interpretation routines
 - a branch to return from routines
 - a branch to top of loop
 
 Threaded interpreter delete some branch instructions:
+
 - a branch for switch statement
 - a branch to return from routines
 - a branch to top of loop
 
 Threaded interpreter only have "branches to the interpretation routines".
+
 - routine0 -> routine1 -> routine2 -> ...
 
 ### Replace `switch` with Table Access
+
 `switch` in decode-and-dispatch maps an opcode to the interpreter routine.
 
 ```c
@@ -270,6 +288,7 @@ dispatch_table[opcode][extended_opcode](inst);  // call interpretation routine
 ```
 
 Deleted results of dispatch loop
+
 ```c
 // main interpreter loop
 while (!halt && !interrupt) {
@@ -281,12 +300,11 @@ while (!halt && !interrupt) {
 ```
 
 ### Copy Dispatch-Loop to Every Routines
+
 We can delete "dispatch loop" by copying the code into the end of interpreter routines.  
 And use `goto` instead of function call to delete "branches to return from routines".
 
-
-![](/slides/virtual_machines/assets/copy-dispatch-loop.svg)
-
+![](./assets/img/copy-dispatch-loop.svg)
 
 ex) Threaded interpreter for PowerPC ISA
 
@@ -310,7 +328,7 @@ LoadWordAndZero:
   extended_opcode = extract(inst, 10, 10);
   routine = dispatch[opcode, extended_opcode];
   goto *routine;
-  
+
 Add:
   RT = extract(inst, 25, 5);
   RA = extract(inst, 20, 5);
@@ -333,6 +351,7 @@ Add:
 ### Summary of Threaded Interpretation
 
 Threaded interpreter delete branch instructions by
+
 - replacing `switch` with _dispatch table_ access
 - copying "dispatch loop" into the end of interpreter routines
 - replacing function call with `goto`
@@ -343,6 +362,7 @@ This method is called _indirect_ threaded interpretation because the jump throug
 
 <span style="color: green">Improvement</span>: Lower runtime overhead than decode-and-dispatch  
 <span style="color: red">Room for Improvements</span>
+
 - Memory overhead by dispatch table
 - Runtime overhead by
   - dispatch table access
@@ -357,6 +377,7 @@ This method is called _indirect_ threaded interpretation because the jump throug
 So far, decoding is performed just before dispatch.
 
 ex) Decoding in threaded interpreter
+
 ```c
   if (halt || interrupt)
     goto exit;
@@ -369,10 +390,10 @@ ex) Decoding in threaded interpreter
   goto *routine;
 ```
 
-
 _Predecoding_ decode instructions and save the informations as intermediate form in advance.
 
 ex) Predecoding for PowerPC ISA
+
 ```
 lwz  r1, 8(r2)    ; load word and zero
 add  r3, r3, r1   ; r3 = r3 + r1
@@ -434,6 +455,7 @@ LoadWordAndZero:
 For direct threaded interpretation, we lookup dispatch table and save it in intermediate form when predecoding.
 
 ex) Predecoding for direct threaded interpretation
+
 ```
 lwz  r1, 8(r2)    ; load word and zero
 add  r3, r3, r1   ; r3 = r3 + r1
@@ -465,6 +487,7 @@ code[1].src2 = 3;    // r3
 We can `goto` the next routine using `code[i].op` without accessing dispatch table.
 
 ex) Direct threaded interpretation for PowerPC ISA
+
 ```c
 LoadWordAndZero:
   RT = code[TPC].dest;
@@ -487,6 +510,7 @@ LoadWordAndZero:
 #### Q. Answer the number of dispatch table access.
 
 Pseudo assembly code
+
 ```
   mov sum, 0    ; sum = 0
   mov i, 0      ; i = 0
@@ -500,6 +524,7 @@ loop:
 {::nomarkdown}
 <input id="acd-check2" class="acd-check" type="checkbox">
 <label class="acd-label" for="acd-check2">Indirect Threaded Interpreter</label>
+
 <div class="acd-content">
   <p>14 times = 2 + 4 * 3</p>
 </div>
@@ -510,8 +535,6 @@ loop:
 </div>
 {:/}
 
-
-
 ## 2.4 Interpreting a Complex Instruction Set
 
 **Interpreting of CISC** is harder than interpreting of RISC.
@@ -519,12 +542,13 @@ loop:
 #### Review: CISC
 
 CISC have the following characteristics:
+
 - One instruction may perform many operations
 - Variable length of instructions
   - Fetch and decode is <span style="color: red">hard</span>.
 
 ex) Instruction format of IA-32
-![](/slides/virtual_machines/assets/cisc_format.svg)
+![](./assets/img/cisc_format.svg)
 
 ### 2.4.1 Interpretation of the IA-32 ISA
 
@@ -532,7 +556,7 @@ ex) Instruction format of IA-32
 
 Decode-and-dispatch interpretation for CISC ISA is almost the same as it for RISC ISA.
 
-![](/slides/virtual_machines/assets/decode-and-dispatch-for-cisc.svg)
+![](./assets/img/decode-and-dispatch-for-cisc.svg)
 
 ##### Dispatch Loop
 
@@ -541,7 +565,7 @@ void cpu_loop() {
   while (!halt) {
     // decode
     instr = IA_32_FetchDecode(PC);
-    
+
     // dispatch
     if (!IA_32_string_instruction) {
       instr.execute();
@@ -556,6 +580,7 @@ void cpu_loop() {
   }
 }
 ```
+
 ##### Decode
 
 Decoding for CISC ISA is hard because of complex format of CISC ISA.
@@ -566,9 +591,9 @@ struct IA_32instr {
   unsigned short opcode;
   unsigned short prefixmask;
   char ilen;    // instruction length
-  
+
   InterpreterFunctionPointer execute;    // semantic routine for this instr
-  
+
   struct {
     // general address computation: [Rbase + (Rindex << shmt) + displacement]
     char mode;
@@ -577,7 +602,7 @@ struct IA_32instr {
     char shmt;
     long displacement;
   } operandRM;
-  
+
   struct {
     char mode;        // either register or immediate
     char regname;     // register number
@@ -602,24 +627,24 @@ IA_32OpcodeInfo_t IA_32_fetch_decode_table[] = {
 IA_32instr
 IA_32_FetchDecode(PC) {
   fetch_ptr = PC;
-  
+
   // 1. parse prefixes
   byte = code[fetch_ptr++];
   while (is_IA_32_prefix(byte)) {
     add_prefix_attribute(byte, instr);
     byte = code[fetch_ptr++];
   }
-  
+
   // 2. parse opcode
   instr.opcode = byte;
   if (instr.opcode == 0x0f) {
     instr.opcode = 0x100 | code[fetch_ptr++]; // 2 Byte opcode
   }
-  
+
   // 3. Table look up based on opcode to find action and function pointer
   decode_action = IA_32_fetch_decode_table[instr.opcode].DecodeAction;
   instr.execute = IA_32_fetch_decode_table[instr.opcode].InterpreterFunctionPointer;
-  
+
   // 4. Operand Resolution -- setup the operandRI and operandRM fields above
   if (need_Mod_RM(decode_action)) {
     parse_Mod_RM_byte(instr);
@@ -630,14 +655,12 @@ IA_32_FetchDecode(PC) {
   }
   if (need_displacement(decode_action))
     fetch_immediate(instr);
-    
+
   // 5. bookkeeping and return
   instr.ilen = bytes_fetched_for_this_instr;
   return instr;
 }
 ```
-
-
 
 ##### Interpreter Routines
 
@@ -679,32 +702,39 @@ ex) Simple instruction `nop = 0x90`
 "Common case" can be made fast by this optimization.
 
 For IA-32 ISA, the common case is:
+
 1. noprefix bytes
 2. a single-byte opcode
 3. simple operand specifiers
 
 This interpreter do the followings:
+
 1. Fetch one byte and dispatch
 2. Interpret depending on the case:
-  - Simple(common) case: Simple routines interpret the instruction
-  - Complex case: Complex routines parse options and shared routine interprets the instructions.
-  - Prefix case: Set prefix flags
+
+- Simple(common) case: Simple routines interpret the instruction
+- Complex case: Complex routines parse options and shared routine interprets the instructions.
+- Prefix case: Set prefix flags
+
 3. Go to next instruction
 
-![](/slides/virtual_machines/assets/optimize-for-common-case.svg)
+![](./assets/img/optimize-for-common-case.svg)
 
 ### 2.4.2 Threaded Interpretation
 
 **Hybrid method of the decode-and-dispatch and threaded methods** is suitable for interpretation of CISC ISA.
 
 ##### Review: Threaded Interpretation
+
 Threaded interpreter delete branch instructions by
+
 - <span style="color: gray">replacing `switch` with table access</span>
 - copying "dispatch loop" into the end of interpreter routines
 - replacing function call with `goto`
-![](/slides/virtual_machines/assets/copy-dispatch-loop.svg)
+  ![](./assets/img/copy-dispatch-loop.svg)
 
 We cannot apply _threaded interpretation_ directly to CISC ISA because of:
+
 - memory overhead
   - General decoding code for CISC is large.
   - Copying it to every interpretation routine have large memory overhead.
@@ -715,22 +745,25 @@ We cannot apply _threaded interpretation_ directly to CISC ISA because of:
 #### Method-3) Hybrid of Decode-and-Dispatch and Threaded Interpretation
 
 We use them according to their roles:
+
 - Treaded interpretation is used for "the common case"
 - Decode-and-dispatch is used for complex instructions
 
 To do so, we will copy "simple decode-and-dispatch code" to every interpretation routine because of:
+
 - small memory overhead
   - Simple decode-and-dispatch code is small
 - high performance improvement
   - Simple decode-and-dispatch code is fast
 
-![](/slides/virtual_machines/assets/threaded-interpreter-for-cisc.svg)
+![](./assets/img/threaded-interpreter-for-cisc.svg)
 
 #### Method-4) Predecoding and Direct Threaded Interpretation
 
 Predecoding of CISC ISA is very difficult.
 
 There are two significant problems:
+
 - Predecoded instruction format become very large.
   - `struct IA_32instr` consumes 24 bytes
 - _Code discovery_ for CISC ISA is very hard.
@@ -741,36 +774,39 @@ There are two significant problems:
 **_Software pipelining_** reduce execution time for interpretation.
 
 #### Parallerization of Decode-and-Dispatch
+
 Normal decode-and-dispatch do the following per one loop:
+
 - decode the currect instruction
 - dispatch the current instruction
 
 "Decode" and "dispatch" cannot be processed in parallel because "dispatch" must use the result of "decode".
 
-![](/slides/virtual_machines/assets/no-pipeline-1.svg)
+![](./assets/img/no-pipeline-1.svg)
 
-![](/slides/virtual_machines/assets/no-pipeline-2.svg)
+![](./assets/img/no-pipeline-2.svg)
 
 #### Software Pipelining
+
 Interpreter using software pipelining do the following per one loop:
+
 - decode the next instruction
 - dispatch the current instruction
 
 "Decode" and "dispatch" can be processed in parallel because "current instruction dispatch" do not use the result of "next instruction decode".
 
-![](/slides/virtual_machines/assets/pipelining-1.svg)
+![](./assets/img/pipelining-1.svg)
 
-![](/slides/virtual_machines/assets/pipelining-2.svg)
+![](./assets/img/pipelining-2.svg)
 
-![](/slides/virtual_machines/assets/pipelining-3.svg)
-
-
+![](./assets/img/pipelining-3.svg)
 
 #### Method-5) Software Pipelining Interpreter
 
 "Next instruction decode" and "current instruction dispatch" are processed in same loop.
 
 ex) IA-32 interpreter in PowerPC assembly code
+
 ```assembly
 loop:
   cmpwi  cr0,r4,48       ; compare length with 48(bits)
@@ -788,6 +824,7 @@ loop:
 ```
 
 In pseudo C code
+
 ```c
 char instr_length_table[] = {
   instr_length,
@@ -811,10 +848,10 @@ void cpu_loop() {
       upper_two_bytes = get_upper_two_bytes(next_instr);
       next_instr.length = instr_length_table[upper_two_bytes];
       next_instr.execute = dispatch_table[upper_two_bytes];
-      
+
       // currect instruction dispatch
       instr.execute();
-      
+
       instr = next_instr;
     }
   }
@@ -826,10 +863,11 @@ void cpu_loop() {
 **Binary Translation** map from source binary to target binary.
 
 ### Predecoding vs. Binary Translation
+
 Predecoding need interpreter routines.  
 Binary translation can be processed directly.
 
-![](/slides/virtual_machines/assets/threaded-interpreter-vs-binary-translator.svg)
+![](./assets/img/threaded-interpreter-vs-binary-translator.svg)
 
 We need _state mapping_ for binary translation.
 
@@ -837,19 +875,20 @@ We need _state mapping_ for binary translation.
 
 Interpreter code perform _state mapping_ in interpretation.
 
-![](/slides/virtual_machines/assets/interpreter-overview.svg)
+![](./assets/img/interpreter-overview.svg)
 
 We must define _state mapping_ in binary translation because there is no code to perform _state mapping_.
 
 ex) State Mapping from Target ISA to Source ISA.
 
-![](/slides/virtual_machines/assets/state-mapping.svg)
-
+![](./assets/img/state-mapping.svg)
 
 ### Binary Translation
+
 Binary Translation is similar to interpreter routines, but it use registers defined by _state mapping_.
 
 ex) Binary Translation from IA-32 to PowerPC.
+
 ```
 addl   %edx, 4(%eax)  ; %edx = %edx + *(%eax + 4)
 movl   4(%eax), %edx  ; *(%eax + 4) = %edx
@@ -883,11 +922,14 @@ addi   r3,r3,3     ; update PC (3 bytes)
 ```
 
 #### Translate multiple instructions together
+
 We can optimize binary translation by
+
 - translating multiple instructions together
 - changing _state mapping_ to use registers directly
 
 ex) Optimized Binary Translation
+
 ```
 r1 points to IA-32 register context block
 r2 points to IA-32 memory image

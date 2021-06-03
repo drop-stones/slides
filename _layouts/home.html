@@ -1,0 +1,28 @@
+---
+layout: default
+---
+
+<div class="home">
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+  {%- comment -%}
+    {%- include post-list.html -%}
+  {%- endcomment -%}
+
+  <details>
+    <summary>Lecture Materials</summary>
+    {%- for lecture_material in site.lecture_materials -%}
+      <dl>
+        <a href="{{ lecture_material.url | relative_url }}">
+          {{ lecture_material.title }}
+        </a>
+      <dl>
+    {%- endfor -%}
+    
+  </details>
+
+</div>
