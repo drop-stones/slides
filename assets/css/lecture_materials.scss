@@ -3,7 +3,8 @@
 
 //$border-color-h2: #888888;
 $border-color-section-title: #888888;
-$border-color-subsection-title: #e8e8e8;
+$border-color-subsection-title: #888888;
+$border-color-part-title: #e8e8e8;
 $border-left-width-section-title: 10px;
 
 .post-subtitle {
@@ -25,7 +26,12 @@ $border-left-width-section-title: 10px;
   border-bottom: 1px solid $border-color-subsection-title;
 }
 
+.part-title {
+  border-bottom: 1px solid $border-color-part-title;
+}
+
 .flex-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
 }

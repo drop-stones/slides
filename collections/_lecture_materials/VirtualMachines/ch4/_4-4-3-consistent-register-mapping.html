@@ -1,1 +1,159 @@
 <h3 class="subsection-title" id="4-4-3-title">4.4.3 Consistent Register Mapping</h3>
+
+<p>
+ <em>Register mapping</em> was discussed in Section 2.5, 2.8.1, 3.3.1.<br>
+ In optimization, <em>consistent register mapping</em> is important for performance.
+</p>
+
+<p>There are three cases for register mapping:</p>
+<ul>
+  <li>
+    source register &lt;&lt; target register
+    <ul>
+      <li>Each source register is permanently mapped to the corresponding target register.</li>
+    </ul>
+  </li>
+  <li>source register &thickapprox; target register</li>
+  <li>
+    source register &gt; target register
+    <ul>
+      <li>All source register cannot be permanently mapped to target registers.</li>
+      <li>
+        Two types of mapping methods:
+        <ol>
+          <li><em>Inconsistent Register Mapping</em></li>
+          <li><em>Consistent Register Mapping</em></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 class="part-title">Inconsistent Register Mapping</h4>
+
+<p><em>Inconsistent Register Mapping</em> has the following properties:</p>
+<ul>
+  <li>
+    Source registers are mapped on a per-translation-block basis.
+    <ul>
+      <li>Different translation blocks may have different register mappings.</li>
+    </ul>
+  </li>
+  <li>
+    Flexible mapping
+    <ul>
+      <li>While <code>R1</code> is used for <code>r1</code> in block A, it is also used for <code>r2</code> in block B.</li>
+    </ul>
+  </li>
+  <li>
+    Extra register copy is required for consistency.
+  </li>
+</ul>
+
+<p>Example: Inconsistent Register Mapping</p>
+
+<p>Source</p>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ inconsistent-source-a }}{% endhighlight %}
+  </div>
+
+  <div>
+    {% highlight c %}{{ inconsistent-source-b }}{% endhighlight %}
+  </div>
+</div>
+
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ inconsistent-source-c }}{% endhighlight %}
+  </div>
+</div>
+
+<p>Target with inconsistent register mapping</p>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ inconsistent-reg-map-a }}{% endhighlight %}
+  </div>
+
+  <div>
+    {% highlight c %}{{ inconsistent-reg-map-b }}{% endhighlight %}
+  </div>
+</div>
+
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ inconsistent-reg-map-c }}{% endhighlight %}
+  </div>
+</div>
+
+<p>Target with extra register copy</p>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ consistent-reg-map-a }}{% endhighlight %}
+  </div>
+
+  <div>
+    {% highlight c %}{{ consistent-reg-map-b }}{% endhighlight %}
+  </div>
+</div>
+
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ inconsistent-reg-map-c }}{% endhighlight %}
+  </div>
+</div>
+
+<p>If translated codes jump to interpreter, the runtime must copy target register values into the register context block, too.</p>
+
+<h4 class="part-title">Consistent Register Mapping</h4>
+<p><em>Consistent Register Mapping</em> has the following properties:</p>
+<ul>
+  <li>
+    Some source registers are mapped to target registers among translation blocks.
+    <ul>
+      <li><code>R1</code> are mapped to <code>r1</code> in all translation blocks.</li>
+    </ul>
+  </li>
+  <li>
+    Other source registers are mapped to memory region.
+    <ul>
+      <li><code>R10</code> are mapped to register context block.</li>
+    </ul>
+  </li>
+  <li>Memory accesses may occur.</li>
+</ul>
+
+<p>Example: Simple Fixed Register Mapping</p>
+<p>Source</p>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ consistent-source-d }}{% endhighlight %}
+  </div>
+  
+  <div>
+    {% highlight c %}{{ consistent-source-e }}{% endhighlight %}
+  </div>
+</div>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ consistent-source-f }}{% endhighlight %}
+  </div>
+</div>
+
+<p>Target with consistent register mapping</p>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ consistent-reg-map-d }}{% endhighlight %}
+  </div>
+  
+  <div>
+    {% highlight c %}{{ consistent-reg-map-e }}{% endhighlight %}
+  </div>
+</div>
+<div class="flex-container">
+  <div>
+    {% highlight c %}{{ consistent-reg-map-f }}{% endhighlight %}
+  </div>
+</div>
+
+<p>In Section 4.6.3, consistent but not fixed methods are discussed.</p>
