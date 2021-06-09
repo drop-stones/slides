@@ -1,11 +1,7 @@
 ---
-layout: page
 title: Virtual Machines Ch.2
+img_path: /assets/img/lecture_materials/VirtualMachines/ch2
 ---
-
-<head>
-  <link href="/slides/assets/css/question.css" rel="stylesheet">
-</head>
 
 # Emulation: Interpretation and Binary Translation
 
@@ -34,7 +30,7 @@ title: Virtual Machines Ch.2
     - **user-level instructions emulation** (Chapter 2)
     - memory architecture, traps and interrupts emulation (Chapter 3, 4)
 
-![](./assets/img/host-guest-relation.svg)
+![]({{ page.img_path | relative_url }}/host-guest-relation.svg)
 
 - Methods of instruction set emulation
   - _Interpretation_
@@ -98,7 +94,7 @@ ex) Instruction format of PowerPC (D-form)
 RT: target register  
 RA: source register
 
-![](./assets/img/risc_format.svg)
+![]({{ page.img_path | relative_url }}/risc_format.svg)
 
 ### CISC (Complex Instruction Set Computer)
 
@@ -114,7 +110,7 @@ RA: source register
   - z/Architecture
 
 ex) Instruction format of IA-32
-![](./assets/img/cisc_format.svg)
+![]({{ page.img_path | relative_url }}/cisc_format.svg)
 
 ##### Q. Check ISA of your PC. Answer the ISA is RISC or CISC.
 
@@ -131,7 +127,7 @@ Windows)      $ systeminfo
 
 ### Interpreter Overview
 
-![](./assets/img/interpreter-overview.svg)
+![]({{ page.img_path | relative_url }}/interpreter-overview.svg)
 
 Interpreter code must perform the following:
 
@@ -225,12 +221,11 @@ Reasons for high performance cost:
 \* Do not consider `extract()` as function.
 
 {::nomarkdown}
-<input id="acd-check1" class="acd-check" type="checkbox">
-<label class="acd-label" for="acd-check1">Answer</label>
 
-<div class="acd-content">
-  <p>5 times (switch, call, if, return, jump-to-head) + break?</p>
-</div>
+<details>
+  <summary>Answer</summary>
+  5 times (switch, call, if, return, jump-to-head) + break?
+</details>
 {:/}
 
 ## 2.2 Threaded Interpretation
@@ -239,7 +234,7 @@ Reasons for high performance cost:
 
 ### Threaded Interpretation Overview
 
-![](./assets/img/threaded-interpreter.svg)
+![]({{ page.img_path | relative_url }}/threaded-interpreter.svg)
 
 Decode-and-dispatch interpreter have many branch instructions:
 
@@ -304,7 +299,7 @@ while (!halt && !interrupt) {
 We can delete "dispatch loop" by copying the code into the end of interpreter routines.  
 And use `goto` instead of function call to delete "branches to return from routines".
 
-![](./assets/img/copy-dispatch-loop.svg)
+![]({{ page.img_path | relative_url }}/copy-dispatch-loop.svg)
 
 ex) Threaded interpreter for PowerPC ISA
 
@@ -522,17 +517,16 @@ loop:
 ```
 
 {::nomarkdown}
-<input id="acd-check2" class="acd-check" type="checkbox">
-<label class="acd-label" for="acd-check2">Indirect Threaded Interpreter</label>
 
-<div class="acd-content">
-  <p>14 times = 2 + 4 * 3</p>
-</div>
-<input id="acd-check3" class="acd-check" type="checkbox">
-<label class="acd-label" for="acd-check3">Predecoding + Direct Threaded Interpreter</label>
-<div class="acd-content">
-  <p>6 times = 2 + 4</p>
-</div>
+<details>
+  <summary>Indirect Threaded Interpreter</summary>
+  14 times = 2 + 4 * 3
+</details>
+
+<details>
+  <summary>Predecoding + Direct Threaded Interpreter</summary>
+  6 times = 2 + 4
+</details>
 {:/}
 
 ## 2.4 Interpreting a Complex Instruction Set
@@ -548,7 +542,7 @@ CISC have the following characteristics:
   - Fetch and decode is <span style="color: red">hard</span>.
 
 ex) Instruction format of IA-32
-![](./assets/img/cisc_format.svg)
+![]({{ page.img_path | relative_url }}/cisc_format.svg)
 
 ### 2.4.1 Interpretation of the IA-32 ISA
 
@@ -556,7 +550,7 @@ ex) Instruction format of IA-32
 
 Decode-and-dispatch interpretation for CISC ISA is almost the same as it for RISC ISA.
 
-![](./assets/img/decode-and-dispatch-for-cisc.svg)
+![]({{ page.img_path | relative_url }}/decode-and-dispatch-for-cisc.svg)
 
 ##### Dispatch Loop
 
@@ -718,7 +712,7 @@ This interpreter do the followings:
 
 3. Go to next instruction
 
-![](./assets/img/optimize-for-common-case.svg)
+![]({{ page.img_path | relative_url }}/optimize-for-common-case.svg)
 
 ### 2.4.2 Threaded Interpretation
 
@@ -731,7 +725,7 @@ Threaded interpreter delete branch instructions by
 - <span style="color: gray">replacing `switch` with table access</span>
 - copying "dispatch loop" into the end of interpreter routines
 - replacing function call with `goto`
-  ![](./assets/img/copy-dispatch-loop.svg)
+  ![]({{ page.img_path | relative_url }}/copy-dispatch-loop.svg)
 
 We cannot apply _threaded interpretation_ directly to CISC ISA because of:
 
@@ -756,7 +750,7 @@ To do so, we will copy "simple decode-and-dispatch code" to every interpretation
 - high performance improvement
   - Simple decode-and-dispatch code is fast
 
-![](./assets/img/threaded-interpreter-for-cisc.svg)
+![]({{ page.img_path | relative_url }}/threaded-interpreter-for-cisc.svg)
 
 #### Method-4) Predecoding and Direct Threaded Interpretation
 
@@ -782,9 +776,9 @@ Normal decode-and-dispatch do the following per one loop:
 
 "Decode" and "dispatch" cannot be processed in parallel because "dispatch" must use the result of "decode".
 
-![](./assets/img/no-pipeline-1.svg)
+![]({{ page.img_path | relative_url }}/no-pipeline-1.svg)
 
-![](./assets/img/no-pipeline-2.svg)
+![]({{ page.img_path | relative_url }}/no-pipeline-2.svg)
 
 #### Software Pipelining
 
@@ -795,11 +789,11 @@ Interpreter using software pipelining do the following per one loop:
 
 "Decode" and "dispatch" can be processed in parallel because "current instruction dispatch" do not use the result of "next instruction decode".
 
-![](./assets/img/pipelining-1.svg)
+![]({{ page.img_path | relative_url }}/pipelining-1.svg)
 
-![](./assets/img/pipelining-2.svg)
+![]({{ page.img_path | relative_url }}/pipelining-2.svg)
 
-![](./assets/img/pipelining-3.svg)
+![]({{ page.img_path | relative_url }}/pipelining-3.svg)
 
 #### Method-5) Software Pipelining Interpreter
 
@@ -867,7 +861,7 @@ void cpu_loop() {
 Predecoding need interpreter routines.  
 Binary translation can be processed directly.
 
-![](./assets/img/threaded-interpreter-vs-binary-translator.svg)
+![]({{ page.img_path | relative_url }}/threaded-interpreter-vs-binary-translator.svg)
 
 We need _state mapping_ for binary translation.
 
@@ -875,13 +869,13 @@ We need _state mapping_ for binary translation.
 
 Interpreter code perform _state mapping_ in interpretation.
 
-![](./assets/img/interpreter-overview.svg)
+![]({{ page.img_path | relative_url }}/interpreter-overview.svg)
 
 We must define _state mapping_ in binary translation because there is no code to perform _state mapping_.
 
 ex) State Mapping from Target ISA to Source ISA.
 
-![](./assets/img/state-mapping.svg)
+![]({{ page.img_path | relative_url }}/state-mapping.svg)
 
 ### Binary Translation
 

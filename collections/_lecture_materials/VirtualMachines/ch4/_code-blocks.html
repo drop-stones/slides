@@ -1,0 +1,75 @@
+<!-- 4.4.2 -->
+{% assign source-4-27 = "
+// Source
+r4 = r6 + 1
+r1 = r2 + r3
+r1 = r4 + r5
+r6 = r1 + r7
+" %}
+
+{% assign target-4-27 = "
+// Target
+R4 = R6 + 1
+// R1 = R2 + R3
+R1 = R4 + R5
+R6 = R1 * R7
+" %}
+
+{% assign source-4-28 = "
+// Source 
+r1 = r2 + r3
+r9 = r1 + r5
+r6 = r1 * r7
+r3 = r6 + 1
+" %}
+
+{% assign target-4-28 = "
+// Target
+R1 = R2 + R3
+R6 = R1 * R7
+R9 = R1 + R5
+R3 = R6 + 1
+" %}
+
+{% assign target-with-saved-reg-4-28 = "
+// Target with saved regs
+R1 = R2 + R3
+S1 = R6 * R7
+R9 = R1 + R5
+R6 = S1
+R3 = S1 + 1
+" %}
+
+<!-- 4.5.1 -->
+{% assign code-seq = "
+R1 = mem[R6]        // reg
+R2 = mem[R6 + 4]    // reg
+R3 = R1 + 1         // reg
+R4 = R1 << 2        // reg
+br exit if R7 == 0  // br
+R7 = R7 + 1         // reg
+mem[R6] = R3        // mem
+" %}
+
+{% assign reg-br-move = "
+R1 = mem[R6]
+R2 = mem[R6 + 4]
+R3 = R1 + 1
+br exit if R7 == 0
+R4 = R1 << 2
+R7 = R7 + 1
+mem[R6] = R3
+" %}
+
+<!-- Appendix -->
+{% assign ssa-form-ex-source = "
+x = 100;    // def x (?)
+x = 200;    // def x
+y = x;      // use x
+" %}
+
+{% assign ssa-form-ex-ir = "
+x1 = 100;   // def x1
+x2 = 200;   // def x2
+y1 = x2;    // use x2
+" %}

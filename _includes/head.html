@@ -3,9 +3,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewpoint" content="width=device-width, initial-scale=1">
   {%- seo -%}
-  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/styles.css' | relative_url }}">
   {%- feed_meta -%}
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
   {%- endif -%}
+
+  {%- if page.collection -%}
+    <link rel="stylesheet" href="{{ '/assets/css/' | append: page.collection | append: '.css' | relative_url }}">
+  {%- endif -%}
+
+  {% comment %}
+  {%- assign style_paths = site.pages | where_exp: "style", "style.path contains page.collection" -%}
+  {%- for style in styles_path -%}
+    <link rel="stylesheet" href="{{ style.path | replace: '.scss', '.css' | relative_url }}">
+  {%- endfor -%}
+  {% endcomment %}
+
 </head>

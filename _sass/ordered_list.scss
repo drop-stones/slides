@@ -1,0 +1,10 @@
+// customized ordered list
+
+div.list {
+  counter-reset: list-number 0;
+}
+
+div.list div:before {
+  counter-increment: list-number;
+  content: counter(list-number);
+}

@@ -1,0 +1,31 @@
+---
+---
+
+//$border-color-h2: #888888;
+$border-color-section-title: #888888;
+$border-color-subsection-title: #e8e8e8;
+$border-left-width-section-title: 10px;
+
+.post-subtitle {
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1;
+  padding-left: 1em;
+}
+
+.section-title {
+  border-left: $border-left-width-section-title solid
+    $border-color-section-title;
+  border-bottom: 1px solid $border-color-section-title;
+
+  padding-left: $border-left-width-section-title;
+}
+
+.subsection-title {
+  border-bottom: 1px solid $border-color-subsection-title;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-around;
+}

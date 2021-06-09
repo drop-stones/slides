@@ -1,0 +1,52 @@
+<h3 class="subsection-title" id="4-5-1-title">4.5.1 Primitive Instruction Reordering</h3>
+
+<h4 class="part-title">Summary</h4>
+
+{% assign extend-live-range = "Extend live range of reg instruction" %}
+{% assign comp-entrance = "Add compensation code at entrance" %}
+{% assign comp-exit = "Add compensation code at branch exit" %}
+{% assign not-allowed = "Not allowed" %}
+{% assign not-allowed-unless-cf = "Not allowed (changes cntrol flow)" %}
+{% assign not-allowed-unless-rare = "Not allowed (can only be done in rare cases)" %}
+{% assign no-effect = "No effect" %}
+<table>
+  <tr>
+    <th></th>
+    <th colspan="4">First</th>
+  </tr>
+  <tr>
+    <th>Second</th>
+    <th>reg</th>
+    <th>mem</th>
+    <th>br</th>
+    <th>join</th>
+  </tr>
+  <tr>
+    <th>reg</th>
+    <td>{{ extend-live-range }}</td>
+    <td>{{ extend-live-range }}</td>
+    <td>{{ extend-live-range }}</td>
+    <td>{{ comp-entrance }}</td>
+  </tr>
+  <tr>
+    <th>mem</th>
+    <td>{{ not-allowed }}</td>
+    <td>{{ not-allowed }}</td>
+    <td>{{ not-allowed }}</td>
+    <td>{{ comp-entrance }}</td>
+  </tr>
+  <tr>
+    <th>br</th>
+    <td>{{ comp-exit }}</td>
+    <td>{{ comp-exit }}</td>
+    <td>{{ not-allowed-unless-cf }}</td>
+    <td>{{ not-allowed-unless-cf }}</td>
+  </tr>
+  <tr>
+    <th>join</th>
+    <td>{{ not-allowed-unless-rare }}</td>
+    <td>{{ not-allowed-unless-rare }}</td>
+    <td>{{ not-allowed-unless-cf }}</td>
+    <td>{{ no-effect }}</td>
+  </tr>
+</table>

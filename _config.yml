@@ -46,3 +46,22 @@ collections_dir: collections
 collections:
   lecture_materials:
     output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: "lecture_materials"
+    values:
+      layout: "lecture_material"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+#  - scope:
+#      path: "assets/css/*"
+#    values:
+#      css: true
+#  - scope:
+#      path: "assets/img"
+#    values:
+#      image: true
