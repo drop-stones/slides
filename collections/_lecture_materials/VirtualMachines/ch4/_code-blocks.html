@@ -53,54 +53,54 @@ R3 = R2 / R1  // devide-by-zero trap
 " %}
 
 {% assign inconsistent-source-a = "
-r1 = 100
+R1 = 100
 br C
 " %}
 {% assign inconsistent-source-b = "
-r1 = 200
+R1 = 200
 br C
 " %}
 {% assign inconsistent-source-c = "
 C:
-  r5 = r4 + r1
+  R5 = R4 + R1
   ...
 " %}
 
 {% assign inconsistent-reg-map-a = "
 // Superblock A
-// R1 <-> r1
-R1 = 100
+// r1 <-> R1
+r1 = 100
 br C
 " %}
 
 {% assign consistent-reg-map-a = "
 // Superblock A
-// R1 <-> r1
-R1 = 100;
-R3 = R1   // R3 <-> r1
+// r1 <-> R1
+r1 = 100;
+r3 = r1   // r3 <-> R1
 br C
 " %}
 
 {% assign inconsistent-reg-map-b = "
 // Superblock B
-// R2 <-> r1
-R2 = 200
+// r2 <-> R1
+r2 = 200
 if cond, br C
 " %}
 
 {% assign consistent-reg-map-b = "
 // Superblock B
-// R2 <-> r1
-R2 = 200
-R3 = R2   // R3 <-> r1
+// r2 <-> R1
+r2 = 200
+r3 = r2   // r3 <-> R1
 if cond, br C
 " %}
 
 {% assign inconsistent-reg-map-c = "
 // Superblock C
-// R3 <-> r1
+// r3 <-> R1
 C:
-  R5 = R4 + R3
+  r5 = r4 + r3
   ...
 " %}
 
@@ -141,10 +141,11 @@ F:
   ...
 " %}
 
+
 <!-- 4.5.1 -->
-{% assign code-seq = "
-R1 = mem[R6]        // reg
-R2 = mem[R6 + 4]    // reg
+{% assign ins-categories = "
+R1 = mem[R6]        // reg (mem if mem[R6] is volatile)
+R2 = mem[R6 + 4]    // reg (mem if mem[R6 + 4] is volatile)
 R3 = R1 + 1         // reg
 R4 = R1 << 2        // reg
 br exit if R7 == 0  // br
@@ -152,14 +153,193 @@ R7 = R7 + 1         // reg
 mem[R6] = R3        // mem
 " %}
 
-{% assign reg-br-move = "
-R1 = mem[R6]
-R2 = mem[R6 + 4]
-R3 = R1 + 1
-br exit if R7 == 0
-R4 = R1 << 2
-R7 = R7 + 1
-mem[R6] = R3
+<!-- br -->
+{% assign move-reg-below-br-before = "
+1 : R3 = R1 + 1
+2 : R4 = R1 << 2        // reg
+3 : br exit if R7 == 0  // br
+4 : R7 = R7 + 1
+" %}
+{% assign move-reg-below-br-exit-before = "
+100 : exit:
+101 :   ...
+" %}
+
+{% assign move-reg-below-br-after = "
+1 : R3 = R1 + 1
+3 : br 2' if R7 == 0    // br
+2 : R4 = R1 << 2        // reg
+4 : R7 = R7 + 1
+" %}
+{% assign move-reg-below-br-exit-after = "
+2'  :   R4 = R1 << 2  // compansation
+    :   br exit:
+        ...
+100 : exit:
+101 :   ...
+" %}
+
+{% assign move-reg-above-br-before = "
+1 : R2 = R1 << 2
+2 : br exit if R8 == 0  // br
+3 : R6 = R7 * R2        // reg
+4 : mem[R6] = R3
+5 : R6 = R2 + 2
+" %}
+{% assign move-reg-above-br-after = "
+1 : R2 = R1 << 2
+3': T1 = R7 * R2        // saved register
+2 : br exit if R8 == 0  // br
+3 : R6 = T1             // reg
+4 : mem[R6] = R3
+5 : R6 = R2 + 2
+" %}
+{% assign move-reg-above-br-no-update = "
+1 : R2 = R1 << 2
+3': T1 = R7 * R2        // saved register
+2 : br exit if R8 == 0  // br
+// 3: R6 = T1
+4 : mem[T1] = R3
+5 : R6 = R2 + 2
+" %}
+
+{% assign move-mem-above-br-before = "
+1 : br exit if R8 == 0  // br
+2 : mem[R1] = R2        // mem
+3 : ...
+" %}
+{% assign move-mem-above-br-exit-before = "
+4 : exit:
+5 :   ...
+" %}
+{% assign move-mem-above-br-after = "
+2 : mem[R1] = R2        // mem
+1 : br exit if R8 == 0  // br
+3 : ...
+" %}
+{% assign move-mem-above-br-exit-after = "
+4 : exit:
+// cannot recover mem[R1]
+5 :   ...
+" %}
+
+{% assign meaningless-move-mem = "
+2': T1 = mem[R1]        // extra load
+2 : mem[R1] = R2        // mem
+1 : br 2'' if R8 == 0   // br
+3 : ...
+" %}
+{% assign meaningless-move-mem-exit = "
+2'':   mem[R1] = T1  // recover
+   :   br exit
+       ...
+4  : exit:
+5  :   ...
+" %}
+
+<!-- join -->
+{% assign move-br-around-join-before = "
+1 :   br label
+  :   ...
+2 : label:                // join
+3 :   br exit if R1 == 0  // br
+" %}
+{% assign move-br-around-join-after = "
+1 :   br label
+  :   ...
+3 :   br exit if R1 == 0  // br
+2 : label:                // join
+" %}
+
+{% assign move-reg-above-join-before = "
+1 :   br label      // br
+  :   ...
+2 :   R1 = R1 + 1   // reg
+3 : label:          // join
+4 :   R7 = mem[R6]  // reg
+5 :   R7 = R7 + 1   // reg
+" %}
+{% assign move-reg-above-join-after = "
+4':   R7 = mem[R6]  // compansation
+1 :   br label      // br
+  :   ...
+2 :   R1 = R1 + 1   // reg
+4 :   R7 = mem[R6]  // moved above
+3 : label:          // join
+5 :   R7 = R7 + 1   // reg
+" %}
+
+{% assign move-reg-below-join-before = "
+1 :   br label      // br
+  :   ...
+2 :   R1 = R1 + 1   // reg
+3 : label:          // join
+4 :   ...
+" %}
+{% assign move-reg-below-join-after = "
+1 :   br label      // br
+  :   ...
+3 : label:          // join
+2 :   R1 = R1 + 1   // reg
+4 :   ...
+" %}
+
+{% assign swap-join-points-before = "
+1 :   br label1
+  :   ...
+2 :   br label2
+  :   ...
+3 : label1:     // join
+4 : label2:     // join
+5 :   ...
+" %}
+{% assign swap-join-points-after = "
+1 :   br label1
+  :   ...
+2 :   br label2
+  :   ...
+4 : label2:     // join
+3 : label1:     // join
+5 :   ...
+" %}
+
+<!-- straight-line -->
+{% assign move-reg-above-mem-before = "
+1 : R1 = R1 * 3
+2 : mem[R6] = R1  // mem
+3 : R7 = R7 << 3  // reg
+4 : R9 = R7 + R2
+"%}
+{% assign move-reg-above-mem-after = "
+1 : R1 = R1 * 3
+3': T1 = R7 << 3  // saved reg
+2 : mem[R6] = R1  // mem
+3 : R7 = T1       // reg
+4 : R9 = T1 + R2
+" %}
+
+{% assign move-mem-above-reg-before = "
+1 : R1 = R2 + R3    // reg
+2 : mem[R4] = 100   // mem
+3 : ...
+" %}
+{% assign move-mem-above-reg-after = "
+2 : mem[R4] = 100   // mem
+1 : R1 = R2 + R3    // reg
+3 : ...
+" %}
+
+<!-- 4.5.2 -->
+{% assign original-source-code = "
+a : add eax, ebx
+b : bz  L1
+c : mov ebx, [eax + 4]
+d : mul ebx, 10
+e : add ebx, 1
+f : add ecx, 1
+g : bz  L2
+h : add ebx, eax
+i : br  L3
 " %}
 
 <!-- Appendix -->
