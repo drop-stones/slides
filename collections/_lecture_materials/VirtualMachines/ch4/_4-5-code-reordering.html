@@ -1,39 +1,38 @@
-<div id="VM4.5 Code Reordering">
+<div class="section" id="vm-4-5-code-reordering">
+  <h2>4.5 Code Reordering</h2>
 
-<h2 class="section-title" id="4-5-title">4.5 Code Reordering</h2>
+  <p><em>Code Reordering</em> is an important optimization because:</p>
+  <ul>
+    <li>
+      In simple pipeline microarchitectures, instructions are executed strictly in program order.
+      <ul>
+        <li><em>Code Reordering</em> have an effect on performance directly.</li>
+      </ul>
+    </li>
+    <li>
+      In <a href="https://en.wikipedia.org/wiki/Very_long_instruction_word">VLIW</a> architectures:
+      <ul>
+        <li>The compiler reorder instructions to gather independent instructions.</li>
+        <li>The compiler pack them together within the same long instruction word.</li>
+      </ul>
+    </li>
+    <li>
+      In dynamic out-of-order <a href="https://en.wikipedia.org/wiki/Superscalar_processor">superscalar processors</a>:
+      <ul>
+        <li><em>Code Reordering</em> have an effect on functional unit latencies (especially cache memory latencies).</li>
+      </ul>
+    </li>
+  </ul>
 
-<p><em>Code Reordering</em> is an important optimization because:</p>
-<ul>
-  <li>
-    In simple pipeline microarchitectures, instructions are executed strictly in program order.
-    <ul>
-      <li><em>Code Reordering</em> have an effect on performance directly.</li>
-    </ul>
-  </li>
-  <li>
-    In <a href="https://en.wikipedia.org/wiki/Very_long_instruction_word">VLIW</a> architectures:
-    <ul>
-      <li>The compiler reorder instructions to gather independent instructions.</li>
-      <li>The compiler pack them together within the same long instruction word.</li>
-    </ul>
-  </li>
-  <li>
-    In dynamic out-of-order <a href="https://en.wikipedia.org/wiki/Superscalar_processor">superscalar processors</a>:
-    <ul>
-      <li><em>Code Reordering</em> have an effect on functional unit latencies (especially cache memory latencies).</li>
-    </ul>
-  </li>
-</ul>
+  <p>
+    Because of <em>code reordering</em>'s importance, we consider it before looking at other optimizations.<br />
+    We first discuss several important issues about <em>code reordering</em>.
+  </p>
 
-<p>
-  Because of <em>code reordering</em>'s importance, we consider it before looking at other optimizations.<br>
-  We first discuss several important issues about <em>code reordering</em>.
-</p>
-
-{% include_relative _4-5-1-primitive-instruction-reordering.html %}
-
-{% include_relative _4-5-2-implementing-a-scheduling-algorithm.html %}
-
-{% include_relative _4-5-3-superblocks-versus-traces.html %}
-
+  {% include_relative _4-5-1-primitive-instruction-reordering.html %}
+  
+  {% include_relative _4-5-2-implementing-a-scheduling-algorithm.html %} 
+  
+  {% include_relative _4-5-3-superblocks-versus-traces.html %}
 </div>
+<!-- vm-4-5-code-reordering -->

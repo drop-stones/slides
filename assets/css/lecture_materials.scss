@@ -6,6 +6,7 @@ $border-color-section-title: #888888;
 $border-color-subsection-title: #888888;
 $border-color-part-title: #e8e8e8;
 $border-left-width-section-title: 10px;
+$border-left-width-paragraph-title: 8px;
 
 .post-subtitle {
   font-size: 32px;
@@ -14,20 +15,33 @@ $border-left-width-section-title: 10px;
   padding-left: 1em;
 }
 
-.section-title {
-  border-left: $border-left-width-section-title solid
-    $border-color-section-title;
-  border-bottom: 1px solid $border-color-section-title;
+.chapter,
+.section,
+.subsection,
+.subsubsection,
+.paragraph {
+  h2 {
+    border-left: $border-left-width-section-title solid $border-color-section-title;
+    border-bottom: 1px solid $border-color-section-title;
 
-  padding-left: $border-left-width-section-title;
-}
+    padding-left: $border-left-width-section-title;
+  }
 
-.subsection-title {
-  border-bottom: 1px solid $border-color-subsection-title;
-}
+  h3 {
+    border-bottom: 1px solid $border-color-subsection-title;
+  }
 
-.part-title {
-  border-bottom: 1px solid $border-color-part-title;
+  h4 {
+    border-bottom: 1px solid $border-color-part-title;
+  }
+
+  h5 {
+    border-left: $border-left-width-paragraph-title solid $border-color-part-title;
+    border-bottom: 1px solid $border-color-part-title;
+
+    font-size: 1em;
+    padding-left: $border-left-width-paragraph-title;
+  }
 }
 
 .flex-container {

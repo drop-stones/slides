@@ -1,328 +1,473 @@
-<h3 class="subsection-title" id="4-5-1-title">4.5.1 Primitive Instruction Reordering</h3>
+<div class="subsection" id="vm-4-5-1-primitive-instruction-reordering">
+  <h3>4.5.1 Primitive Instruction Reordering</h3>
 
-<p>
-  In this subsection, we consider reordering pairs of instructions (swapping one for another).<br>
-  We discuss in the following steps:
-</p>
-<ol>
-  <li>
-    Categorize the instructions into four categries.
-    <ul>
-      <li>reg: Register updates</li>
-      <li>mem: Memory updates</li>
-      <li>br: Branch instructions</li>
-      <li>join: Join points</li>
-    </ul>
-  </li>
-  <li>
-    Discuss possible reordering.
-    <ul>
-      <li>br &#8646; another</li>
-      <li>join &#8646; another</li>
-      <li>remaining pairs</li>
-    </ul>
-  </li>
-</ol>
+  <p>
+    In this subsection, we consider reordering pairs of instructions (swapping one for another).<br />
+    We discuss in the following steps:
+  </p>
+  <ol>
+    <li>
+      Categorize the instructions into four categries.
+      <ul>
+        <li>reg: Register updates</li>
+        <li>mem: Memory updates</li>
+        <li>br: Branch instructions</li>
+        <li>join: Join points</li>
+      </ul>
+    </li>
+    <li>
+      Discuss possible reordering.
+      <ul>
+        <li>br &#8646; another</li>
+        <li>join &#8646; another</li>
+        <li>remaining pairs</li>
+      </ul>
+    </li>
+  </ol>
 
-<h4 class="part-title">Four instruction categories</h4>
+  <div class="subsubsection" id="vm-four-instruction-categories">
+    <h4>Four instruction categories</h4>
 
-<ul>
-  <li>
-    reg: Register updates
-    <ul>
-      <li>Description: instructions that produce a register result</li>
-      <li>Property: can be "undone" (using saved registers, saving into memory)</li>
-      <li>Examples: 
-        <ul>
-          <li>{% highlight c %}mov rax, [rbx]  // rax = mem[rbx]{% endhighlight %}</li>
-          <li>{% highlight c %}add r1, r2, r3  // r1 = r2 + r3{% endhighlight %}</li>
-        </ul>
-    </ul>
-  </li>
-  <li>
-    mem: Memory updates
-    <ul>
-      <li>Description: instructions that place a value in a memory</li>
-      <li>Property: cannot be "undone" easily (because saving memory have high cost of time and memory)</li>
-      <li>Exaples:
-        <ul>
-          <li>{% highlight c %}mov [rax], rbx  // mem[rax] = rbx{% endhighlight %}</li>
-          <li>{% highlight c %}stw r1, 4(r2)   // mem[r2 + 4] = r1{% endhighlight %}</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>
-    br: Branch instructions
-    <ul>
-      <li>Property: do not trap</li>
-      <li>Example: {% highlight c %}bz label  // if zero_flag == 0 then br label{% endhighlight %}</li>
-    </ul>
-  </li>
-
-{% assign join-example = "
-  br label
-  ...
-label:  // join points
-  ...
-" %}
-  <li>
-    join: Join points
-    <ul>
-      <li>Description: the points where a jump or branch target enters the code sequence</li>
-      <li>Property: <em>join</em> are not instructions but can affect reordering</li>
-      <li>Example: {% highlight c %}{{ join-example }}{% endhighlight %}</li>
-    </ul>
-  </li>
-</ul>
-
-<p>In addition, <em>volatile memory access</em> is categorized as mem.</p>
-
-<ul>
-  <li>
-    Access to <em>volatile memory locations</em>
     <ul>
       <li>
-        A <em>volatile memory location</em> may be accessed by an entity other than the process.
+        reg: Register updates
         <ul>
-          <li>Shared memory with other process or thread</li>
-          <li>Memory-mapped I/O with I/O system</li>
+          <li>Description: instructions that produce a register result</li>
+          <li>Property: can be "undone" (using saved registers, saving into memory)</li>
+          <li>
+            Examples:
+            <ul>
+              <li>{% highlight c %}mov rax, [rbx] // rax = mem[rbx]{% endhighlight %}</li>
+              <li>{% highlight c %}add r1, r2, r3 // r1 = r2 + r3{% endhighlight %}</li>
+            </ul>
+          </li>
         </ul>
       </li>
       <li>
-        Property: cannot be reordered in many cases:
-          <ul>
-            <li>We cannot move an access to shared memory before getting lock (mutex).</li>
-            <li>An access to memory-mapped I/O may trigger some I/O device functions.</li>
-          </ul>
+        mem: Memory updates
+        <ul>
+          <li>Description: instructions that place a value in a memory</li>
+          <li>Property: cannot be "undone" easily (because saving memory have high cost of time and memory)</li>
+          <li>
+            Exaples:
+            <ul>
+              <li>{% highlight c %}mov [rax], rbx // mem[rax] = rbx{% endhighlight %}</li>
+              <li>{% highlight c %}stw r1, 4(r2) // mem[r2 + 4] = r1{% endhighlight %}</li>
+            </ul>
+          </li>
+        </ul>
       </li>
-      <li>Category: mem (because state cannot be recovered easily)</li>
+      <li>
+        br: Branch instructions
+        <ul>
+          <li>Property: do not trap</li>
+          <li>Example: {% highlight c %}bz label // if zero_flag == 0 then br label{% endhighlight %}</li>
+        </ul>
+      </li>
+
+      {% assign join-example = " br label ... label: // join points ... " %}
+      <li>
+        join: Join points
+        <ul>
+          <li>Description: the points where a jump or branch target enters the code sequence</li>
+          <li>
+            Property:
+            <em>join</em>
+            are not instructions but can affect reordering
+          </li>
+          <li>Example: {% highlight c %}{{ join-example }}{% endhighlight %}</li>
+        </ul>
+      </li>
     </ul>
-  </li>
-</ul>
 
-<p>In some VM applications, the emulation system must optimize conservatively because it does not know whether the memory access is <em>volatile</em> or not.</p>
+    <p>
+      In addition,
+      <em>volatile memory access</em>
+      is categorized as mem.
+    </p>
 
-<p>Example: For instructions categories</p>
-<div class="flex-container">
-  <div>
-    {% highlight c %}{{ ins-categories }}{% endhighlight %}
+    <ul>
+      <li>
+        Access to
+        <em>volatile memory locations</em>
+        <ul>
+          <li>
+            A
+            <em>volatile memory location</em>
+            may be accessed by an entity other than the process.
+            <ul>
+              <li>Shared memory with other process or thread</li>
+              <li>Memory-mapped I/O with I/O system</li>
+            </ul>
+          </li>
+          <li>
+            Property: cannot be reordered in many cases:
+            <ul>
+              <li>We cannot move an access to shared memory before getting lock (mutex).</li>
+              <li>An access to memory-mapped I/O may trigger some I/O device functions.</li>
+            </ul>
+          </li>
+          <li>Category: mem (because state cannot be recovered easily)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>
+      In some VM applications, the emulation system must optimize conservatively because it does not know whether the memory access is
+      <em>volatile</em>
+      or not.
+    </p>
+
+    <p>Example: For instructions categories</p>
+    <div class="flex-container">
+      <div>{% highlight c %}{{ ins-categories }}{% endhighlight %}</div>
+    </div>
   </div>
-</div>
+  <!-- vm-four-instruction-categories -->
 
-<h4 class="part-title">br &#8646; another</h4>
+  <div class="subsubsection" id="vm-br-another">
+    <h4>br &#8646; another</h4>
 
-<div class="flex-container">
-  <div>
-    TODO: figure-4-31-a-reg
+    <div class="paragraph" id="vm-move-reg-or-mem-below-br">
+      <h5>Move reg or mem below br</h5>
+      <div class="flex-container">
+        <div>TODO: figure-4-31-a-reg</div>
+
+        <div>TODO: figure-4-31-a-mem</div>
+      </div>
+
+      <p>Example: Move reg below br</p>
+
+      <p>Before reordering:</p>
+      <div class="flex-container">
+        <div>{% highlight c %}{{ move-reg-below-br-before }}{% endhighlight %}</div>
+        <div>{% highlight c %}{{ move-reg-below-br-exit-before }}{% endhighlight %}</div>
+      </div>
+      <p>After reordering:</p>
+      <div class="flex-container">
+        <div>{% highlight c %}{{ move-reg-below-br-after }}{% endhighlight %}</div>
+        <div>{% highlight c %}{{ move-reg-below-br-exit-after }}{% endhighlight %}</div>
+      </div>
+
+      <p>
+        <em>Compasation code</em>
+        ensures that the state is the same as original code.
+      </p>
+    </div>
+    <!-- vm-move-reg-or-mem-below-br -->
+
+    <div class="paragraph" id="vm-move-reg-above-br">
+      <h5 class="paragraph-title">Move reg above br</h5>
+
+      <div class="flex-container">
+        <div>TODO: figure-4-32-a-reg</div>
+
+        <div>TODO: figure-4-32-a-mem</div>
+      </div>
+
+      <p>Example: Move reg above br</p>
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ move-reg-above-br-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ move-reg-above-br-after }}{% endhighlight %}
+        </div>
+        <div>Omit register copy:<br />{% highlight c %}{{ move-reg-above-br-no-update }}{% endhighlight %}</div>
+      </div>
+
+      <p>There are two reasons why we insert saved register <code>T1</code>:</p>
+      <ul>
+        <li>
+          <code>R6</code>
+          must be
+          <em>live</em>
+          at label
+          <code>exit</code>.
+        </li>
+        <li>
+          <code>R6</code>
+          must be
+          <em>live</em>
+          until the original position (between ins.2 and ins.4).
+        </li>
+      </ul>
+    </div>
+    <!-- vm-move-reg-above-reg -->
+
+    <div class="paragraph" id="vm-move-mem-above-br">
+      <h5>Move mem above br</h5>
+      <div class="flex-container">
+        <div>TODO: figure</div>
+      </div>
+
+      <p>Example: Move mem above br</p>
+      <p>Before reordering:</p>
+      <div class="flex-container">
+        <div>{% highlight c %}{{ move-mem-above-br-before }}{% endhighlight %}</div>
+        <div>{% highlight c %}{{ move-mem-above-br-exit-before }}{% endhighlight %}</div>
+      </div>
+      <p>After reordering:</p>
+      <div class="flex-container">
+        <div>{% highlight c %}{{ move-mem-above-br-after }}{% endhighlight %}</div>
+        <div>{% highlight c %}{{ move-mem-above-br-exit-after }}{% endhighlight %}</div>
+      </div>
+
+      <p>
+        This example shows that
+        <code>mem[R1]</code>
+        cannot be recoverable.<br />
+      </p>
+
+      <p>Meaningless(?) reordering:</p>
+      <div class="flex-container">
+        <div>{% highlight c %}{{ meaningless-move-mem }}{% endhighlight %}</div>
+        <div>{% highlight c %}{{ meaningless-move-mem-exit }}{% endhighlight %}</div>
+      </div>
+
+      <p>
+        This reordering looks good, but an extra memory access is added.<br />
+        From this, we assume that mem cannot be recoverable ("undone").
+      </p>
+    </div>
+    <!-- vm-move-mem-above-br -->
+
+    <div class="paragraph" id="vm-move-br-around-join">
+      <h5>Move br around join</h5>
+      <div class="flex-container">
+        <div>TODO: figure for br <-> join</div>
+
+        <div>TODO: figure for join <-> br</div>
+      </div>
+
+      <p>Example: Move br around join</p>
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ move-br-around-join-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ move-br-around-join-after }}{% endhighlight %}
+        </div>
+      </div>
+
+      <p>This example shows that moving br around join changes control flow.</p>
+    </div>
+    <!-- vm-move-br-around-join -->
   </div>
+  <!-- vm-br-another -->
 
-  <div>
-    TODO: figure-4-31-a-mem
+  <div class="subsubsection" id="vm-join-another">
+    <h4 class="part-title">join &#8646; another</h4>
+
+    <div class="paragraph" id="vm-move-reg-above-join">
+      <h5>Move reg above join</h5>
+      <div class="flex-container">
+        <div>TODO: figure-4-33-reg</div>
+      </div>
+
+      <p>Example: Move reg above join (= join point are moved down without reordering)</p>
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ move-reg-above-join-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ move-reg-above-join-after }}{% endhighlight %}
+        </div>
+      </div>
+
+      <p>This reordering alone is meaningless, but this enable more optimizations.</p>
+    </div>
+    <!-- vm-move-reg-above-join -->
+
+    <div class="paragraph" id="vm-move-mem-above-join">
+      <h5>Move mem above join</h5>
+      <div class="flex-container">
+        <div>TODO: figure-4-33-mem</div>
+      </div>
+    </div>
+
+    <div class="paragraph" id="vm-move-reg-or-mem-below-join">
+      <h5>Move reg or mem below join</h5>
+      <div class="flex-container">
+        <div>TODO: figure for move reg below join</div>
+        <div>TODO: figure for move mem below join</div>
+      </div>
+
+      <p>Example: Move reg below join</p>
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ move-reg-below-join-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ move-reg-below-join-after }}{% endhighlight %}
+        </div>
+      </div>
+
+      <p>
+        This example shows that execution path 1-3-2 changes
+        <code>R1</code>
+        value.
+      </p>
+    </div>
+    <!-- vm-move-reg-or-mem-below-join -->
+
+    <div class="paragraph" id="vm-swap-join-points">
+      <h5>Swap join points</h5>
+      <div class="flex-container">
+        <div>TODO: figure</div>
+      </div>
+
+      <p>Example: Swap join points</p>
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ swap-join-points-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ swap-join-points-after }}{% endhighlight %}
+        </div>
+      </div>
+
+      <p>This reordering have no effect cleary.</p>
+    </div>
+    <!-- vm-swap-join-points -->
   </div>
-</div>
+  <!-- vm-join-another -->
 
-<p>Example: Move reg below br</p>
+  <div class="subsubsection" id="vm-straight-line-reordering">
+    <h4>Straight-line reordering ({reg, mem} &#8646; {reg, mem})</h4>
 
-<p>Before reordering:</p>
-<div class="flex-container">
-  <div>{% highlight c %}{{ move-reg-below-br-before }}{% endhighlight %}</div>
-  <div>{% highlight c %}{{ move-reg-below-br-exit-before }}{% endhighlight %}</div>
-</div>
-<p>After reordering:</p>
-<div class="flex-container">
-  <div>{% highlight c %}{{ move-reg-below-br-after }}{% endhighlight %}</div>
-  <div>{% highlight c %}{{ move-reg-below-br-exit-after }}{% endhighlight %}</div>
-</div>
+    <div class="paragraph" id="vm-move-reg-above-reg-or-mem">
+      <h5>Move reg above reg or mem</h5>
+      <div class="flex-container">
+        <div>TODO: figure for swap reg</div>
+        <div>TODO: figure for move reg above mem</div>
+      </div>
 
-<p><em>Compasation code</em> ensures that the state is the same as original code.</p>
+      <p>Example: Move reg above mem</p>
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ move-reg-above-mem-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ move-reg-above-mem-after }}{% endhighlight %}
+        </div>
+      </div>
+    </div>
+    <!-- move-reg-above-reg-or-mem -->
 
-<div class="flex-container">
-  <div>
-    TODO: figure-4-32-a-reg
+    <div class="paragraph" id="vm-move-mem-above-reg-or-mem">
+      <h5>Move mem above reg or mem</h5>
+      <div class="flex-container">
+        <div>TODO: figure for move mem above mem and reg</div>
+      </div>
+
+      <div class="flex-container">
+        <div>
+          Before reordering:
+          <br />{% highlight c %}{{ move-mem-above-reg-before }}{% endhighlight %}
+        </div>
+        <div>
+          After reordering:
+          <br />{% highlight c %}{{ move-mem-above-reg-after }}{% endhighlight %}
+        </div>
+      </div>
+
+      <p>
+        We assume that mem cannot be recoverable ("undone") before.<br />
+        If
+        <code>1: R1 = R2 + R3</code>
+        will trap, we cannot recover the original state.
+      </p>
+    </div>
+    <!-- vm-move-mem-above-reg-or-mem -->
   </div>
+  <!-- vm-straight-line-reordering -->
 
-  <div>
-    TODO: figure-4-32-a-mem
+  <div class="subsubsection" id="vm-4-5-1-summary">
+    <h4>Summary</h4>
+
+    {% assign extend-live-range = "Extend live range of reg instruction" %} {% assign comp-entrance = "Add compensation code at entrance" %} {% assign comp-exit = "Add compensation code at branch
+    exit" %} {% assign not-allowed = "Not allowed" %} {% assign not-allowed-unless-cf = "Not allowed (changes cntrol flow)" %} {% assign not-allowed-unless-rare = "Not allowed (can only be done in
+    rare cases)" %} {% assign no-effect = "No effect" %}
+    <table>
+      <tr>
+        <th></th>
+        <th colspan="4">First (moved down)</th>
+      </tr>
+      <tr>
+        <th>Second (moved up)</th>
+        <th>reg</th>
+        <th>mem</th>
+        <th>br</th>
+        <th>join</th>
+      </tr>
+      <tr>
+        <th>reg</th>
+        <td>{{ extend-live-range }}</td>
+        <td>{{ extend-live-range }}</td>
+        <td>{{ extend-live-range }}</td>
+        <td>{{ comp-entrance }}</td>
+      </tr>
+      <tr>
+        <th>mem</th>
+        <td>{{ not-allowed }}</td>
+        <td>{{ not-allowed }}</td>
+        <td>{{ not-allowed }}</td>
+        <td>{{ comp-entrance }}</td>
+      </tr>
+      <tr>
+        <th>br</th>
+        <td>{{ comp-exit }}</td>
+        <td>{{ comp-exit }}</td>
+        <td>{{ not-allowed-unless-cf }}</td>
+        <td>{{ not-allowed-unless-cf }}</td>
+      </tr>
+      <tr>
+        <th>join</th>
+        <td>{{ not-allowed-unless-rare }}</td>
+        <td>{{ not-allowed-unless-rare }}</td>
+        <td>{{ not-allowed-unless-cf }}</td>
+        <td>{{ no-effect }}</td>
+      </tr>
+    </table>
+
+    <p>Possible reordering is the followings:</p>
+    <ul>
+      <li>
+        Move
+        <em>reg</em>
+        above any instructions (using saved registers)
+      </li>
+      <li>
+        Move
+        <em>reg</em>
+        or
+        <em>mem</em>
+        below
+        <em>br</em>
+        (by adding compansation code)
+      </li>
+      <li>
+        Move
+        <em>mem</em>
+        above
+        <em>join</em>
+        (by adding compansation code)
+      </li>
+    </ul>
   </div>
+  <!-- vm-4-5-1-summary -->
 </div>
-
-<p>Example: Move reg above br</p>
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ move-reg-above-br-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ move-reg-above-br-after }}{% endhighlight %}</div>
-  <div>Omit register copy:<br>{% highlight c %}{{ move-reg-above-br-no-update }}{% endhighlight %}</div>
-</div>
-
-<p>There are two reasons why we insert saved register <code>T1</code>:</p>
-<ul>
-  <li><code>R6</code> must be <em>live</em> at label <code>exit</code>.</li>
-  <li><code>R6</code> must be <em>live</em> until the original position (between ins.2 and ins.4).</li>
-</ul>
-
-<p>Example: Move mem above br</p>
-<p>Before reordering:</p>
-<div class="flex-container">
-  <div>{% highlight c %}{{ move-mem-above-br-before }}{% endhighlight %}</div>
-  <div>{% highlight c %}{{ move-mem-above-br-exit-before }}{% endhighlight %}</div>
-</div>
-<p>After reordering:</p>
-<div class="flex-container">
-  <div>{% highlight c %}{{ move-mem-above-br-after }}{% endhighlight %}</div>
-  <div>{% highlight c %}{{ move-mem-above-br-exit-after }}{% endhighlight %}</div>
-</div>
-
-<p>
-  This example shows that <code>mem[R1]</code> cannot be recoverable.<br>
-</p>
-
-<p>Meaningless(?) reordering:</p>
-<div class="flex-container">
-  <div>{% highlight c %}{{ meaningless-move-mem }}{% endhighlight %}</div>
-  <div>{% highlight c %}{{ meaningless-move-mem-exit }}{% endhighlight %}</div>
-</div>
-
-<p>
-  This reordering looks good, but an extra memory access is added.<br>
-  From this, we assume that mem cannot be recoverable ("undone").
-</p>
-
-
-<div class="flex-container">
-  <div>
-    TODO: figure for br <-> join
-  </div>
-
-  <div>
-    TODO: figure for join <-> br
-  </div>
-</div>
-
-<p>Example: Move br around join</p>
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ move-br-around-join-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ move-br-around-join-after }}{% endhighlight %}</div>
-</div>
-
-<p>This example shows that moving br around join changes control flow.</p>
-
-<h4 class="part-title">join &#8646; another</h4>
-
-<div class="flex-container">
-  <div>TODO: figure-4-33-reg</div>
-  <div>TODO: figure-4-33-mem</div>
-</div>
-
-<p>Example: Move reg above join (= join point are moved down without reordering)</p>
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ move-reg-above-join-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ move-reg-above-join-after }}{% endhighlight %}</div>
-</div>
-
-<p>This reordering alone is meaningless, but this enable more optimizations.</p>
-
-<div class="flex-container">
-  <div>TODO: figure for move reg below join</div>
-  <div>TODO: figure for move mem below join</div>
-</div>
-
-<p>Example: Move reg below join</p>
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ move-reg-below-join-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ move-reg-below-join-after }}{% endhighlight %}</div>
-</div>
-
-<p>This example shows that execution path 1-3-2 changes <code>R1</code> value.</p>
-
-<p>Example: Swap join points</p>
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ swap-join-points-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ swap-join-points-after }}{% endhighlight %}</div>
-</div>
-
-<p>This reordering have no effect cleary.</p>
-
-<h4 class="part-title">Straight-line reordering ({reg, mem} &#8646; {reg, mem})</h4>
-
-<div class="flex-container">
-  <div>TODO: figure for swap reg</div>
-  <div>TODO: figure for move reg above mem</div>
-</div>
-
-<p>Example: Move reg above mem</p>
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ move-reg-above-mem-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ move-reg-above-mem-after }}{% endhighlight %}</div>
-</div>
-
-<div class="flex-container">
-  <div>TODO: figure for move mem above mem and reg</div>
-</div>
-
-<div class="flex-container">
-  <div>Before reordering: <br>{% highlight c %}{{ move-mem-above-reg-before }}{% endhighlight %}</div>
-  <div>After reordering:  <br>{% highlight c %}{{ move-mem-above-reg-after }}{% endhighlight %}</div>
-</div>
-
-<p>
-  We assume that mem cannot be recoverable ("undone") before.<br>
-  If <code>1: R1 = R2 + R3</code> will trap, we cannot recover the original state.
-</p>
-
-<h4 class="part-title">Summary</h4>
-
-{% assign extend-live-range = "Extend live range of reg instruction" %}
-{% assign comp-entrance = "Add compensation code at entrance" %}
-{% assign comp-exit = "Add compensation code at branch exit" %}
-{% assign not-allowed = "Not allowed" %}
-{% assign not-allowed-unless-cf = "Not allowed (changes cntrol flow)" %}
-{% assign not-allowed-unless-rare = "Not allowed (can only be done in rare cases)" %}
-{% assign no-effect = "No effect" %}
-<table>
-  <tr>
-    <th></th>
-    <th colspan="4">First (moved down)</th>
-  </tr>
-  <tr>
-    <th>Second (moved up)</th>
-    <th>reg</th>
-    <th>mem</th>
-    <th>br</th>
-    <th>join</th>
-  </tr>
-  <tr>
-    <th>reg</th>
-    <td>{{ extend-live-range }}</td>
-    <td>{{ extend-live-range }}</td>
-    <td>{{ extend-live-range }}</td>
-    <td>{{ comp-entrance }}</td>
-  </tr>
-  <tr>
-    <th>mem</th>
-    <td>{{ not-allowed }}</td>
-    <td>{{ not-allowed }}</td>
-    <td>{{ not-allowed }}</td>
-    <td>{{ comp-entrance }}</td>
-  </tr>
-  <tr>
-    <th>br</th>
-    <td>{{ comp-exit }}</td>
-    <td>{{ comp-exit }}</td>
-    <td>{{ not-allowed-unless-cf }}</td>
-    <td>{{ not-allowed-unless-cf }}</td>
-  </tr>
-  <tr>
-    <th>join</th>
-    <td>{{ not-allowed-unless-rare }}</td>
-    <td>{{ not-allowed-unless-rare }}</td>
-    <td>{{ not-allowed-unless-cf }}</td>
-    <td>{{ no-effect }}</td>
-  </tr>
-</table>
-
-<p>Possible reordering is the followings:</p>
-<ul>
-  <li>Move <em>reg</em> above any instructions (using saved registers)</li>
-  <li>Move <em>reg</em> or <em>mem</em> below <em>br</em> (by adding compansation code)</li>
-  <li>Move <em>mem</em> above <em>join</em> (by adding compansation code)</li>
-</ul>
+<!-- vm-4-5-1-primitive-instruction-reordering -->

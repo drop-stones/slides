@@ -1,139 +1,157 @@
-<h3 class="subsection-title" id="4-4-2-title">4.4.2 Optimization and Compatibility</h3>
+<div class="subsection" id="vm-4-4-2-optimization-and-compatibility">
 
-<p>As disscussed in section 3.2, we must maintain <em>compatibility</em> even after optimization.</p>
+  <h3>4.4.2 Optimization and Compatibility</h3>
 
-<h4 class="part-title">Review: Compatibility for process VM</h3>
+  <p>As disscussed in section 3.2, we must maintain <em>compatibility</em> even after optimization.</p>
 
-<p>
-  We must maintain an isomorphic relationship between guest VM and host platform.<br>
-  To achive this, we focus on all control transfer points:<br>
-  <ul>
-    <li>system call</li>
-    <li>return from system call</li>
-    <li><strong>trap</strong> : concerns about optimizations</li>
-    <li>interrupt</li>
-  </ul>
+  <div class="subsubsection" id="vm-compatibility-review">
+    <h4>Review: Compatibility for process VM</h4>
 
-  And at these points, we must form the <em>precise state</em>:
-  <ul>
-    <li>same registers state</li>
-    <li>same memory state</li>
-  </ul>
-</p>
+    <p>
+      We must maintain an isomorphic relationship between guest VM and host platform.<br>
+      To achive this, we focus on all control transfer points:<br>
+    <ul>
+      <li>system call</li>
+      <li>return from system call</li>
+      <li><strong>trap</strong> : concerns about optimizations</li>
+      <li>interrupt</li>
+    </ul>
 
-<img src="{{ img_path }}/check_compatibility_on_control_transfer_point.svg">
+    And at these points, we must form the <em>precise state</em>:
+    <ul>
+      <li>same registers state</li>
+      <li>same memory state</li>
+    </ul>
+    </p>
 
-<h4 class="part-title">Trap compatibility</h3>
+    <img src="{{ img_path }}/check_compatibility_on_control_transfer_point.svg">
+  </div> <!-- vm-compatibility-review -->
 
-<p>A process VM is <em>trap compatibility</em> if:</p>
-<ul>
-  <li>any trap occur during the native execution if the trap occur during emulation.</li>
-  <li>any trap occur during emulation if the trap occur during the native execution.</li>
-</ul>
-<p style="color: gray"><span>Note:</span> Except for a page fault (in Chapter.7)</p>
+  <div class="subsubsection" id="vm-trap-compatibility">
+    <h4>Trap compatibility</h4>
 
-<p><em>Trap compatibility</em> must be maintained before and after optimization.</p>
+    <p>A process VM is <em>trap compatibility</em> if:</p>
+    <ul>
+      <li>any trap occur during the native execution if the trap occur during emulation.</li>
+      <li>any trap occur during emulation if the trap occur during the native execution.</li>
+    </ul>
+    <p style="color: gray"><span>Note:</span> Except for a page fault (in Chapter.7)</p>
 
-<p>NG-example) Remove redundant instructions</p>
+    <p><em>Trap compatibility</em> must be maintained before and after optimization.</p>
 
-<div class="flex-container">
-  <div>
-    {% highlight c %}{{ source-4-27 }}{% endhighlight %}
-  </div>
+    <p>NG-example) Remove redundant instructions</p>
 
-  <div>
-    {% highlight c %}{{ target-4-27 }}{% endhighlight %}
-  </div>
-</div>
+    <div class="flex-container">
+      <div>
+        {% highlight c %}{{ source-4-27 }}{% endhighlight %}
+      </div>
 
-<p>In this example, the optimization violate trap compatibility because:</p>
-<ul>
-  <li>In source, <code>r1 = r2 + r3</code> may trap.</li>
-  <li>In target, no trap occurs because <code>r1 = r2 + r3</code> is removed.</li>
-</ul>
+      <div>
+        {% highlight c %}{{ target-4-27 }}{% endhighlight %}
+      </div>
+    </div>
 
-<p>The converse condition for trap compatibility can be maintained.</p>
+    <p>In this example, the optimization violate trap compatibility because:</p>
+    <ul>
+      <li>In source, <code>r1 = r2 + r3</code> may trap.</li>
+      <li>In target, no trap occurs because <code>r1 = r2 + r3</code> is removed.</li>
+    </ul>
 
-<p>OK-example) Handling of devide-by-zero</p>
-<div class="flex-container">
-  <div>
-    {% highlight c %}{{ source-0-div }}{% endhighlight %}
-  </div>
+    <p>The converse condition for trap compatibility can be maintained.</p>
 
-  <div>
-    {% highlight c %}{{ target-0-div }}{% endhighlight %}
-  </div>
-</div>
+    <p>OK-example) Handling of devide-by-zero</p>
+    <div class="flex-container">
+      <div>
+        {% highlight c %}{{ source-0-div }}{% endhighlight %}
+      </div>
 
-<p>In this example, runtime can maintain trap compatibility because:</p>
-<ul>
-  <li>In source, <code>r3 = r2 / r1</code> do not trap.</li>
-  <li>In target, runtime can ignore divide-by-zero trap while divide-by-zero trap occurs.</li>
-</ul>
+      <div>
+        {% highlight c %}{{ target-0-div }}{% endhighlight %}
+      </div>
+    </div>
+
+    <p>In this example, runtime can maintain trap compatibility because:</p>
+    <ul>
+      <li>In source, <code>r3 = r2 / r1</code> do not trap.</li>
+      <li>In target, runtime can ignore divide-by-zero trap while divide-by-zero trap occurs.</li>
+    </ul>
+  </div> <!-- vm-trap-compatibility -->
+
+  <div class="subsubsection" id="vm-memory-and-register-compatibility">
+    <h4>Memory and Register Compatibility at Trap Instructions</h4>
+
+    <p><em>Memory</em> and <em>register state compatibility</em> are maintained if:</p>
+    <ul>
+      <li>the runtime can reconstruct the same <em>memory state</em> as the state on guest VM.</li>
+      <li>the runtime can reconstruct the same <em>register state</em> as the state on guest VM.</li>
+    </ul>
+
+    <p><em>Memory</em> and <em>register state compatibility</em> must be maintained even after optimization.</p>
+
+    <div class="example">
+    <p>Example) Code reordering optimization may violate <em>register state compatibility</em>.</p>
+    <div class="flex-container">
+      <div>
+        {% highlight c %}{{ source-4-28 }}{% endhighlight %}
+      </div>
+
+      <div>
+        {% highlight c %}{{ target-4-28 }}{% endhighlight %}
+      </div>
+
+      <div>
+        {% highlight c %}{{ target-with-saved-reg-4-28 }}{% endhighlight %}
+      </div>
+    </div>
 
 
-<h4 class="part-title">Memory and Register Compatibility at Trap Instructions</h3>
+    <p>
+      It might be beneficial to reorder <code>r6 = r1 * r7</code> to a higher point because multiply take several
+      cycles.<br>
+      But reordering line.2 and line.3 violates <em>register state compatibility</em> because when
+      <code>r9 = r1 + r5</code> trap,:
+    <ul>
+      <li>in souce, <code>r6</code> has not been updated yet.</li>
+      <li>in target, <code>R6</code> has been updated.</li>
+    </ul>
 
-<p><em>Memory</em> and <em>register state compatibility</em> are maintained if:</p>
-<ul>
-  <li>the runtime can reconstruct the same <em>memory state</em> as the state on guest VM.</li>
-  <li>the runtime can reconstruct the same <em>register state</em> as the state on guest VM.</li>
-</ul>
+    To maintain <em>register state compatibility</em>, saved register <code>S1</code> hold the multiply results.<br>
+    This optimized code update registers in the same order as original source.
+    </p>
 
-<p><em>Memory</em> and <em>register state compatibility</em> must be maintained even after optimization.</p>
+    </div>
+    <!-- example -->
+  </div> <!-- vm-memory-and-register-compatibility -->
 
-<p>Example) Code reordering optimization may violate <em>register state compatibility</em>.</p>
-<div class="flex-container">
-  <div>
-    {% highlight c %}{{ source-4-28 }}{% endhighlight %}
-  </div>
-
-  <div>
-    {% highlight c %}{{ target-4-28 }}{% endhighlight %}
-  </div>
-
-  <div>
-    {% highlight c %}{{ target-with-saved-reg-4-28 }}{% endhighlight %}
-  </div>
-</div>
-
-
-<p>
-  It might be beneficial to reorder <code>r6 = r1 * r7</code> to a higher point because multiply take several cycles.<br>
-  But reordering line.2 and line.3 violates <em>register state compatibility</em> because when <code>r9 = r1 + r5</code> trap,:
-  <ul>
-    <li>in souce, <code>r6</code> has not been updated yet.</li>
-    <li>in target, <code>R6</code> has been updated.</li>
-  </ul>
-
-  To maintain <em>register state compatibility</em>, saved register <code>S1</code> hold the multiply results.<br>
-  This optimized code update registers in the same order as original source.
-</p>
-
-<aside>
-  <h4>Intrinsic compatibility vs. Extrinsic compatibility</h4>
-  <ul>
-    <li>
-      Intrinsic compatibility
-      <ul>
-        <li>All register and memory states are recoverable at any potentially trap time.</li>
-        <li>Optimization are very restricted.</li>
-      </ul>
-    </li>
-
-    <li>
-      Extrinsic compatibility
+  <aside>
+    <div class="subsubsection" id="vm-intrinsic-vs-extrinsic-compatibility">
+      <h4>Intrinsic compatibility vs. Extrinsic compatibility</h4>
       <ul>
         <li>
-          VM developer make some assumptions about trap:
+          Intrinsic compatibility
           <ul>
-            <li>certain types of bugs are not present.</li>
-            <li>a particular compiler will be used for the executable.</li>
-            <li>some traps will never be used.</li>
+            <li>All register and memory states are recoverable at any potentially trap time.</li>
+            <li>Optimization are very restricted.</li>
           </ul>
         </li>
-        <li>We can optimize more freely.</li>
+
+        <li>
+          Extrinsic compatibility
+          <ul>
+            <li>
+              VM developer make some assumptions about trap:
+              <ul>
+                <li>certain types of bugs are not present.</li>
+                <li>a particular compiler will be used for the executable.</li>
+                <li>some traps will never be used.</li>
+              </ul>
+            </li>
+            <li>We can optimize more freely.</li>
+          </ul>
+        </li>
       </ul>
-    </li>
-  </ul>
-</aside>
+    </div> <!-- vm-intrinsic-vs-extrinsic-compatibility -->
+  </aside>
+
+</div>
+<!-- vm-4-4-2-optimization-and-compatibility -->

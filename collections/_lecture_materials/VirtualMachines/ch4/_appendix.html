@@ -1,25 +1,31 @@
-<h2 class="section-title" id="appendix-title">Appendix</h2>
+<div class="section" id="vm-4-appendix">
+  <h2>Appendix</h2>
 
-<h3 class="subsection-title" id="ssa-form-title">Static Single Assignment (SSA) Form</h3>
+  <div class="subsection" id="vm-ssa-form">
+    <h3>Static Single Assignment (SSA) Form</h3>
 
-<p>SSA is a property of an intermediate representation(IR).</p>
+    <p>SSA is a property of an intermediate representation(IR).</p>
 
-<p>SSA form has the following properties:</p>
+    <p>SSA form has the following properties:</p>
 
-<ul>
-  <li>Each variable be assigned once.</li>
-  <li>Each variable be defined before it is used.</li>
-</ul>
+    <ul>
+      <li>Each variable be assigned once.</li>
+      <li>Each variable be defined before it is used.</li>
+    </ul>
 
-<h4 class="part">Benefits</h4>
-<p>Use-def chains are easily identified.</p>
+    <h4>Benefits</h4>
+    <p>Use-def chains are easily identified.</p>
 
-<p>ex) Easy code sequence in C</p>
+    <p>ex) Easy code sequence in C</p>
 
-<div class="flex-container">
-  <div>{% highlight c %}{{ ssa-form-ex-source }}{% endhighlight %}</div>
+    <div class="flex-container">
+      <div>{% highlight c %}{{ ssa-form-ex-source }}{% endhighlight %}</div>
 
-  <div>{% highlight c %}{{ ssa-form-ex-ir }}{% endhighlight %}</div>
+      <div>{% highlight c %}{{ ssa-form-ex-ir }}{% endhighlight %}</div>
+    </div>
+
+    <p>cf. <a href="https://en.wikipedia.org/wiki/Static_single_assignment_form">wikipedia</a></p>
+  </div>
+  <!-- vm-ssa-form -->
 </div>
-
-<p>cf. <a href="https://en.wikipedia.org/wiki/Static_single_assignment_form">wikipedia</a></p>
+<!-- vm-4-appendix -->

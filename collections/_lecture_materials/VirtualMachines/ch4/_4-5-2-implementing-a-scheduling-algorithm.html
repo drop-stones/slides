@@ -1,48 +1,102 @@
-<h3 class="subsection-title" id="4-5-2-title">4.5.2 Implementing a Scheduling Algorithm</h3>
+<div class="subsection" id="vm-4-5-2-implementing-a-scheduling-algorithm">
+  <h3>4.5.2 Implementing a Scheduling Algorithm</h3>
 
-<p>
-  In this subsection, we consider a complete code-scheduling algorithm.<br>
-  This algorithm have the following properties:
-</p>
+  <p>
+    In this subsection, we consider a complete code-scheduling algorithm.<br />
+    This algorithm have the following properties:
+  </p>
 
-<ul>
-  <li>Optimization granularity: superblock</li>
-  <li>
-    Register states are always recoverable.
+  <ul>
+    <li>Optimization granularity: superblock</li>
+    <li>
+      Register states are always recoverable.
+      <ul>
+        <li><em>Register live ranges</em> are extended by backups.</li>
+      </ul>
+    </li>
+    <li>
+      Handling precise traps:
+      <ol>
+        <li>Recover the original register state at the <em>checkpoint</em>.</li>
+        <li>Interpret the original source code from the <em>checkpoint</em>.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <p>We will use the translations from IA-32 to PowerPC as an example.</p>
+
+  <div class="flex-container">
+    <div>Original Source Code: <br />{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
+  </div>
+
+  <div class="subsubsection" id="vm-4-5-2-step1">
+    <h4>Step 1: Translate to Single-Assignment Form</h4>
+
+    <p>Original source code is translated to target code and placed in code cache.</p>
+    <div class="flex-container">
+      <div>Original Source Code: <br />{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
+      <div>Translated Target Code:<br />{% highlight nasm %}{{ translated-target-code }}{% endhighlight %}</div>
+    </div>
+
+    <p>The translated target code is:</p>
     <ul>
-      <li><em>Register live ranges</em> are extended by backups.</li>
+      <li>converted in <a href="#ssa-form-title">SSA</a> form.</li>
+      <li>pused into a scheduling buffer.</li>
     </ul>
-  </li>
-  <li>
-    Handling precise traps:
-    <ol>
-      <li>Recover the original register state at the <em>checkpoint</em>.</li>
-      <li>Interpret the original source code from the <em>checkpoint</em>.</li>
-    </ol>
-  </li>
-</ul>
 
-<p>We will use the translations from IA-32 to PowerPC as an example.</p>
+    <div class="flex-container">
+      <div>Translated Target Code:<br />{% highlight nasm %}{{ translated-target-code }}{% endhighlight %}</div>
+      <div>SSA-Formed Target Code:<br />{% highlight nasm %}{{ ssa-form-target-code }}{% endhighlight %}</div>
+    </div>
+  </div>
+  <!-- vm-4-5-2-step1 -->
 
-<div class="flex-container">
-  <div>Original Source Code: <br>{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
+  <div class="subsubsection" id="vm-4-5-2-step2">
+    <h4>Step 2: Form Register Map</h4>
+
+    <p><em>Register Map (RegMAP)</em> maintains a mapping from <em>the source registers</em> to <em>the single-assignment registers</em>.</p>
+
+    <div class="flex-container">
+      <div><br />Original Source Code: <br />{% highlight nasm %}{{ original-source-code-without-description }}{% endhighlight %}</div>
+      <div><br />SSA-Formed Target Code:<br />{% highlight nasm %}{{ ssa-form-target-code }}{% endhighlight %}</div>
+      <div>Register Map (RegMAP): <br />{% highlight c %}{{ reg-map }}{% endhighlight %}</div>
+    </div>
+  </div>
+  <!-- vm-4-5-2-step2 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step3">
+    <h4>Step 3: Reorder Code</h4>
+  </div>
+  <!-- vm-4-5-2-step3 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step4">
+    <h4>Step 4: Determine Checkpoints</h4>
+  </div>
+  <!-- vm-4-5-2-step4 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step5">
+    <h4>Step 5: Assign Registers</h4>
+  </div>
+  <!-- vm-4-5-2-step5 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step6">
+    <h4>Step 6: Add Compensate Code</h4>
+  </div>
+  <!-- vm-4-5-2-step6 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step7">
+    <h4>Precise State Recovery</h4>
+  </div>
+  <!-- vm-4-5-2-step7 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step8">
+    <h4>Condition Code Handling</h4>
+  </div>
+  <!-- vm-4-5-2-step8 -->
+
+  <div class="subsubsection" id="vm-4-5-2-step5a">
+    <h4>Step 5a: Assign Register with Condition Codes</h4>
+  </div>
+  <!-- vm-4-5-2-step5a -->
 </div>
-
-<h4 class="part-title">Step 1: Translate to Single-Assignment Form</h4>
-
-<h4 class="part-title">Step 2: Form Register Map</h4>
-
-<h4 class="part-title">Step 3: Reorder Code</h4>
-
-<h4 class="part-title">Step 4: Determine Checkpoints</h4>
-
-<h4 class="part-title">Step 5: Assign Registers</h4>
-
-<h4 class="part-title">Step 6: Add Compensate Code</h4>
-
-<h4 class="part-title">Precise State Recovery</h4>
-
-<h4 class="part-title">Condition Code Handling</h4>
-
-<h4 class="part-title">Step 5a: Assign Register with Condition Codes</h4>
-
+<!-- vm-4-5-2-implementing-a-scheduling-algorithm -->

@@ -1,36 +1,35 @@
-<div id="VM4.4 Optimization Framework">
+<div id="vm-4-4-optimization-framework">
+  <h2 class="section-title">4.4 Optimization Framework</h2>
 
-<h2 class="section-title" id="4-4-title">4.4 Optimization Framework</h2>
+  <p>In this section, we first discuss the overarching issues that are common to all the <em>dynamic optimization</em> methods.</p>
+  <p>Optimization can be divided into two categories:</p>
+  <ul>
+    <li>
+      Static optimization (cf. Dragon Book)
+      <ul>
+        <li>Timing: At compilation (before execution)</li>
+        <li>Type of analyzed programs: High-level language, IR (Binary)</li>
+        <li>Analysis granularity: function (intra-procedural), overall (inter-procedural)</li>
+        <li>Available information: high-level semantics (e.g., data structure declarations)</li>
+      </ul>
+    </li>
+    <li>
+      Dynamic optimization (in this section)
+      <ul>
+        <li>Timing: At run time</li>
+        <li>Type of analyzed programs: Binary (Bytecode)</li>
+        <li>Analysis granularity: trace, superblock, (dynamic basic block)</li>
+        <li>Available information: <em>profile</em> information (e.g., frequency of passing paths)</li>
+        <li>Desireble property: Fast, low overhead methods (because optimization is performed at run time)</li>
+      </ul>
+    </li>
+  </ul>
 
-<p>In this section, we first discuss the overarching issues that are common to all the <em>dynamic optimization</em> methods.</p>
-<p>Optimization can be divided into two categories:</p>
-<ul>
-  <li>
-    Static optimization (cf. Dragon Book)
-    <ul>
-      <li>Timing: At compilation (before execution)</li>
-      <li>Type of analyzed programs: High-level language, IR (Binary)</li>
-      <li>Analysis granularity: function (intra-procedural), overall (inter-procedural)</li>
-      <li>Available information: high-level semantics (e.g., data structure declarations)</li>
-    </ul>
-  </li>
-  <li>
-    Dynamic optimization (in this section)
-    <ul>
-      <li>Timing: At run time</li>
-      <li>Type of analyzed programs: Binary (Bytecode)</li>
-      <li>Analysis granularity: trace, superblock, (dynamic basic block)</li>
-      <li>Available information: <em>profile</em> information (e.g., frequency of passing paths)</li>
-      <li>Desireble property: Fast, low overhead methods (because optimization is performed at run time)</li>
-    </ul>
-  </li>
-</ul>
-
-{% include_relative _4-4-1-approach.html %}
-
-{% include_relative _4-4-2-optimizations-and-compatibility.html %}
-
-{% include_relative _4-4-3-consistent-register-mapping.html %}
+  {% include_relative _4-4-1-approach.html %}
+  
+  {% include_relative _4-4-2-optimizations-and-compatibility.html %} 
+  
+  {% include_relative _4-4-3-consistent-register-mapping.html %}
 
 </div>
-
+<!-- vm-4-4-optimization-framework -->

@@ -1,3 +1,17 @@
+<!-- 4 -->
+{% assign appendix-ssa-form = <a href="#vm-ssa-form">SSA</a> %}
+{% assign 4-4-title   = <a href="#4-4-title">4.4 Optimization Framework</a> %} 
+{% assign 4-4-1-title = <a href="#4-4-1-title">4.4.1 Approarch</a> %} 
+{% assign 4-4-2-title = <a href="#4-4-2-title">4.4.2 Optimization and Compatibility</a> %}
+{% assign 4-4-3-title = <a href="#4-4-3-title">4.4.3 Consistent Framework</a> %}
+{% assign 4-5-title   = <a href="#4-5-title">4.5 Code Reordering</a> %}
+{% assign 4-5-1-title = <a href="#4-5-1-title">4.5.1 Primitive Instruction Reordering</a> %}
+{% assign 4-5-2-title = <a href="#4-5-2-title">4.5.2 Implementing a Scheduling Algorithm</a> %}
+{% assign 4-5-3-title = <a href="#4-5-3-title">4.5.3 Superblocks Versus Traces</a> %}
+{% assign appendix-title = <a href="#appendix-title">Appendix</a> %}
+{% assign ssa-form-title = <a href="#ssa-form-title">SSA</a> %}
+
+
 <!-- 4.4.2 -->
 {% assign source-4-27 = "
 // Source
@@ -331,8 +345,45 @@ mem[R6] = R3        // mem
 
 <!-- 4.5.2 -->
 {% assign original-source-code = "
+a : add eax, ebx        ; eax += ebx
+b : bz  L1              ; br L1 if ZF == 0
+c : mov ebx, [eax + 4]  ; ebx = mem[eax + 4]
+d : mul ebx, 10         ; ebx *= 10
+e : add ebx, 1          ; ebx += 1
+f : add ecx, 1          ; ecx += 1
+g : bz  L2              ; br L2 if ZF == 0
+h : add ebx, eax        ; ebx += eax
+i : br  L3              ; br L3
+" %}
+
+<!-- Step.1 -->
+{% assign translated-target-code = "
+a : add r1, r1, r2
+b : bz CR0, L1
+c : lwz r2, 4(r1)
+d : mul r2, r2, 10
+e : add r2, r2, 1
+f : add r3, r3, 1
+g : bz CR0, L2
+h : add r2, r1, r2
+i : b L3
+" %}
+{% assign ssa-form-target-code = "
+a : t5 = r1 + r2, set CR0
+b : bz CR0, L1
+c : t6 = mem[t5 + 4]
+d : t7 = t6 * 10
+e : t8 = t7 + 1
+f : t9 = r3 + 1
+g : bz CR0, L2
+h : t10 = t8 + t5
+i : b L3
+" %}
+
+<!-- Step.2 -->
+{% assign original-source-code-without-description = "
 a : add eax, ebx
-b : bz  L1
+b : bz  L1           
 c : mov ebx, [eax + 4]
 d : mul ebx, 10
 e : add ebx, 1
@@ -340,6 +391,18 @@ f : add ecx, 1
 g : bz  L2
 h : add ebx, eax
 i : br  L3
+" %}
+{% assign reg-map = "
+eax   ebx   ecx   edx
+t5    r2    r3    r4
+t5    r2    r3    r4
+t5    t6    r3    r4
+t5    t7    r3    r4
+t5    t8    r3    r4
+t5    t8    t9    r4
+t5    t8    t9    r4
+t5    t10   t9    r4
+t5    t10   t9    r4
 " %}
 
 <!-- Appendix -->
