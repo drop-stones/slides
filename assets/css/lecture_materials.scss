@@ -1,12 +1,12 @@
 ---
 ---
 
-//$border-color-h2: #888888;
-$border-color-section-title: #888888;
-$border-color-subsection-title: #888888;
-$border-color-part-title: #e8e8e8;
-$border-left-width-section-title: 10px;
-$border-left-width-paragraph-title: 8px;
+$border-color-h2: #888888;
+$border-color-h3: #888888;
+$border-color-h4: #e8e8e8;
+$border-color-h5: $border-color-h4;
+$border-left-width-h2: 10px;
+$border-left-width-h5: 8px;
 
 .post-subtitle {
   font-size: 32px;
@@ -21,26 +21,52 @@ $border-left-width-paragraph-title: 8px;
 .subsubsection,
 .paragraph {
   h2 {
-    border-left: $border-left-width-section-title solid $border-color-section-title;
-    border-bottom: 1px solid $border-color-section-title;
+    border-left: $border-left-width-h2 solid $border-color-h2;
+    border-bottom: 1px solid $border-color-h2;
 
-    padding-left: $border-left-width-section-title;
+    padding-left: $border-left-width-h2;
   }
 
   h3 {
-    border-bottom: 1px solid $border-color-subsection-title;
+    border-bottom: 1px solid $border-color-h3;
   }
 
   h4 {
-    border-bottom: 1px solid $border-color-part-title;
+    border-bottom: 1px solid $border-color-h4;
   }
 
   h5 {
-    border-left: $border-left-width-paragraph-title solid $border-color-part-title;
-    border-bottom: 1px solid $border-color-part-title;
+    border-left: $border-left-width-h5 solid $border-color-h5;
+    border-bottom: 1px solid $border-color-h5;
 
     font-size: 1em;
-    padding-left: $border-left-width-paragraph-title;
+    padding-left: $border-left-width-h5;
+  }
+}
+
+.example {
+  h5 {
+    border: none;
+    font-size: 1em;
+
+    &:before {
+      font-family: "Font Awesome 5 Free";
+      content: "\f044"; // edit icon <i class="far fa-edit"></i>
+      padding-right: 0.5em;
+    }
+  }
+}
+
+.question {
+  h5 {
+    border: none;
+    font-size: 1em;
+
+    &:before {
+      font-family: "Font Awesome 5 Free";
+      content: "\f2c4"; // quora icon <i class="fab fa-quora"></i>
+      padding-right: 0.5em;
+    }
   }
 }
 
@@ -48,4 +74,13 @@ $border-left-width-paragraph-title: 8px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+.code-title {
+  font-family: monospace;
+  color: #666666;
+}
+
+.vm-4-overview-description dt {
+  width: 350px;
 }

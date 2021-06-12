@@ -1,15 +1,14 @@
 <div class="subsection" id="vm-4-4-2-optimization-and-compatibility">
-
   <h3>4.4.2 Optimization and Compatibility</h3>
 
   <p>As disscussed in section 3.2, we must maintain <em>compatibility</em> even after optimization.</p>
 
   <div class="subsubsection" id="vm-compatibility-review">
     <h4>Review: Compatibility for process VM</h4>
-
     <p>
-      We must maintain an isomorphic relationship between guest VM and host platform.<br>
-      To achive this, we focus on all control transfer points:<br>
+      We must maintain an isomorphic relationship between guest VM and host platform.<br />
+      To achive this, we focus on all control transfer points:
+    </p>
     <ul>
       <li>system call</li>
       <li>return from system call</li>
@@ -17,15 +16,14 @@
       <li>interrupt</li>
     </ul>
 
-    And at these points, we must form the <em>precise state</em>:
+    <p>And at these points, we must form the <em>precise state</em>:</p>
     <ul>
       <li>same registers state</li>
       <li>same memory state</li>
     </ul>
-    </p>
-
-    <img src="{{ img_path }}/check_compatibility_on_control_transfer_point.svg">
-  </div> <!-- vm-compatibility-review -->
+    <img src="{{ img_path }}/check_compatibility_on_control_transfer_point.svg" />
+  </div>
+  <!-- vm-compatibility-review -->
 
   <div class="subsubsection" id="vm-trap-compatibility">
     <h4>Trap compatibility</h4>
@@ -39,43 +37,53 @@
 
     <p><em>Trap compatibility</em> must be maintained before and after optimization.</p>
 
-    <p>NG-example) Remove redundant instructions</p>
+    <div class="example" id="vm-example-remove-redundant-instructions">
+      <h5>Remove redundant instructions</h5>
 
-    <div class="flex-container">
-      <div>
-        {% highlight c %}{{ source-4-27 }}{% endhighlight %}
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Source</div>
+          <div>{% highlight c %}{{ source-4-27 }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Target</div>
+          <div>{% highlight c %}{{ target-4-27 }}{% endhighlight %}</div>
+        </div>
       </div>
 
-      <div>
-        {% highlight c %}{{ target-4-27 }}{% endhighlight %}
-      </div>
+      <p>In this example, the optimization violate trap compatibility because:</p>
+      <ul>
+        <li>In source, <code>r1 = r2 + r3</code> may trap.</li>
+        <li>In target, no trap occurs because <code>r1 = r2 + r3</code> is removed.</li>
+      </ul>
+
+      <p>The converse condition for trap compatibility can be maintained.</p>
     </div>
+    <!-- vm-example-remove-redundant-instructions -->
 
-    <p>In this example, the optimization violate trap compatibility because:</p>
-    <ul>
-      <li>In source, <code>r1 = r2 + r3</code> may trap.</li>
-      <li>In target, no trap occurs because <code>r1 = r2 + r3</code> is removed.</li>
-    </ul>
+    <div class="example" id="vm-example-handling-of-devide-by-zero">
+      <h5>Handling of devide-by-zero</h5>
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Source (not handling devide-by-zero)</div>
+          <div>{% highlight c %}{{ source-0-div }}{% endhighlight %}</div>
+        </div>
 
-    <p>The converse condition for trap compatibility can be maintained.</p>
-
-    <p>OK-example) Handling of devide-by-zero</p>
-    <div class="flex-container">
-      <div>
-        {% highlight c %}{{ source-0-div }}{% endhighlight %}
+        <div>
+          <div class="code-title">Target (handling devide-by-zero)</div>
+          <div>{% highlight c %}{{ target-0-div }}{% endhighlight %}</div>
+        </div>
       </div>
 
-      <div>
-        {% highlight c %}{{ target-0-div }}{% endhighlight %}
-      </div>
+      <p>In this example, runtime can maintain trap compatibility because:</p>
+      <ul>
+        <li>In source, <code>r3 = r2 / r1</code> do not trap.</li>
+        <li>In target, runtime can <strong>ignore</strong> divide-by-zero trap while divide-by-zero trap occurs.</li>
+      </ul>
     </div>
-
-    <p>In this example, runtime can maintain trap compatibility because:</p>
-    <ul>
-      <li>In source, <code>r3 = r2 / r1</code> do not trap.</li>
-      <li>In target, runtime can ignore divide-by-zero trap while divide-by-zero trap occurs.</li>
-    </ul>
-  </div> <!-- vm-trap-compatibility -->
+    <!-- vm-example-handling-of-devide-by-zero -->
+  </div>
+  <!-- vm-trap-compatibility -->
 
   <div class="subsubsection" id="vm-memory-and-register-compatibility">
     <h4>Memory and Register Compatibility at Trap Instructions</h4>
@@ -88,40 +96,42 @@
 
     <p><em>Memory</em> and <em>register state compatibility</em> must be maintained even after optimization.</p>
 
-    <div class="example">
-    <p>Example) Code reordering optimization may violate <em>register state compatibility</em>.</p>
-    <div class="flex-container">
-      <div>
-        {% highlight c %}{{ source-4-28 }}{% endhighlight %}
+    <div class="example" id="vm-example-code-reordering-violate-register-state-compatibility">
+      <h5>Code reordering optimization may violate <em>register state compatibility</em>.</h5>
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Source</div>
+          <div>{% highlight c %}{{ source-4-28 }}{% endhighlight %}</div>
+        </div>
+
+        <div>
+          <div class="code-title">Target</div>
+          <div>{% highlight c %}{{ target-4-28 }}{% endhighlight %}</div>
+        </div>
+
+        <div>
+          <div class="code-title">Target with saved register</div>
+          <div>{% highlight c %}{{ target-with-saved-reg-4-28 }}{% endhighlight %}</div>
+        </div>
       </div>
 
-      <div>
-        {% highlight c %}{{ target-4-28 }}{% endhighlight %}
-      </div>
+      <p>
+        It might be beneficial to reorder <code>r6 = r1 * r7</code> to a higher point because multiply take several cycles.<br />
+        But reordering line.2 and line.3 violates <em>register state compatibility</em> because when <code>r9 = r1 + r5</code> trap,:
+      </p>
+      <ul>
+        <li>in souce, <code>r6</code> has not been updated yet.</li>
+        <li>in target, <code>R6</code> has been updated.</li>
+      </ul>
 
-      <div>
-        {% highlight c %}{{ target-with-saved-reg-4-28 }}{% endhighlight %}
-      </div>
+      <p>
+        To maintain <em>register state compatibility</em>, saved register <code>S1</code> hold the multiply results.<br />
+        This optimized code update registers in the same order as original source.
+      </p>
     </div>
-
-
-    <p>
-      It might be beneficial to reorder <code>r6 = r1 * r7</code> to a higher point because multiply take several
-      cycles.<br>
-      But reordering line.2 and line.3 violates <em>register state compatibility</em> because when
-      <code>r9 = r1 + r5</code> trap,:
-    <ul>
-      <li>in souce, <code>r6</code> has not been updated yet.</li>
-      <li>in target, <code>R6</code> has been updated.</li>
-    </ul>
-
-    To maintain <em>register state compatibility</em>, saved register <code>S1</code> hold the multiply results.<br>
-    This optimized code update registers in the same order as original source.
-    </p>
-
-    </div>
-    <!-- example -->
-  </div> <!-- vm-memory-and-register-compatibility -->
+    <!-- vm-exmaple-code-reordering-violate-register-state-compatibility -->
+  </div>
+  <!-- vm-memory-and-register-compatibility -->
 
   <aside>
     <div class="subsubsection" id="vm-intrinsic-vs-extrinsic-compatibility">
@@ -150,8 +160,8 @@
           </ul>
         </li>
       </ul>
-    </div> <!-- vm-intrinsic-vs-extrinsic-compatibility -->
+    </div>
+    <!-- vm-intrinsic-vs-extrinsic-compatibility -->
   </aside>
-
 </div>
 <!-- vm-4-4-2-optimization-and-compatibility -->

@@ -1,6 +1,13 @@
 // description list
 dt {
+  float: left;
+  clear: left;
+  text-align: left;
   font-weight: bold;
+
+  &:after {
+    content: ":";
+  }
 }
 
 dd {

@@ -1,18 +1,80 @@
 <div class="section" id="vm-4-overview">
-  <h2>Overview</h2>
+  <h2>Review + Overview</h2>
 
-  <h4>Contents</h4>
-  {% comment %}
-  <dl>
-    <dt>4.4 Optimization Framework</dt>
-    <dd>Disscution the overarching issues that are common to all optimization methods.</dd>
-    <ol>
-      <li>Approach</li>
-    </ol>
-    <dt>4.5 Code Reordering</dt>
-    <dd></dd>
-  </dl>
+  <div class="subsection" id="vm-4-review">
+    <h3>Review</h3>
 
-  <div><span>1</span> My First Item</div>
-  {% endcomment %}
+    <p>In Chapter.4 Dynamic Binary Optimization, the discussion is in the following:</p>
+    <ul>
+      <li>Typical program behaviour for optimization heuristics (4.4.1)</li>
+      <li>Profiling techniques to collect <em>profile</em> (4.4.2)</li>
+      <li>Forming large translation/optimization blocks using profile (4.4.3)</li>
+      <li><strong>Overall view of dynamic optimization (4.4.4)</strong></li>
+      <li><strong>Reordering optimization (4.4.5)</strong></li>
+      <li>...</li>
+    </ul>
+  </div>
+  <!-- vm-4-review -->
+
+  <div class="subsection" id="vm-4-overview">
+    <h3>Overview of section 4.4.4 and 4.4.3</h3>
+
+    <dl class="vm-4-overview-description">
+      <dt>{{ 4-4-title }}</dt>
+      <dd>Overall view of dynamic optimization</dd>
+
+      <dt>&nbsp;&nbsp;{{ 4-4-1-title }}</dt>
+      <dd>Overall approach to dynamic optimization</dd>
+
+      <dt>&nbsp;&nbsp;{{ 4-4-2-title }}</dt>
+      <dd>Compatibility issues</dd>
+
+      <dt>&nbsp;&nbsp;{{ 4-4-3-title }}</dt>
+      <dd>Register mapping issues</dd>
+
+      <dt>{{ 4-5-title }}</dt> 
+      <dd>Reordering optimization</dd>
+
+      <dt>&nbsp;&nbsp;{{ 4-5-1-title }}</dt>
+      <dd>Simple swap reordering</dd>
+
+      <dt>&nbsp;&nbsp;{{ 4-5-2-title }}</dt>
+      <dd>Complete reordering algorithm</dd>
+
+      <dt>&nbsp;&nbsp;{{ 4-5-3-title }}</dt>
+      <dd>Granularity of dynamic optmization</dd>
+    </dl>
+
+  </div>
+  <!-- vm-4-overview -->
+ 
+  <div class="subsection" id="vm-4-contents">
+    <h3>Contents</h3>
+
+    <ul>
+      <li>
+        <a href="#vm-4-4-optimization-framework">{{ 4-4-title }}</a>
+        <ul>
+          <li><a href="#vm-4-4-1-approach">{{ 4-4-1-title }}</a></li>
+          <li><a href="#vm-4-4-2-optimization-and-compatibility">{{ 4-4-2-title }}</a></li>
+          <li><a href="#vm-4-4-3-consistent-register-mapping">{{ 4-4-3-title }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#vm-4-5-code-reordering">{{ 4-5-title }}</a>
+        <ul>
+          <li><a href="#vm-4-5-1-primitive-instruction-reordering">{{ 4-5-1-title }}</a></li>
+          <li><a href="#vm-4-5-2-implementing-a-scheduling-algorithm">{{ 4-5-2-title }}</a></li>
+          <li><a href="#vm-4-5-3-superblocks-versus-traces">{{ 4-5-3-title }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#vm-4-appendix">{{ appendix-title }}</a>
+        <ul>
+          <li><a href="#vm-ssa-form">{{ ssa-form-title }}</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <!-- vm-4-contents -->
 </div>

@@ -26,7 +26,10 @@
   <p>We will use the translations from IA-32 to PowerPC as an example.</p>
 
   <div class="flex-container">
-    <div>Original Source Code: <br />{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
+    <div>
+      <div class="code-title">Original Source Code</div>
+      <div>{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
+    </div>
   </div>
 
   <div class="subsubsection" id="vm-4-5-2-step1">
@@ -34,19 +37,33 @@
 
     <p>Original source code is translated to target code and placed in code cache.</p>
     <div class="flex-container">
-      <div>Original Source Code: <br />{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
-      <div>Translated Target Code:<br />{% highlight nasm %}{{ translated-target-code }}{% endhighlight %}</div>
+      <div>
+        <div class="code-title">Original Source Code</div>
+        <div>{% highlight nasm %}{{ original-source-code }}{% endhighlight %}</div>
+      </div>
+
+      <div>
+        <div class="code-title">Translated Target Code</div>
+        <div>{% highlight nasm %}{{ translated-target-code }}{% endhighlight %}</div>
+      </div>
     </div>
 
     <p>The translated target code is:</p>
     <ul>
-      <li>converted in <a href="#ssa-form-title">SSA</a> form.</li>
+      <li>converted in <a href="#vm-ssa-form">SSA</a> form.</li>
       <li>pused into a scheduling buffer.</li>
     </ul>
 
     <div class="flex-container">
-      <div>Translated Target Code:<br />{% highlight nasm %}{{ translated-target-code }}{% endhighlight %}</div>
-      <div>SSA-Formed Target Code:<br />{% highlight nasm %}{{ ssa-form-target-code }}{% endhighlight %}</div>
+      <div>
+        <div class="code-title">Translated Target Code</div>
+        <div>{% highlight nasm %}{{ translated-target-code }}{% endhighlight %}</div>
+      </div>
+
+      <div>
+        <div class="code-title">SSA-Formed Target Code</div>
+        <div>{% highlight nasm %}{{ ssa-form-target-code }}{% endhighlight %}</div>
+      </div>
     </div>
   </div>
   <!-- vm-4-5-2-step1 -->
@@ -57,9 +74,22 @@
     <p><em>Register Map (RegMAP)</em> maintains a mapping from <em>the source registers</em> to <em>the single-assignment registers</em>.</p>
 
     <div class="flex-container">
-      <div><br />Original Source Code: <br />{% highlight nasm %}{{ original-source-code-without-description }}{% endhighlight %}</div>
-      <div><br />SSA-Formed Target Code:<br />{% highlight nasm %}{{ ssa-form-target-code }}{% endhighlight %}</div>
-      <div>Register Map (RegMAP): <br />{% highlight c %}{{ reg-map }}{% endhighlight %}</div>
+      <div>
+        <div class="code-title">Original Source Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ original-source-code-without-description }}{% endhighlight %}</div>
+      </div>
+
+      <div>
+        <div class="code-title">SSA-Formed Target Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ ssa-form-target-code }}{% endhighlight %}</div>
+      </div>
+
+      <div>
+        <div class="code-title">Register Map (RegMAP)</div>
+        <div>{% highlight c %}{{ reg-map }}{% endhighlight %}</div>
+      </div>
     </div>
   </div>
   <!-- vm-4-5-2-step2 -->

@@ -6,14 +6,16 @@
     <li>
       In simple pipeline microarchitectures, instructions are executed strictly in program order.
       <ul>
-        <li><em>Code Reordering</em> have an effect on performance directly.</li>
+        <li><em>Code Reordering</em> improve pipeline performance.</li>
       </ul>
     </li>
     <li>
-      In <a href="https://en.wikipedia.org/wiki/Very_long_instruction_word">VLIW</a> architectures:
+      Source binary is not ordered for target processors.
       <ul>
-        <li>The compiler reorder instructions to gather independent instructions.</li>
-        <li>The compiler pack them together within the same long instruction word.</li>
+        <li>
+          In <a href="https://en.wikipedia.org/wiki/Very_long_instruction_word">VLIW</a> architectures, 
+          VLIW processors assume that the compiler reorder instructions to gather independent instructions.
+        </li>
       </ul>
     </li>
     <li>
@@ -31,8 +33,9 @@
 
   {% include_relative _4-5-1-primitive-instruction-reordering.html %}
   
-  {% include_relative _4-5-2-implementing-a-scheduling-algorithm.html %} 
+  {% include_relative _4-5-2-implementing-a-scheduling-algorithm.html %}
   
   {% include_relative _4-5-3-superblocks-versus-traces.html %}
+
 </div>
 <!-- vm-4-5-code-reordering -->
