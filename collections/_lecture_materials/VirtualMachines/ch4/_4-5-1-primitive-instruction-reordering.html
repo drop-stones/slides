@@ -49,7 +49,7 @@
           <li>Description: instructions that place a value in a memory</li>
           <li>Property: cannot be "undone" easily (because saving memory have high cost of time and memory)</li>
           <li>
-            Exaples:
+            Examples:
             <ul>
               <li>{% highlight c %}mov [rax], rbx // mem[rax] = rbx{% endhighlight %}</li>
               <li>{% highlight c %}stw r1, 4(r2) // mem[r2 + 4] = r1{% endhighlight %}</li>
@@ -65,7 +65,6 @@
         </ul>
       </li>
 
-      {% assign join-example = " br label ... label: // join points ... " %}
       <li>
         join: Join points
         <ul>
@@ -128,35 +127,61 @@
   </div>
   <!-- vm-four-instruction-categories -->
 
+  <p>
+    We will now discuss the reordering of two adjacent instructions.<br>
+    There are two keys to understanding well:
+  </p>
+  <ul>
+    <li>
+      Are memory and register states recoverable at trap instructions?
+      <ul>
+        <li>If so, the reordering is allowed.</li>
+        <li>If not, the reordering is not allowed.</li>
+      </ul>
+    </li>
+    <li>
+      Does the reordering change control flow?
+      <ul>
+        <li>If so, the reordering is not allowed.</li>
+        <li>If not, the reordering is allowed.</li>
+      </ul>
+    </li>
+  </ul>
+
   <div class="subsubsection" id="vm-br-another">
     <h4>br &#8646; another</h4>
 
     <div class="paragraph" id="vm-move-reg-or-mem-below-br">
       <h5>Move reg or mem below br</h5>
       <div class="flex-container">
-        <div>TODO: figure-4-31-a-reg</div>
-
-        <div>TODO: figure-4-31-a-mem</div>
+        <div class="width-half"><img src="{{ img_path }}/move-reg-below-br.svg"></div>
+        <div class="width-half"><img src="{{ img_path }}/move-mem-below-br.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-reg-below-br">
         <h5>Move reg below br</h5>
 
-        <div class="code-title"><p>Before reordering:</p></div>
+        <div class="code-title"><p>Before reordering</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ move-reg-below-br-before }}{% endhighlight %}</div>
           <div>{% highlight c %}{{ move-reg-below-br-exit-before }}{% endhighlight %}</div>
         </div>
-        <div class="code-title"><p>After reordering:</p></div>
+        <div class="code-title"><p>After reordering</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ move-reg-below-br-after }}{% endhighlight %}</div>
-          <div>{% highlight c %}{{ move-reg-below-br-exit-after }}{% endhighlight %}</div>
+          <div>
+            <div>
+              <div class="code-title">Compensation Code</div>
+              <div>{% highlight c %}{{ move-reg-below-br-compensation }}{% endhighlight %}</div>
+            </div>
+            <div>{% highlight c %}{{ move-reg-below-br-exit-after }}{% endhighlight %}</div>
+          </div>
         </div>
       </div>
       <!-- vm-example-move-reg-below-br -->
 
       <p>
-        <em>Compasation code</em>
+        <em>Compensation code</em>
         ensures that the state is the same as original code.
       </p>
     </div>
@@ -166,9 +191,7 @@
       <h5>Move reg above br</h5>
 
       <div class="flex-container">
-        <div>TODO: figure-4-32-a-reg</div>
-
-        <div>TODO: figure-4-32-a-mem</div>
+        <div class="width-half"><img src="{{ img_path}}/move-reg-above-br.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-reg-above-br">
@@ -202,6 +225,9 @@
             must be
             <em>live</em>
             until the original position (between ins.2 and ins.4).
+            <ul>
+              <li><em>Live</em> means that the original values are hold.</li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -212,7 +238,7 @@
     <div class="paragraph" id="vm-move-mem-above-br">
       <h5>Move mem above br</h5>
       <div class="flex-container">
-        <div>TODO: figure</div>
+        <div><img src="{{ img_path }}/move-mem-above-br.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-mem-above-br">
@@ -235,10 +261,13 @@
           cannot be recoverable.<br />
         </p>
 
-        <div class="code-title"><p>Meaningless(?) reordering:</p></div>
+        <div class="code-title"><p>Memory compatible but slow(?) reordering:</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ meaningless-move-mem }}{% endhighlight %}</div>
-          <div>{% highlight c %}{{ meaningless-move-mem-exit }}{% endhighlight %}</div>
+          <div>
+            <div>{% highlight c %}{{ meaningless-move-mem-compensation }}{% endhighlight %}</div>
+            <div>{% highlight c %}{{ meaningless-move-mem-exit }}{% endhighlight %}</div>
+          </div>
         </div>
 
         <p>
@@ -253,9 +282,8 @@
     <div class="paragraph" id="vm-move-br-around-join">
       <h5>Move br around join</h5>
       <div class="flex-container">
-        <div>TODO: figure for br <-> join</div>
-
-        <div>TODO: figure for join <-> br</div>
+        <div><img src="{{ img_path }}/move-br-above-join.svg"></div>
+        <div><img src="{{ img_path }}/move-br-below-join.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-br-around-join">
@@ -263,10 +291,12 @@
         <div class="flex-container">
           <div>
             <div class="code-title">Before reordering</div>
+            <div>{% highlight c %}{{ move-br-around-join-branch-from }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ move-br-around-join-before }}{% endhighlight %}</div>
           </div>
           <div>
             <div class="code-title">After reordering</div>
+            <div>{% highlight c %}{{ move-br-around-join-branch-from }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ move-br-around-join-after }}{% endhighlight %}</div>
           </div>
         </div>
@@ -276,6 +306,32 @@
       <!-- vm-example-move-br-around-join -->
     </div>
     <!-- vm-move-br-around-join -->
+
+    <div class="paragraph" id="vm-swap-br-and-br">
+      <h5>Swap br and br</h5>
+      <div class="flex-container">
+        <div><img src="{{ img_path }}/swap-br-and-br.svg"></div>
+      </div>
+
+      <div class="example" id="vm-example-swap-br-and-br">
+        <h5></h5>
+        <div class="flex-container">
+          <div>
+            <div class="code-title">Before optimization</div>
+            <div>{% highlight c %}{{ swap-br-before }}{% endhighlight %}</div>
+          </div>
+          
+          <div>
+            <div class="code-title">After optimization</div>
+            <div>{% highlight c %}{{ swap-br-after }}{% endhighlight %}</div>
+          </div>
+        </div>
+
+        <p>Obviously control flow is changed.</p>
+      </div>
+      <!-- vm-example-move-br-and-br -->
+    </div>
+    <!-- vm-swap-br-and-br -->
   </div>
   <!-- vm-br-another -->
 
@@ -283,9 +339,10 @@
     <h4>join &#8646; another</h4>
 
     <div class="paragraph" id="vm-move-reg-above-join">
-      <h5>Move reg above join</h5>
+      <h5>Move reg or mem above join</h5>
       <div class="flex-container">
-        <div>TODO: figure-4-33-reg</div>
+        <div class="width-half"><img src="{{ img_path }}/move-reg-above-join.svg"></div>
+        <div class="width-half"><img src="{{ img_path }}/move-mem-above-join.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-reg-above-join">
@@ -293,10 +350,13 @@
         <div class="flex-container">
           <div>
             <div class="code-title">Before reordering</div>
+            <div>{% highlight c %}{{ move-reg-above-join-branch-from }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ move-reg-above-join-before }}{% endhighlight %}</div>
           </div>
           <div>
             <div class="code-title">After reordering</div>
+            <div>{% highlight c %}{{ move-reg-above-join-branch-from-after }}{% endhighlight %}</div>
+            <div>{% highlight c %}{{ move-reg-above-join-compensation }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ move-reg-above-join-after }}{% endhighlight %}</div>
           </div>
         </div>
@@ -307,18 +367,11 @@
     </div>
     <!-- vm-move-reg-above-join -->
 
-    <div class="paragraph" id="vm-move-mem-above-join">
-      <h5>Move mem above join</h5>
-      <div class="flex-container">
-        <div>TODO: figure-4-33-mem</div>
-      </div>
-    </div>
-
     <div class="paragraph" id="vm-move-reg-or-mem-below-join">
       <h5>Move reg or mem below join</h5>
       <div class="flex-container">
-        <div>TODO: figure for move reg below join</div>
-        <div>TODO: figure for move mem below join</div>
+        <div><img src="{{ img_path }}/move-reg-below-join.svg"></div>
+        <div><img src="{{ img_path }}/move-mem-below-join.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-reg-below-join">
@@ -326,16 +379,18 @@
         <div class="flex-container">
           <div>
             <div class="code-title">Before reordering</div>
+            <div>{% highlight c %}{{ move-reg-below-join-branch-from }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ move-reg-below-join-before }}{% endhighlight %}</div>
           </div>
           <div>
             <div class="code-title">After reordering</div>
+            <div>{% highlight c %}{{ move-reg-below-join-branch-from }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ move-reg-below-join-after }}{% endhighlight %}</div>
           </div>
         </div>
 
         <p>
-          This example shows that execution path 1-3-2 changes
+          This example shows that execution path 2-4-3 changes
           <code>R1</code>
           value.
         </p>
@@ -347,7 +402,7 @@
     <div class="paragraph" id="vm-swap-join-points">
       <h5>Swap join points</h5>
       <div class="flex-container">
-        <div>TODO: figure</div>
+        <div><img src="{{ img_path }}/swap-join-and-join.svg"></div>
       </div>
 
       <div class="example" id="vm-example-swap-join-points">
@@ -355,10 +410,14 @@
         <div class="flex-container">
           <div>
             <div class="code-title">Before reordering</div>
+            <div>{% highlight c %}{{ swap-join-points-branch-label1 }}{% endhighlight %}</div>
+            <div>{% highlight c %}{{ swap-join-points-branch-label2 }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ swap-join-points-before }}{% endhighlight %}</div>
           </div>
           <div>
             <div class="code-title">After reordering</div>
+            <div>{% highlight c %}{{ swap-join-points-branch-label1 }}{% endhighlight %}</div>
+            <div>{% highlight c %}{{ swap-join-points-branch-label2 }}{% endhighlight %}</div>
             <div>{% highlight c %}{{ swap-join-points-after }}{% endhighlight %}</div>
           </div>
         </div>
@@ -377,8 +436,8 @@
     <div class="paragraph" id="vm-move-reg-above-reg-or-mem">
       <h5>Move reg above reg or mem</h5>
       <div class="flex-container">
-        <div>TODO: figure for swap reg</div>
-        <div>TODO: figure for move reg above mem</div>
+        <div class="width-half"><img src="{{ img_path }}/swap-reg-and-reg.svg"></div>
+        <div class="width-half"><img src="{{ img_path }}/move-reg-above-mem.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-reg-above-mem">
@@ -401,7 +460,8 @@
     <div class="paragraph" id="vm-move-mem-above-reg-or-mem">
       <h5>Move mem above reg or mem</h5>
       <div class="flex-container">
-        <div>TODO: figure for move mem above mem and reg</div>
+        <div><img src="{{ img_path }}/move-mem-above-reg.svg"></div>
+        <div><img src="{{ img_path }}/swap-mem-and-mem.svg"></div>
       </div>
 
       <div class="example" id="vm-example-move-mem-above-reg">
@@ -481,6 +541,9 @@
         Move
         <em>reg</em>
         above any instructions (using saved registers)
+        <ul>
+          <li>Register states can be recoverable.</li>
+        </ul>
       </li>
       <li>
         Move
@@ -489,17 +552,58 @@
         <em>mem</em>
         below
         <em>br</em>
-        (by adding compansation code)
+        (by adding compensation code)
       </li>
       <li>
         Move
         <em>mem</em>
         above
         <em>join</em>
-        (by adding compansation code)
+        (by adding compensation code)
       </li>
     </ul>
   </div>
   <!-- vm-4-5-1-summary -->
+
+  <div class="question" id="question-4-5-1">
+    <h5>Answer whether this optimization is allowed and why.</h5>
+
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Before reordering</div>
+        <div>{% highlight c %}{{ question-4-5-1-q1-before }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">After reordering</div>
+        <div>{% highlight c %}{{ question-4-5-1-q1-after }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <details>
+      <summary class="answer"></summary>
+      No. A saved register is needed.
+      <div class="flex-container">
+        <div>{% highlight c %}{{ question-4-5-1-q1-answer }}{% endhighlight %}</div>
+      </div>
+    </details>
+
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Before reordering</div>
+        <div>{% highlight c %}{{ question-4-5-1-q2-before }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">After reordering</div>
+        <div>{% highlight c %}{{ question-4-5-1-q2-after }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <details>
+      <summary class="answer"></summary>
+      No. If <code>r1 = r2 + r3</code> trap, we cannot recover <code>mem[r4]</code>.
+    </details>
+  </div>
+  <!-- question-4-5-1 -->
+
 </div>
 <!-- vm-4-5-1-primitive-instruction-reordering -->

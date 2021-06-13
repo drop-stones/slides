@@ -35,6 +35,8 @@
     </ul>
     <p style="color: gray"><span>Note:</span> Except for a page fault (in Chapter.7)</p>
 
+    <p>Intuitively, <em>Trap timing in guest</em> == <em>Trap timing in host</em>.</p>
+
     <p><em>Trap compatibility</em> must be maintained before and after optimization.</p>
 
     <div class="example" id="vm-example-remove-redundant-instructions">
@@ -163,5 +165,41 @@
     </div>
     <!-- vm-intrinsic-vs-extrinsic-compatibility -->
   </aside>
+
+  <div class="question" id="vm-4-4-2-question">
+    <h5>Answer whether this optimization maintains compatibility or not.</h5>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Before optimization</div>
+        <div>{% highlight c %}{{ question-4-4-2-q1-before }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">After optimization</div>
+        <div>{% highlight c %}{{ question-4-4-2-q1-after }}{% endhighlight %}</div>
+      </div>
+    </div>
+    
+    <details>
+      <summary class="answer"></summary>
+      Yes!! because saved register have <em>backup</em> of <code>r1</code>.
+    </details>
+
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Before optimization</div>
+        <div>{% highlight c %}{{ question-4-4-2-q2-before }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">After optimization</div>
+        <div>{% highlight c %}{{ question-4-4-2-q2-after }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <details>
+      <summary class="answer"></summary>
+      Yes!! because branch instructions cannot trap.
+    </details>
+  </div>
+  <!-- vm-4-4-2-question -->
 </div>
 <!-- vm-4-4-2-optimization-and-compatibility -->

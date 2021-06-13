@@ -2,7 +2,7 @@
 {% assign 4-4-title   = "4.4 Optimization Framework" %} 
 {% assign 4-4-1-title = "4.4.1 Approarch" %} 
 {% assign 4-4-2-title = "4.4.2 Optimization and Compatibility" %}
-{% assign 4-4-3-title = "4.4.3 Consistent Framework" %}
+{% assign 4-4-3-title = "4.4.3 Consistent Register Mapping" %}
 {% assign 4-5-title   = "4.5 Code Reordering" %}
 {% assign 4-5-1-title = "4.5.1 Primitive Instruction Reordering" %}
 {% assign 4-5-2-title = "4.5.2 Implementing a Scheduling Algorithm" %}
@@ -58,13 +58,39 @@ R3 = R2 / R1  // devide-by-zero trap
 4 : R3 = S1 + 1
 " %}
 
+{% assign question-4-4-2-q1-before = "
+1 : mem[r1] = r2
+2 : r1 = r2 * r3
+3 : ...
+" %}
+{% assign question-4-4-2-q1-after = "
+2': S1 = r2 * r3
+1 : mem[r1] = r2
+2 : r1 = S1
+3 : ...
+" %}
+
+{% assign question-4-4-2-q2-before = "
+1 : r1 = r2 + r3
+2 : if false br exit
+3 : r4 = mem[r1]
+4 : ...
+" %}
+{% assign question-4-4-2-q2-after = "
+1 : r1 = r2 + r3
+// if false br exit
+3 : r4 = mem[r1];
+4 : ...
+" %}
+
+<!-- 4.4.3 -->
 {% assign inconsistent-source-a = "
 R1 = 100
 br C
 " %}
 {% assign inconsistent-source-b = "
 R1 = 200
-br C
+if cond br C
 " %}
 {% assign inconsistent-source-c = "
 C:
@@ -73,14 +99,12 @@ C:
 " %}
 
 {% assign inconsistent-reg-map-a = "
-// Superblock A
 // R1 <-> r1
 r1 = 100
 br C
 " %}
 
 {% assign consistent-reg-map-a = "
-// Superblock A
 // R1 <-> r1
 r1 = 100;
 r3 = r1   // r3 <-> R1
@@ -88,14 +112,12 @@ br C
 " %}
 
 {% assign inconsistent-reg-map-b = "
-// Superblock B
 // R1 <-> r2
 r2 = 200
 if cond, br C
 " %}
 
 {% assign consistent-reg-map-b = "
-// Superblock B
 // R1 <-> r2
 r2 = 200
 r3 = r2   // r3 <-> R1
@@ -103,7 +125,6 @@ if cond, br C
 " %}
 
 {% assign inconsistent-reg-map-c = "
-// Superblock C
 // R1 <-> r3
 C:
   r5 = r4 + r3
@@ -149,6 +170,13 @@ F:
 
 
 <!-- 4.5.1 -->
+{% assign join-example = "
+  br label
+  ...
+label: // join points
+  ...
+" %}
+
 {% assign ins-categories = "
 R1 = mem[R6]        // reg (mem if mem[R6] is volatile)
 R2 = mem[R6 + 4]    // reg (mem if mem[R6 + 4] is volatile)
@@ -177,10 +205,11 @@ mem[R6] = R3        // mem
 2 : R4 = R1 << 2        // reg
 4 : R7 = R7 + 1
 " %}
+{% assign move-reg-below-br-compensation = "
+2': R4 = R1 << 2
+  : br exit
+" %}
 {% assign move-reg-below-br-exit-after = "
-2'  :   R4 = R1 << 2  // compansation
-    :   br exit:
-        ...
 100 : exit:
 101 :   ...
 " %}
@@ -235,78 +264,95 @@ mem[R6] = R3        // mem
 1 : br 2'' if R8 == 0   // br
 3 : ...
 " %}
-{% assign meaningless-move-mem-exit = "
+{% assign meaningless-move-mem-compensation = "
 2'':   mem[R1] = T1  // recover
    :   br exit
-       ...
-4  : exit:
-5  :   ...
+" %}
+{% assign meaningless-move-mem-exit = "
+4 : exit:
+5 :   ...
+" %}
+
+{% assign move-br-around-join-branch-from = "
+1 : ...
+2 : br label
+" %}
+{% assign move-br-around-join-before = "
+3 : label:                // join
+4 :   br exit if R1 == 0  // br
+" %}
+{% assign move-br-around-join-after = "
+4 :   br exit if R1 == 0  // br
+3 : label:                // join
+" %}
+
+{% assign swap-br-before = "
+1 : ...
+2 : br label1
+3 : br label2
+" %}
+{% assign swap-br-after = "
+1 : ...
+3 : br label2
+2 : br label1
 " %}
 
 <!-- join -->
-{% assign move-br-around-join-before = "
-1 :   br label
-  :   ...
-2 : label:                // join
-3 :   br exit if R1 == 0  // br
+{% assign move-reg-above-join-branch-from = "
+1 : ...
+2 : br label
 " %}
-{% assign move-br-around-join-after = "
-1 :   br label
-  :   ...
-3 :   br exit if R1 == 0  // br
-2 : label:                // join
-" %}
-
 {% assign move-reg-above-join-before = "
-1 :   br label      // br
-  :   ...
-2 :   R1 = R1 + 1   // reg
 3 : label:          // join
 4 :   R7 = mem[R6]  // reg
-5 :   R7 = R7 + 1   // reg
+5 :   ...
+" %}
+{% assign move-reg-above-join-branch-from-after = "
+1 : ...
+2 : br 4'
+" %}
+{% assign move-reg-above-join-compensation = "
+4': R7 = mem[R6]
+  : br label
 " %}
 {% assign move-reg-above-join-after = "
-4':   R7 = mem[R6]  // compansation
-1 :   br label      // br
-  :   ...
-2 :   R1 = R1 + 1   // reg
 4 :   R7 = mem[R6]  // moved above
 3 : label:          // join
-5 :   R7 = R7 + 1   // reg
+5 :   ...
 " %}
 
+{% assign move-reg-below-join-branch-from = "
+1 : R1 = 100
+2 : br label
+" %}
 {% assign move-reg-below-join-before = "
-1 :   br label      // br
-  :   ...
-2 :   R1 = R1 + 1   // reg
-3 : label:          // join
-4 :   ...
+3 :   R1 = R1 + 1   // reg
+4 : label:          // join
+5 :   ...
 " %}
 {% assign move-reg-below-join-after = "
-1 :   br label      // br
-  :   ...
-3 : label:          // join
-2 :   R1 = R1 + 1   // reg
-4 :   ...
+4 : label:          // join
+3 :   R1 = R1 + 1   // reg
+5 :   ...
 " %}
 
+{% assign swap-join-points-branch-label1 = "
+1 : R1 = 100
+2 : br label1
+" %}
+{% assign swap-join-points-branch-label2 = "
+3 : R2 = 200
+4 : br label2
+" %}
 {% assign swap-join-points-before = "
-1 :   br label1
-  :   ...
-2 :   br label2
-  :   ...
-3 : label1:     // join
-4 : label2:     // join
-5 :   ...
+5 : label1:     // join
+6 : label2:     // join
+7 :   R3 = R1 + R2
 " %}
 {% assign swap-join-points-after = "
-1 :   br label1
-  :   ...
-2 :   br label2
-  :   ...
-4 : label2:     // join
-3 : label1:     // join
-5 :   ...
+5 : label2:     // join
+6 : label1:     // join
+7 :   R3 = R1 + R2
 " %}
 
 <!-- straight-line -->
@@ -343,6 +389,30 @@ mem[R6] = R3        // mem
 {% assign not-allowed-unless-cf = "Not allowed (changes cntrol flow)" %}
 {% assign not-allowed-unless-rare = "Not allowed (can only be done in rare cases)" %}
 {% assign no-effect = "No effect" %}
+
+<!-- question-4-5-1 -->
+{% assign question-4-5-1-q1-before = "
+1 : if cond br label
+2 : r1 = mem[r2]
+" %}
+{% assign question-4-5-1-q1-after = "
+2 : r1 = mem[r2]
+1 : if cond br label
+" %}
+{% assign question-4-5-1-q1-answer = "
+2': t1 = mem[r2]
+1 : if cond br label
+2 : r1 = t1
+" %}
+
+{% assign question-4-5-1-q2-before = "
+1 : r1 = r2 + r3
+2 : mem[r4] = r5
+" %}
+{% assign question-4-5-1-q2-after = "
+2 : mem[r4] = r5
+1 : r1 = r2 + r3
+" %}
 
 <!-- 4.5.2 -->
 {% assign original-source-code = "
@@ -404,6 +474,58 @@ t5    t8    t9    r4
 t5    t8    t9    r4
 t5    t10   t9    r4
 t5    t10   t9    r4
+" %}
+
+<!-- Step.3 -->
+{% assign before-scheduling = ssa-form-target-code %}
+{% assign after-scheduling = "
+a : t5 = r1 + r2, set CR0
+c : t6 = mem[t5 + 4]
+b : bz CR0, L1
+d : t7 = t6 * 10
+f : t9 = r3 + 1
+g : bz CR0, L2
+e : t8 = t7 + 1
+h : t10 = t8 + t5
+i : b L3
+" %}
+{% assign scheduled-reg-map = "
+eax   ebx   ecx   edx
+t5    r2    r3    r4
+t5    t6    r3    r4
+t5    r2    r3    r4
+t5    t7    r3    r4
+t5    t8    t9    r4
+t5    t8    t9    r4
+t5    t8    r3    r4
+t5    t10   t9    r4
+t5    t10   t9    r4
+" %}
+{% assign l2-compensation-code = "
+L2: t8 = t7 + 1
+" %}
+
+{% assign commit = "
+a
+
+b,c
+d
+
+
+e,f,g
+h
+i
+" %}
+{% assign checkpoint = "
+@
+a
+a
+c
+d
+d
+d
+g
+h
 " %}
 
 <!-- Appendix -->

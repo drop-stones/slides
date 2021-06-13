@@ -1,12 +1,15 @@
 <div class="section" id="vm-4-4-1-approach">
   <h3>4.4.1 Approach</h3>
 
-  <div class="flex-container">
-    <div>TODO: figure-4-25</div>
+  <p>In this subsection, we discuss overall approach to dynamic optimization.</p>
 
-    <div>
+  <h4>Overall Approach</h4>
+  <div class="flex-container">
+    <div style="width: 60%;"><img src="{{ img_path }}/major_steps_in_dynamic_optimization.svg" /></div>
+
+    <div style="width: 40%;">
       <ol>
-        <li>Collect basic blocks using profile information</li>
+        <li>Collect basic blocks from code cache using profile information</li>
         <li>Convert to intermediate (<a href="#vm-ssa-form">SSA</a>) form; place in buffer</li>
         <li>
           Schedule and optimize
@@ -20,8 +23,25 @@
     </div>
   </div>
 
+  <h4>Optimization of Traces or Superblocks</h4>
+  <ul>
+    <li>
+      Trace: multiple entries, multiple exits
+      <ul>
+        <li>In optimization, <em>compensation code</em> are inserted into entry and exit points.</li>
+      </ul>
+    </li>
+    <li>
+      Superblock: single entry, multiple exits
+      <ul>
+        <li>In optimization, <em>compensation code</em> are inserted into exit points.</li>
+      </ul>
+    </li>
+  </ul>
   <div class="flex-container">
-    <div>TODO: figure-4-26</div>
+    <div><img src="{{ img_path}}/optimize_trace_and_superblock.svg" /></div>
   </div>
+
+  <p>We will discuss about <em>compensation code</em> in <a href="#4-5-1-primitive-instruction-reordering">{{ 4-5-1-title }}</a>.</p>
 </div>
 <!-- vm-4-4-1-approach -->

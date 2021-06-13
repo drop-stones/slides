@@ -19,7 +19,7 @@
     <li>
       source register &gt; target register
       <ul>
-        <li>All source register cannot be permanently mapped to target registers.</li>
+        <li>All source registers cannot be permanently mapped to target registers.</li>
         <li>
           Two types of mapping methods:
           <ol>
@@ -56,22 +56,40 @@
 
       <div class="code-title"><p>Source</p></div>
       <div class="flex-container">
-        <div>{% highlight c %}{{ inconsistent-source-a }}{% endhighlight %}</div>
-        <div>{% highlight c %}{{ inconsistent-source-b }}{% endhighlight %}</div>
+        <div>
+          <div class="code-title">Block A</div>
+          <div>{% highlight c %}{{ inconsistent-source-a }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Block B</div>
+          <div>{% highlight c %}{{ inconsistent-source-b }}{% endhighlight %}</div>
+        </div>
       </div>
 
       <div class="flex-container">
-        <div>{% highlight c %}{{ inconsistent-source-c }}{% endhighlight %}</div>
+        <div>
+          <div class="code-title">Block C</div>
+          <div>{% highlight c %}{{ inconsistent-source-c }}{% endhighlight %}</div>
+        </div>
       </div>
 
       <div class="code-title"><p>Target with inconsistent register mapping</p></div>
       <div class="flex-container">
-        <div>{% highlight c %}{{ inconsistent-reg-map-a }}{% endhighlight %}</div>
-        <div>{% highlight c %}{{ inconsistent-reg-map-b }}{% endhighlight %}</div>
+        <div>
+          <div class="code-title">Block A</div>
+          <div>{% highlight c %}{{ inconsistent-reg-map-a }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Block B</div>
+          <div>{% highlight c %}{{ inconsistent-reg-map-b }}{% endhighlight %}</div>
+        </div>
       </div>
 
       <div class="flex-container">
-        <div>{% highlight c %}{{ inconsistent-reg-map-c }}{% endhighlight %}</div>
+        <div>
+          <div class="code-title">Block C</div>
+          <div>{% highlight c %}{{ inconsistent-reg-map-c }}{% endhighlight %}</div>
+        </div>
       </div>
 
       <p>This target code have a problem about <code>R1</code> register mapping because:</p>
@@ -83,12 +101,21 @@
 
       <div class="code-title"><p>Target with extra register copy</p></div>
       <div class="flex-container">
-        <div>{% highlight c %}{{ consistent-reg-map-a }}{% endhighlight %}</div>
-        <div>{% highlight c %}{{ consistent-reg-map-b }}{% endhighlight %}</div>
+        <div>
+          <div class="code-title">Block A</div>
+          <div>{% highlight c %}{{ consistent-reg-map-a }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Block B</div>
+          <div>{% highlight c %}{{ consistent-reg-map-b }}{% endhighlight %}</div>
+        </div>
       </div>
 
       <div class="flex-container">
-        <div>{% highlight c %}{{ inconsistent-reg-map-c }}{% endhighlight %}</div>
+        <div>
+          <div class="code-title">Block C</div>
+          <div>{% highlight c %}{{ inconsistent-reg-map-c }}{% endhighlight %}</div>
+        </div>
       </div>
 
       <p>If translated codes jump to interpreter, the runtime must copy target register values into the register context block, too.</p>
@@ -118,7 +145,7 @@
 
     <div class="example" id="vm-example-simple-fixed-register-mapping">
       <h5>Simple Fixed Register Mapping</h5>
-      
+
       <div class="code-title"><p>Source</p></div>
       <div class="flex-container">
         <div>{% highlight c %}{{ consistent-source-d }}{% endhighlight %}</div>

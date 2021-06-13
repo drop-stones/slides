@@ -51,7 +51,7 @@
     <p>The translated target code is:</p>
     <ul>
       <li>converted in <a href="#vm-ssa-form">SSA</a> form.</li>
-      <li>pused into a scheduling buffer.</li>
+      <li>pushed into a scheduling buffer.</li>
     </ul>
 
     <div class="flex-container">
@@ -96,11 +96,75 @@
 
   <div class="subsubsection" id="vm-4-5-2-step3">
     <h4>Step 3: Reorder Code</h4>
+    
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Before Scheduling</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ before-scheduling }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">After Scheduling</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
+        <div class="code-title">Compensation Code</div>
+        <div>{% highlight nasm %}{{ l2-compensation-code }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Register Map (RegMAP)</div>
+        <div>{% highlight c %}{{ scheduled-reg-map }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>The following instructions are reordered:</p>
+    <ul>
+      <li>Load instruction <code>c</code> is moved up because of its latency.</li>
+      <li>Add instruction <code>e</code> is moved down because its operand <code>t7</code> takes time to calculate.</li>
+    </ul>
   </div>
   <!-- vm-4-5-2-step3 -->
 
   <div class="subsubsection" id="vm-4-5-2-step4">
     <h4>Step 4: Determine Checkpoints</h4>
+
+    <p><em>Checkpoints</em> are places where <em>all</em> instructions in the original code have been completed up to that point.</p>
+
+    <p>
+      Intuitively, checkpoints are similar to save points in game.<br>
+      We can restart execution from checkpoints just as we can restart the game from save points.
+    </p>
+
+    <p>
+      To find <em>checkpoints</em>, we consider "committed (executed)" instructions in the original source code order.<br>
+      In this "committed" instructions, the latest instruction is the <em>checkpoint</em>.
+    </p>
+
+    <div class="flex-container">
+      <div>
+        <div class="code-title">After Scheduling</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
+      </div>
+
+      <div>
+        <div class="code-title">Register Map (RegMAP)</div>
+        <div>{% highlight c %}{{ scheduled-reg-map }}{% endhighlight %}</div>
+      </div>
+
+      <div>
+        <div class="code-title">Commit</div>
+        &nbsp;
+        <div>{% highlight c %}{{ commit }}{% endhighlight %}</div>
+      </div>
+      
+      <div>
+        <div class="code-title">Checkpoint</div>
+        &nbsp;
+        <div>{% highlight c %}{{ checkpoint }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p style="color: gray">NOTE: <code>@</code> means the initial register mapping.</p>
   </div>
   <!-- vm-4-5-2-step4 -->
 
