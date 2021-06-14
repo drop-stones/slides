@@ -25,13 +25,13 @@
      showgrid="false"
      inkscape:snap-text-baseline="false"
      inkscape:zoom="2"
-     inkscape:cx="169.25"
+     inkscape:cx="299.75"
      inkscape:cy="211.5"
-     inkscape:window-width="3440"
-     inkscape:window-height="1383"
+     inkscape:window-width="1716"
+     inkscape:window-height="1381"
      inkscape:window-x="0"
      inkscape:window-y="25"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      inkscape:current-layer="layer1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -327,7 +327,7 @@
        transform="translate(4.9656363,3.5201665)"><tspan
          x="26.21875"
          y="128.55298"
-         id="tspan10570">A</tspan></text>
+         id="tspan20024">A</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-6);stroke-width:0.264583"
@@ -337,7 +337,7 @@
        transform="translate(4.8868297,3.5189687)"><tspan
          x="26.21875"
          y="144.59009"
-         id="tspan10572">B</tspan></text>
+         id="tspan20026">B</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-1);stroke-width:0.264583"
@@ -347,7 +347,7 @@
        transform="translate(4.9217113,3.5171173)"><tspan
          x="26.21875"
          y="160.62525"
-         id="tspan10574">C</tspan></text>
+         id="tspan20028">C</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-5);stroke-width:0.264583"
@@ -357,7 +357,7 @@
        transform="translate(4.633615,3.5185109)"><tspan
          x="26.21875"
          y="176.66236"
-         id="tspan10576">D</tspan></text>
+         id="tspan20030">D</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
@@ -399,7 +399,7 @@
        transform="translate(4.965636,3.520167)"><tspan
          x="68.023438"
          y="145.15259"
-         id="tspan10578">A</tspan></text>
+         id="tspan20032">A</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-6-9);stroke-width:0.264583"
@@ -409,7 +409,7 @@
        transform="translate(4.88683,3.518969)"><tspan
          x="68.023438"
          y="157.69751"
-         id="tspan10580">B</tspan></text>
+         id="tspan20034">B</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-5-1);stroke-width:0.264583"
@@ -419,7 +419,7 @@
        transform="translate(4.633615,3.518511)"><tspan
          x="68.023438"
          y="170.24243"
-         id="tspan10582">D</tspan></text>
+         id="tspan20036">D</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker209771)"
        d="M 39.579438,130.03292 67.959247,147.0699"
@@ -455,7 +455,7 @@
        transform="translate(0.62193408,0.83926651)"><tspan
          x="136.43164"
          y="167.32949"
-         id="tspan10584">Comp</tspan></text>
+         id="tspan20038">Comp</tspan></text>
     <rect
        style="fill:none;fill-opacity:0.25;stroke:#000000;stroke-width:0.23;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect295307"
@@ -472,7 +472,7 @@
        transform="translate(0.62193408,0.83876297)"><tspan
          x="136.43164"
          y="160.42129"
-         id="tspan10586">Comp</tspan></text>
+         id="tspan20040">Comp</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker307878)"
        d="m 150.01263,138.78955 c 10.01653,13.3552 0.1939,21.28412 0.1939,21.28412"
@@ -599,20 +599,30 @@
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-0-9);stroke-width:0.264583"
-       x="-20.312126"
-       y="122.86195"
-       id="text61051"
+       x="104.93183"
+       y="189.19785"
+       id="text13999"
        transform="translate(0.4844535,1.83235)"><tspan
-         x="136.43164"
-         y="161.35767"
-         id="tspan10596"><tspan
-           dx="0 3.185854 3.185854 3.185854"
-           id="tspan10588">Opt.</tspan><tspan
-           dx="3.185854"
-           id="tspan10590">A</tspan><tspan
-           dx="3.185854"
-           id="tspan10592">B</tspan><tspan
-           dx="3.185854"
-           id="tspan10594">C</tspan></tspan></text>
+         x="136.86462"
+         y="125.7229"
+         id="tspan20044">Opt.<tspan
+   dx="3.185854"
+   id="tspan20042" /></tspan><tspan
+         x="143.23633"
+         y="132.33749"
+         id="tspan20046" /><tspan
+         x="141.6434"
+         y="138.95207"
+         id="tspan20050">A<tspan
+   dx="3.185854"
+   id="tspan20048" /></tspan><tspan
+         x="141.6434"
+         y="145.56667"
+         id="tspan20054">B<tspan
+   dx="3.185854"
+   id="tspan20052" /></tspan><tspan
+         x="141.6434"
+         y="152.18126"
+         id="tspan20056">C</tspan></text>
   </g>
 </svg>
