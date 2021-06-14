@@ -3,8 +3,8 @@
 
 <svg
    width="137.95325mm"
-   height="108.94137mm"
-   viewBox="0 0 137.95325 108.94137"
+   height="108.92716mm"
+   viewBox="0 0 137.95325 108.92716"
    version="1.1"
    id="svg5"
    inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
@@ -25,7 +25,7 @@
      showgrid="false"
      inkscape:snap-text-baseline="false"
      inkscape:zoom="2"
-     inkscape:cx="175.25"
+     inkscape:cx="169.25"
      inkscape:cy="211.5"
      inkscape:window-width="3440"
      inkscape:window-height="1383"
@@ -252,7 +252,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-16.692476,-97.731232)">
+     transform="translate(-16.692476,-97.74544)">
     <path
        id="rect259757"
        style="fill:#000000;fill-opacity:0.1;stroke:#000000;stroke-width:1.21768;stroke-miterlimit:4;stroke-dasharray:none"
@@ -327,7 +327,7 @@
        transform="translate(4.9656363,3.5201665)"><tspan
          x="26.21875"
          y="128.55298"
-         id="tspan70468">A</tspan></text>
+         id="tspan10570">A</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-6);stroke-width:0.264583"
@@ -337,7 +337,7 @@
        transform="translate(4.8868297,3.5189687)"><tspan
          x="26.21875"
          y="144.59009"
-         id="tspan70470">B</tspan></text>
+         id="tspan10572">B</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-1);stroke-width:0.264583"
@@ -347,7 +347,7 @@
        transform="translate(4.9217113,3.5171173)"><tspan
          x="26.21875"
          y="160.62525"
-         id="tspan70472">C</tspan></text>
+         id="tspan10574">C</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-5);stroke-width:0.264583"
@@ -357,7 +357,7 @@
        transform="translate(4.633615,3.5185109)"><tspan
          x="26.21875"
          y="176.66236"
-         id="tspan70474">D</tspan></text>
+         id="tspan10576">D</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
@@ -399,7 +399,7 @@
        transform="translate(4.965636,3.520167)"><tspan
          x="68.023438"
          y="145.15259"
-         id="tspan70476">A</tspan></text>
+         id="tspan10578">A</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-6-9);stroke-width:0.264583"
@@ -409,7 +409,7 @@
        transform="translate(4.88683,3.518969)"><tspan
          x="68.023438"
          y="157.69751"
-         id="tspan70478">B</tspan></text>
+         id="tspan10580">B</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;white-space:pre;shape-inside:url(#rect182287-5-1);stroke-width:0.264583"
@@ -419,7 +419,7 @@
        transform="translate(4.633615,3.518511)"><tspan
          x="68.023438"
          y="170.24243"
-         id="tspan70480">D</tspan></text>
+         id="tspan10582">D</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker209771)"
        d="M 39.579438,130.03292 67.959247,147.0699"
@@ -455,7 +455,7 @@
        transform="translate(0.62193408,0.83926651)"><tspan
          x="136.43164"
          y="167.32949"
-         id="tspan70482">Comp</tspan></text>
+         id="tspan10584">Comp</tspan></text>
     <rect
        style="fill:none;fill-opacity:0.25;stroke:#000000;stroke-width:0.23;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect295307"
@@ -472,7 +472,7 @@
        transform="translate(0.62193408,0.83876297)"><tspan
          x="136.43164"
          y="160.42129"
-         id="tspan70484">Comp</tspan></text>
+         id="tspan10586">Comp</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker307878)"
        d="m 150.01263,138.78955 c 10.01653,13.3552 0.1939,21.28412 0.1939,21.28412"
@@ -548,22 +548,22 @@
        xml:space="preserve"
        style="font-size:5.29167px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;letter-spacing:0px;text-anchor:middle;stroke-width:0.264583"
        x="109.1013"
-       y="101.78008"
+       y="101.76587"
        id="text34345"><tspan
          sodipodi:role="line"
          id="tspan34343"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="109.1013"
-         y="101.78008">Scheduling</tspan><tspan
+         y="101.76587">Scheduling</tspan><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="109.1013"
-         y="108.39467"
+         y="108.38046"
          id="tspan34347">Optimization</tspan><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="109.1013"
-         y="115.00925"
+         y="114.99504"
          id="tspan34349">Buffer</tspan></text>
     <text
        xml:space="preserve"
@@ -579,7 +579,7 @@
          sodipodi:role="line"
          style="text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="108.88555"
-         y="138.13737"
+         y="138.13739"
          id="tspan52109" /><tspan
          sodipodi:role="line"
          style="text-align:center;text-anchor:middle;stroke-width:0.264583"
@@ -589,7 +589,7 @@
          sodipodi:role="line"
          style="text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="108.88555"
-         y="151.36655"
+         y="151.36656"
          id="tspan52113">B</tspan><tspan
          sodipodi:role="line"
          style="text-align:center;text-anchor:middle;stroke-width:0.264583"
@@ -603,26 +603,16 @@
        y="122.86195"
        id="text61051"
        transform="translate(0.4844535,1.83235)"><tspan
-         x="136.86462"
-         y="125.7229"
-         id="tspan70488">Opt.<tspan
-   dx="3.185854"
-   id="tspan70486" /></tspan><tspan
-         x="143.23633"
-         y="132.33749"
-         id="tspan70490" /><tspan
-         x="141.6434"
-         y="138.95207"
-         id="tspan70494">A<tspan
-   dx="3.185854"
-   id="tspan70492" /></tspan><tspan
-         x="141.6434"
-         y="145.56667"
-         id="tspan70498">B<tspan
-   dx="3.185854"
-   id="tspan70496" /></tspan><tspan
-         x="141.6434"
-         y="152.18126"
-         id="tspan70500">C</tspan></text>
+         x="136.43164"
+         y="161.35767"
+         id="tspan10596"><tspan
+           dx="0 3.185854 3.185854 3.185854"
+           id="tspan10588">Opt.</tspan><tspan
+           dx="3.185854"
+           id="tspan10590">A</tspan><tspan
+           dx="3.185854"
+           id="tspan10592">B</tspan><tspan
+           dx="3.185854"
+           id="tspan10594">C</tspan></tspan></text>
   </g>
 </svg>
