@@ -3,45 +3,58 @@
 
   <p>In this subsection, we discuss overall approach to dynamic optimization.</p>
 
-  <h4>Overall Approach</h4>
-  <div class="flex-container">
-    <div style="width: 60%;"><img src="{{ img_path }}/major_steps_in_dynamic_optimization.svg" /></div>
+  <div class="subsection" id="vm-overall-approach">
+    <h4>Overall Approach</h4>
+    <div class="flex-container">
+      <div style="width: 60%"><img src="{{ img_path }}/major_steps_in_dynamic_optimization.svg" /></div>
 
-    <div style="width: 40%;">
-      <ol>
-        <li>Collect basic blocks from code cache using profile information</li>
-        <li>Convert to intermediate (<a href="#vm-ssa-form">SSA</a>) form; place in buffer</li>
-        <li>
-          Schedule and optimize
-          <ul>
-            <li>Generate side table information (for precise state recovery)</li>
-          </ul>
-        </li>
-        <li>Generate target code</li>
-        <li>Add compensation code; place in code cache</li>
-      </ol>
+      <div style="width: 40%">
+        <ol>
+          <li>Collect basic blocks from code cache using profile information</li>
+          <li>Convert to intermediate (<a href="#vm-ssa-form">SSA</a>) form; place in buffer</li>
+          <li>
+            Schedule and optimize
+            <ul>
+              <li>Generate side table information (for precise state recovery)</li>
+            </ul>
+          </li>
+          <li>Generate target code</li>
+          <li>Add compensation code; place in code cache</li>
+        </ol>
+      </div>
     </div>
-  </div>
 
-  <h4>Optimization of Traces or Superblocks</h4>
-  <ul>
-    <li>
-      Trace: multiple entries, multiple exits
-      <ul>
-        <li>In optimization, <em>compensation code</em> are inserted into entry and exit points.</li>
-      </ul>
-    </li>
-    <li>
-      Superblock: single entry, multiple exits
-      <ul>
-        <li>In optimization, <em>compensation code</em> are inserted into exit points.</li>
-      </ul>
-    </li>
-  </ul>
-  <div class="flex-container">
-    <div><img src="{{ img_path}}/optimize_trace_and_superblock.svg" /></div>
+    <p>In brief, overall approach is as follows:</p>
+    <ol>
+      <li>Form <em>superblock</em></li>
+      <li>Convert to SSA</li>
+      <li>Optimize!</li>
+    </ol>
   </div>
+  <!-- vm-overall-approach -->
 
-  <p>We will discuss about <em>compensation code</em> in <a href="#4-5-1-primitive-instruction-reordering">{{ 4-5-1-title }}</a>.</p>
+  <div class="subsection" id="vm-optimization-of-traces-or-superblocks">
+    <h4>Optimization of Traces or Superblocks</h4>
+    <ul>
+      <li>
+        Trace: multiple entries, multiple exits
+        <ul>
+          <li>In optimization, <em>compensation code</em> are inserted into entry and exit points.</li>
+        </ul>
+      </li>
+      <li>
+        Superblock: single entry, multiple exits
+        <ul>
+          <li>In optimization, <em>compensation code</em> are inserted into exit points.</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="flex-container">
+      <div><img src="{{ img_path}}/optimize_trace_and_superblock.svg" /></div>
+    </div>
+
+    <p>We will discuss about <em>compensation code</em> in <a href="#vm-4-5-1-primitive-instruction-reordering">{{ 4-5-1-title }}</a>.</p>
+  </div>
+  <!-- vm-optimization-of-traces-or-superblocks -->
 </div>
 <!-- vm-4-4-1-approach -->

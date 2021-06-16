@@ -170,26 +170,370 @@
 
   <div class="subsubsection" id="vm-4-5-2-step5">
     <h4>Step 5: Assign Registers</h4>
+
+    <p>Assignment of Registers is done as follows:</p>
+    <ol>
+      <li>Caluculate <em>register live ranges</em>.</li>
+      <li>Assign target registers to SSA variables using <em>register live ranges</em>.</li>
+    </ol>
+
+    <p>For <em>precise state recovery</em>, we need to extend live ranges:</p>
+    <ul>
+      <li><em>Checkpoints</em> are save points.</li>
+      <li>We need to be able to go back to the checkpoint.</li>
+      <li>To do so, we need to keep the register states at the checkpoint.</li>
+      <li>In other words, we need to extend <em>register live ranges</em>.</li>
+    </ul>
+
+    <details>
+      <summary><i class="fa fa-table aria-hidden="true"></i> Register Map</summary>
+      {% highlight c %}{{ scheduled-reg-map2 }}{% endhighlight %}
+    </details>
+
+    <p>
+      For instruction <code>c</code> or <code>b</code>, we need to extend <em>register live ranges</em> at <code>a</code>.<br>
+      (<code>x</code> means extended live ranges.)
+    </p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges-a-to-b }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Scheduled Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling-a-to-b }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Checkpoint</div>
+        &nbsp;
+        <div>{% highlight c %}{{ checkpoint-a-to-b }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>For instruction <code>d</code>, we need to extend <em>register live ranges</em> at <code>c</code>.</p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges-a-to-d }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Scheduled Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling-a-to-d }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Checkpoint</div>
+        &nbsp;
+        <div>{% highlight c %}{{ checkpoint-a-to-d }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>For instruction <code>e</code>, we need to extend <em>register live ranges</em> at <code>d</code>.</p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges-a-to-e }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Scheduled Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling-a-to-e }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Checkpoint</div>
+        &nbsp;
+        <div>{% highlight c %}{{ checkpoint-a-to-e }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>For instruction <code>h</code>, we need to extend <em>register live ranges</em> at <code>g</code>.</p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges-a-to-g }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Scheduled Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling-a-to-g }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Checkpoint</div>
+        &nbsp;
+        <div>{% highlight c %}{{ checkpoint-a-to-g }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>For instruction <code>i</code>, we need to extend <em>register live ranges</em> at <code>h</code>.</p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Scheduled Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Checkpoint</div>
+        &nbsp;
+        <div>{% highlight c %}{{ checkpoint }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>
+      After calculation of <em>register live ranges</em>, we assign target registers to SSA variables.<br>
+      Here, we need to note the following:
+    </p>
+    <ul>
+      <li>
+        Target registers are assigned SSA variables whose live ranges do not overlap.
+        <ul>
+          <li>r1 are assigned r1 (before <code>a</code>) and t5 (after <code>a</code>).</li>
+          <li>r2 are assigned r2, t7 (before <code>e</code>), t8 (after <code>e</code>) and t10.</li>
+          <li>r3 are assigned r3.</li>
+          <li>r4 are assigned r4.</li>
+          <li>r5 are assigned t6 and t9.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">After Assignment</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-register-assignment }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Register Map(RegMAP)</div>
+        <div>{% highlight c %}{{ after-register-assignment-regmap }}{% endhighlight %}</div>
+      </div>
+    </div>
   </div>
   <!-- vm-4-5-2-step5 -->
 
   <div class="subsubsection" id="vm-4-5-2-step6">
-    <h4>Step 6: Add Compensate Code</h4>
+    <h4>Step 6: Add Compensation Code + Register Copy</h4>
+    
+    <p>
+      Compensation code and register copy for consistent register mapping is added:<br>
+    </p>
+    <ul>
+      <li>Compensation code ensures that the moved instructions are executed both under <em>branch-taken</em> and <em>not-taken</em>.</li>
+      <li>
+        Register copy ensures consistent register mapping among all superblocks (or basic blocks).
+        <ul>
+          <li>We need register copy <code>r3 = r5</code> because <code>ecx</code> is mapped to r3 at entry.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Step 3</div>
+        <div>
+          <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
+          <div class="code-title">Compensation Code</div>
+          <div>{% highlight nasm %}{{ l2-compensation-code }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="code-title">Compensation Code Added</div>
+        <div>
+          <div>{% highlight nasm %}{{ register-copy-added }}{% endhighlight %}</div>
+          <div class="code-title">Compensation Code</div>
+          <div>{% highlight nasm %}{{ compensation-code-added }}{% endhighlight %}</div>
+        </div>
+      </div>
+    </div>
+
+    <p>Finally, we form target code from intermediate form.</p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Power PC Code</div>
+        <div>
+          <div>{% highlight nasm %}{{ power-pc-code }}{% endhighlight %}</div>
+          <div class="code-title">Compensation Code</div>
+          <div>{% highlight nasm %}{{ power-pc-code-compensation }}{% endhighlight %}</div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- vm-4-5-2-step6 -->
 
   <div class="subsubsection" id="vm-4-5-2-step7">
     <h4>Precise State Recovery</h4>
+
+    <p>
+      We will check whether this algorithm guarantee compatibility.<br>
+      To do so, we will see <em>precise state recovery</em> at a trap.
+    </p>
+
+    <p>If a trap occurs:</p>
+    <ol>
+      <li>
+        Find the trapping superblock and corresponding source basic blocks.
+        <ul>
+          <li>using <em>reverse translation side table</em> (section 3.6.3).</li>
+        </ul>
+      </li>
+      <li>Find the checkpoint for the trapping instruction.</li>
+      <li>Reconstruct the RegMAP at the checkpoint.</li>
+      <li>Interpret source instructions from the checkpoint.</li>
+    </ol>
+
+    <div class="example">
+      <h5>Instruction <code>d</code> traps</h5>
+      
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Source Code</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ ia-32-a-to-d }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Target Code</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ power-pc-a-to-d }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Checkpoint</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ checkpoint-a-to-d }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Register Map</div>
+          <div>{% highlight c %}{{ power-pc-regmap-a-to-d }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <p>In this example, RegMAP at <code>c</code> is used for recovery.</p>
+    </div>
+
+    <div class="question">
+      <h5>Instruction <code>c</code> traps when <code>b</code> is taken.</h5>
+
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Source Code</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ ia-32-a-to-c }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Target Code</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ power-pc-a-to-b }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Checkpoint</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ checkpoint-a-to-b }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Register Map</div>
+          <div>{% highlight c %}{{ power-pc-regmap-a-to-b }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <details>
+        <summary>Explanation</summary>
+        In target code execution, <code>c</code> traps and register states at <code>a</code> is reconstructed.<br>
+        In source code interpretation, <code>c</code> is not executed.<br>
+      </details>
+
+    </div>
+
+    <p>There are other methods for precise state recovery:</p>
+    <ul>
+      <li>
+        Only use binary translation
+        <ul>
+          <li>The runtime maintains "translated codes before optimization" and "optimized code".</li>
+          <li>If a trap occurs, we reconstruct RegMAP and run "translated codes before optimization".</li>
+        </ul>
+      </li>
+      <li>
+        <details>
+          <summary>Insert <em>repair code</em></summary>
+          <p>If a trap occurs, <em>repair code</em> are executed.</p>
+          <div class="flex-container">
+            <div>
+              <div class="code-title">Source</div>
+              <div>{% highlight c %}{{ repair-code-source }}{% endhighlight %}</div>
+            </div>
+            <div>
+              <div class="code-title">Target</div>
+              <div>{% highlight c %}{{ repair-code-target }}{% endhighlight %}</div>
+              <div class="code-title">Repair code</div>
+              <div>{% highlight c %}{{ repair-code }}{% endhighlight %}</div>
+            </div>
+          </div>
+        </details>
+      </li>
+    </ul>
   </div>
   <!-- vm-4-5-2-step7 -->
 
   <div class="subsubsection" id="vm-4-5-2-step8">
     <h4>Condition Code Handling</h4>
+
+    <p>For handling condition codes, an efficient method is <em>lazy evaluation</em>.</p>
+
+    <p>
+      However, we must care about condition codes in reordering.<br>
+      For precise state recovery, we must recover condition codes.<br>
+      Condition codes recovery is as follows:
+    </p>
+    <ul>
+      <li>
+        Determine <em>condition code checkpoints</em>
+        <ul>
+          <li>We only focus on <em>condition code-settings</em> instructions.</li>
+        </ul>
+      </li>
+      <li>Calculate <em>register live ranges</em></li>
+      <li>Assign target registers</li>
+    </ul>
   </div>
   <!-- vm-4-5-2-step8 -->
 
   <div class="subsubsection" id="vm-4-5-2-step5a">
     <h4>Step 5a: Assign Register with Condition Codes</h4>
+
+    <p>
+      For instruction <code>b</code>, we need to re-calculate <code>r1 + r2, set CR0</code> at <code>a</code>.<br>
+      To do so, we need to extend <em>register live ranges</em> just before <code>a</code> (denoted as <code>@</code>).<br>
+      (<code>y</code> means extended live ranges.)
+    </p>
+    <div class="flex-container">
+      <div>
+        <div class="code-title">Register Live Ranges</div>
+        <div>{% highlight c %}{{ register-live-ranges-with-condition-codes-a-to-d }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Scheduled Code</div>
+        &nbsp;
+        <div>{% highlight nasm %}{{ after-scheduling-a-to-d }}{% endhighlight %}</div>
+      </div>
+      <div>
+        <div class="code-title">Condition Codes<br>Checkpoint</div>
+        <div>{% highlight c %}{{ condition-codes-checkpoint-a-to-d }}{% endhighlight %}</div>
+      </div>
+    </div>
+
+    <p>If <code>d</code> traps:</p>
+    <ul>
+      <li>Reconstruct RegMAP at <code>c</code>.</li>
+      <li>Reconstruct condition codes at <code>@</code> (by executing <code>r1 + r2, set CR0</code>).</li>
+      <li>Interpret source code from <code>c</code>.</li>
+    </ul>
   </div>
   <!-- vm-4-5-2-step5a -->
 </div>

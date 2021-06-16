@@ -3,27 +3,50 @@
 
   <p>In this section, we discuss the overall issues that are common to all the <em>dynamic optimization</em> methods.</p>
   <p>First, we compare <em>dynamic optimization</em> with <em>static optimization</em>:</p>
-  <ul>
-    <li>
-      Static optimization (cf. Dragon Book)
-      <ul>
-        <li>Timing: At compilation (before execution)</li>
-        <li>Type of analyzed programs: High-level language, IR (Binary)</li>
-        <li>Analysis granularity: function (intra-procedural), overall (inter-procedural)</li>
-        <li>Available information: high-level semantics (e.g., data structure declarations)</li>
-      </ul>
-    </li>
-    <li>
-      Dynamic optimization (in this section)
-      <ul>
-        <li>Timing: At run time (during or after execution)</li>
-        <li>Type of analyzed programs: Binary (Bytecode)</li>
-        <li>Analysis granularity: trace, superblock, (dynamic basic block)</li>
-        <li>Available information: <em>profile</em> information (e.g., frequency of passing paths)</li>
-        <li>Desireble property: Fast, low overhead methods (because optimization is performed at run time)</li>
-      </ul>
-    </li>
-  </ul>
+
+  {% assign static-optimization-timing = "At compilation<br>(before execution)" %}
+  {% assign static-optimization-types-of-analyzed-program = "High-level language, IR (Binary)" %}
+  {% assign static-optimization-analysis-granularity = "Function (intra-procedural),<br>Overall (inter-procedural)" %}
+  {% assign static-optimization-available-information = "High-level semantics<br>(e.g., data structure declarations)" %}
+  {% assign static-optimization-desired-property = "Slow but highly optimization" %}
+
+  {% assign dynamic-optimization-timing = "At run time<br>(during or after execution)" %}
+  {% assign dynamic-optimization-types-of-analyzed-program = "Binary (Bytecode)" %}
+  {% assign dynamic-optimization-analysis-granularity = "Trace, Superblock,<br>(dynamic basic block)" %}
+  {% assign dynamic-optimization-available-information = "<em>Profile</em> information<br>(e.g., frequency of passing paths)" %}
+  {% assign dynamic-optimization-desired-property = "Fast, low overhead methods<br>(because optimization is performed at run time)" %}
+  <table>
+    <tr>
+      <th></th>
+      <th>Static optimization<br>(cf. Dragon Book)</th>
+      <th>Dynamic optimization<br>(in this section)</th>
+    </tr>
+    <tr>
+      <th>Timing</th>
+      <td>{{ static-optimization-timing }}</td>
+      <td>{{ dynamic-optimization-timing }}</td>
+    </tr>
+    <tr>
+      <th>Types of analyzed program</th>
+      <td>{{ static-optimization-types-of-analyzed-program }}</td>
+      <td>{{ dynamic-optimization-types-of-analyzed-program }}</td>
+    </tr>
+    <tr>
+      <th>Analysis granularity</th>
+      <td>{{ static-optimization-analysis-granularity }}</td>
+      <td>{{ dynamic-optimization-analysis-granularity }}</td>
+    </tr>
+    <tr>
+      <th>Available information</th>
+      <td>{{ static-optimization-available-information }}</td>
+      <td>{{ dynamic-optimization-available-information }}</td>
+    </tr>
+    <tr>
+      <th>Desired property</th>
+      <td>{{ static-optimization-desired-property }}</td>
+      <td>{{ dynamic-optimization-desired-property }}</td>
+    </tr>
+  </table>
 
   {% include_relative _4-4-1-approach.html %}
   

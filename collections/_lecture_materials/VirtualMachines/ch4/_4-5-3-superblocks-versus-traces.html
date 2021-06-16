@@ -1,4 +1,123 @@
 <div class="subsection" id="vm-4-5-3-superblocks-versus-traces">
   <h3>4.5.3 Superblocks Versus Traces</h3>
+
+  <p>
+    Most dynamic translation systems use superblocks rather than traces.<br>
+    In this subsection, we discuss why it is so.
+  </p>
+
+  <table>
+    <tr>
+      <th></th>
+      <th>Superblock</th>
+      <th>Trace</th>
+    </tr>
+    <tr>
+      <th>Entry (join points)</th>
+      <td>Single</td>
+      <td>Multiple</td>
+    </tr>
+    <tr>
+      <th>Exit</th>
+      <td>Multiple</td>
+      <td>Multiple</td>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+      <th>Code duplication</th>
+      <td>-</td>
+      <td>Tail duplication</td>
+    </tr>
+  </table>
+
+  <div class="flex-container">
+    <div>
+      <div>Superblocks</div>
+      <div><img src="{{ img_path }}/superblocks.svg"></div>
+    </div>
+    <div>
+      <div>Traces</div>
+      <div><img src="{{ img_path }}/traces.svg"></div>
+    </div>
+  </div>
+
+  <div class="subsubsection">
+    <h4>Instruction Caching</h4>
+
+    <p>Superblocks have disadvantages:</p>
+    <ul>
+      <li>Superblocks have replication code by tail duplication.</li>
+      <li>Increase the memory size.</li>
+      <li>Decrease instruction cache efficiency.</li>
+    </ul>
+
+    <p>To mitigate it, we convert only heavily used regions of code to superblocks.</p>
+  </div>
+
+  <div class="subsubsection">
+    <h4>Branch Predictors</h4>
+
+    <p>Superblocks have both advantages and disadvantages:</p>
+    <ul>
+      <li>
+        <span style="color:red;">Cons</span>: We need more entries in a branch predictors.
+        <ul>
+          <li>Ex) There are three branches in example.</li>
+        </ul>
+      </li>
+      <li>
+        <span style="color: green;">Pros</span>: We can get path information embedded in superblocks.
+        <ul>
+          <li>Ex) A-D-E-G go to the loop head. F-G exit the loop.</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="subsubsection">
+    <h4>Optimizations</h4>
+
+    <p>Superblocks have advantages about optimizations:</p>
+    <ul>
+      <li>
+        Join points impose some restrictions.
+        <ul>
+          <li>Ex) We cannot move reg/mem below join.</li>
+          <div class="flex-container">
+            <div><img src="{{ img_path }}/move-reg-below-join.svg"></div>
+            <div><img src="{{ img_path }}/move-mem-below-join.svg"></div>
+          </div>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="subsubsection">
+    <h4>Superblocks/Traces Formation Process</h4>
+
+    <p>Join points in traces have bad effects on transformation process:</p>
+    <ul>
+      <li>
+        After trace formation, we must check and keep in mind join points.
+        <ul>
+          <li>We must check branch target of <code>C</code> when discovering it.</li>
+          <li>We must keep in mind that <code>G</code> is join point.</li>
+          <div class="flex-container">
+            <img src="{{ img_path }}/traces-transformation.svg">
+          </div>
+        </ul>
+      </li>
+      <li>
+        After superblock formation, we do not have to check join points.
+        <ul>
+          <li>We do not have to check branch target of <code>C</code>.</li>
+          <div class="flex-container">
+            <img src="{{ img_path }}/superblocks-transformation.svg">
+          </div>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </div>
 <!-- vm-4-5-3-superblocs-versus-traces -->

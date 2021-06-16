@@ -528,6 +528,257 @@ g
 h
 " %}
 
+<!-- Step.5 -->
+{% assign scheduled-reg-map2 = "
+   eax   ebx   ecx   edx
+a: t5    r2    r3    r4
+c: t5    t6    r3    r4
+b: t5    r2    r3    r4
+d: t5    t7    r3    r4
+f: t5    t8    t9    r4
+g: t5    t8    t9    r4
+e: t5    t8    r3    r4
+h: t5    t10   t9    r4
+i: t5    t10   t9    r4
+" %}
+
+{% assign register-live-ranges-a-to-b = "
+r1 r2 r3 r4 t5
+|  |  |  |  |
+   x  |  |  |
+   x  |  |  |
+" %}
+{% assign after-scheduling-a-to-b = "
+a : t5 = r1 + r2, set CR0
+c : t6 = mem[t5 + 4]
+b : bz CR0, L1
+" %}
+{% assign checkpoint-a-to-b = "
+@
+a
+a
+" %}
+
+{% assign register-live-ranges-a-to-d = "
+r1 r2 r3 r4 t5 t6 t7
+|  |  |  |  |
+   x  |  |  |  |
+   x  |  |  |  |
+      |  |  |  |  |
+" %}
+{% assign after-scheduling-a-to-d = "
+a : t5 = r1 + r2, set CR0
+c : t6 = mem[t5 + 4]
+b : bz CR0, L1
+d : t7 = t6 * 10
+" %}
+{% assign checkpoint-a-to-d = "
+@
+a
+a
+c
+" %}
+
+{% assign register-live-ranges-a-to-e = "
+r1 r2 r3 r4 t5 t6 t7 t8 t9
+|  |  |  |  |
+   x  |  |  |  |
+   x  |  |  |  |
+      |  |  |  |  |
+      |  |  |     |     |
+      x  |  |     |
+      x  |  |     |  |
+" %}
+{% assign after-scheduling-a-to-e = "
+a : t5 = r1 + r2, set CR0
+c : t6 = mem[t5 + 4]
+b : bz CR0, L1
+d : t7 = t6 * 10
+f : t9 = r3 + 1
+g : bz CR0, L2
+e : t8 = t7 + 1
+" %}
+{% assign checkpoint-a-to-e = "
+@
+a
+a
+c
+d
+d
+d
+" %}
+
+{% assign register-live-ranges-a-to-g = "
+r1 r2 r3 r4 t5 t6 t7 t8 t9
+|  |  |  |  |
+   x  |  |  |  |
+   x  |  |  |  |
+      |  |  |  |  |
+      |  |  |     |     |
+      x  |  |     |     |
+      x  |  |     |  |  |
+         |  |        |  |
+" %}
+{% assign after-scheduling-a-to-g = "
+a : t5 = r1 + r2, set CR0
+c : t6 = mem[t5 + 4]
+b : bz CR0, L1
+d : t7 = t6 * 10
+f : t9 = r3 + 1
+g : bz CR0, L2
+e : t8 = t7 + 1
+h : t10 = t8 + t5
+" %}
+{% assign checkpoint-a-to-g = "
+@
+a
+a
+c
+d
+d
+d
+g
+" %}
+
+{% assign register-live-ranges = "
+r1 r2 r3 r4 t5 t6 t7 t8 t9 t10
+|  |  |  |  |
+   x  |  |  |  |
+   x  |  |  |  |
+      |  |  |  |  |
+      |  |  |     |     |
+      x  |  |     |     |
+      x  |  |     |  |  |
+         |  |        |  |  |
+         |  |           |  |
+" %}
+{% assign after-register-assignment = "
+a : r1 = r1 + r2,set CR0
+c : r5 = mem[r1 + 4]
+b : bz CR0, L1
+d : r2 = r5 * 10
+f : r5 = r3 + 1,set CR0
+g : bz CR0, L2
+e : r2 = r2 + 1
+h : r2 = r2 + r1
+i : b L3
+" %}
+{% assign after-register-assignment-regmap = "
+eax  ebx  ecx  edx
+r1   r2   r3   r4
+r1   r5   r3   r4
+r1   r2   r3   r4
+r1   r2   r3   r4
+r1   r2   r5   r4
+r1   r2   r5   r4
+r1   r2   r3   r4
+r1   r2   r5   r4
+r1   r2   r5   r4
+" %}
+
+{% assign register-copy-added = "
+a : r1 = r1 + r2,set CR0
+c : r5 = mem[r1 + 4]
+b : bz CR0, L1
+d : r2 = r5 * 10
+f : r5 = r3 + 1,set CR0
+g : bz CR0, L2'
+e : r2 = r2 + 1
+h : r2 = r2 + r1
+i : b L3
+    r3 = r5
+" %}
+{% assign compensation-code-added = "
+L2': r2 = r2 + 1
+     r3 = r5
+" %}
+
+{% assign power-pc-code = "
+a: add    r1, r1, r2
+c: lwz    r5, 4(r1)
+b: beq    CR0, L1
+d: muli   r2, r5, 10
+f: addic  r5, r3, r1
+g: beq    CR0, L2'
+e: addi   r2, r2, 1
+h: add    r2, r2, r1
+i: b      L3
+   mr     r3, r5
+" %}
+{% assign power-pc-code-compensation = "
+L2': addi r2, r2, 1
+     mr   r3, r5
+     b    L2
+" %}
+
+<!-- Precise State Recovery -->
+{% assign ia-32-a-to-d = "
+a : add eax, ebx
+b : bz  L1           
+c : mov ebx,[eax + 4]
+d : mul ebx, 10
+" %}
+{% assign power-pc-a-to-d = "
+a: add  r1, r1, r2
+c: lwz  r5, 4(r1)
+b: beq  CR0, L1
+d: muli r2, r5, 10
+" %}
+{% assign power-pc-regmap-a-to-d = "
+   eax  ebx  ecx  edx
+a: r1   r2   r3   r4
+c: r1   r5   r3   r4
+b: r1   r2   r3   r4
+d: r1   r2   r3   r4
+" %}
+
+{% assign ia-32-a-to-c = "
+a : add eax, ebx
+b : bz  L1           
+c : mov ebx,[eax + 4]
+" %}
+{% assign power-pc-a-to-b = "
+a: add  r1, r1, r2
+c: lwz  r5, 4(r1)
+b: beq  CR0, L1
+" %}
+{% assign power-pc-regmap-a-to-b = "
+   eax  ebx  ecx  edx
+a: r1   r2   r3   r4
+c: r1   r5   r3   r4
+b: r1   r2   r3   r4
+" %}
+
+{% assign repair-code-source = "
+1: r1 = r2 + r3
+2: r9 = r1 + r5   // reg 1
+3: r6 = r1 * r7   // reg 2
+" %}
+{% assign repair-code-target = "
+1: R1 = R2 + R3
+3: R6 = R1 * R7   // reg 2
+2: R9 = R1 + R5   // reg 1
+" %}
+{% assign repair-code = "
+// if R6 = R1 * R7 traps,
+2': R9 = R1 + R5
+" %}
+
+<!-- Step.5a -->
+{% assign register-live-ranges-with-condition-codes-a-to-d = "
+r1 r2 r3 r4 t5 t6
+|  |  |  |  |
+y  x  |  |  |  |
+y  x  |  |  |  |
+      |  |  |  |
+" %}
+{% assign condition-codes-checkpoint-a-to-d = "
+@
+@
+@
+@
+" %}
+
 <!-- Appendix -->
 {% assign ssa-form-ex-source = "
 x = 100;    // def x (?)
@@ -539,4 +790,23 @@ y = x;      // use x
 x1 = 100;   // def x1
 x2 = 200;   // def x2
 y1 = x2;    // use x2
+" %}
+
+{% assign static-vs-dynamic-example = "
+1 : for (i = 0; i < 100; i++) {
+2 :   x = i;
+3 :   y += x;
+4 : }
+" %}
+{% assign static-assignment = "
+1 : for (i = 0; i < 100; i++) {
+2 :   x1 = i;
+3 :   y1 += x1;
+4 : }
+" %}
+{% assign dynamic-assignment = "
+1 : for (i = 0; i < 100; i++) {
+2 :   x_i = i;
+3 :   y_i += x_i;
+4 : }
 " %}

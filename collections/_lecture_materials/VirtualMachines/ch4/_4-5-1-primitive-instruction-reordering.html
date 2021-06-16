@@ -158,6 +158,12 @@
         <div class="width-half"><img src="{{ img_path }}/move-mem-below-br.svg"></div>
       </div>
 
+      <p>We can move reg or mem below br because:</p>
+      <ul>
+        <li>The moved instruction is executed both under <em>branch-taken</em> and <em>branch-not-taken</em>.</li>
+        <li>Not change control flow.</li>
+      </ul>
+
       <div class="example" id="vm-example-move-reg-below-br">
         <h5>Move reg below br</h5>
 
@@ -193,6 +199,12 @@
       <div class="flex-container">
         <div class="width-half"><img src="{{ img_path}}/move-reg-above-br.svg"></div>
       </div>
+
+      <p>We can move reg above br because:</p>
+      <ul>
+        <li>The original register value of <code>R</code> is remained while the moved instruction is executed.</li>
+        <li>Not change control flow.</li>
+      </ul>
 
       <div class="example" id="vm-example-move-reg-above-br">
         <h5>Move reg above br</h5>
@@ -241,15 +253,26 @@
         <div><img src="{{ img_path }}/move-mem-above-br.svg"></div>
       </div>
 
+      <p>We cannot move mem above br because:</p>
+      <ul>
+        <li>
+          The moved instruction is executed both under <em>branch-taken</em> and <em>branch-not-taken</em>.
+          <ul>
+            <li>Originally, the instruction is executed only under <em>branch-not-taken</em>.</li>
+          </ul>
+        </li>
+        <li>Memory state cannot be saved. (or need extra instructions)</li>
+      </ul>
+
       <div class="example" id="vm-example-move-mem-above-br">
         <h5>Move mem above br</h5>
 
-        <div class="code-title"><p>Before reordering:</p></div>
+        <div class="code-title"><p>Before reordering</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ move-mem-above-br-before }}{% endhighlight %}</div>
           <div>{% highlight c %}{{ move-mem-above-br-exit-before }}{% endhighlight %}</div>
         </div>
-        <div class="code-title"><p>After reordering:</p></div>
+        <div class="code-title"><p>After reordering</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ move-mem-above-br-after }}{% endhighlight %}</div>
           <div>{% highlight c %}{{ move-mem-above-br-exit-after }}{% endhighlight %}</div>
@@ -261,7 +284,7 @@
           cannot be recoverable.<br />
         </p>
 
-        <div class="code-title"><p>Memory compatible but slow(?) reordering:</p></div>
+        <div class="code-title"><p>Memory compatible but slow(?) reordering</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ meaningless-move-mem }}{% endhighlight %}</div>
           <div>
@@ -280,14 +303,19 @@
     <!-- vm-move-mem-above-br -->
 
     <div class="paragraph" id="vm-move-br-around-join">
-      <h5>Move br around join</h5>
+      <h5>Move br above/below join</h5>
       <div class="flex-container">
         <div><img src="{{ img_path }}/move-br-above-join.svg"></div>
         <div><img src="{{ img_path }}/move-br-below-join.svg"></div>
       </div>
 
+      <p>We cannot move br above/below join because:</p>
+      <ul>
+        <li>Change control flow.</li>
+      </ul>
+
       <div class="example" id="vm-example-move-br-around-join">
-        <h5>Move br around join</h5>
+        <h5>Move br above join</h5>
         <div class="flex-container">
           <div>
             <div class="code-title">Before reordering</div>
@@ -312,6 +340,11 @@
       <div class="flex-container">
         <div><img src="{{ img_path }}/swap-br-and-br.svg"></div>
       </div>
+
+      <p>We cannot swap br and br because:</p>
+      <ul>
+        <li>Change control flow.</li>
+      </ul>
 
       <div class="example" id="vm-example-swap-br-and-br">
         <h5></h5>
@@ -338,15 +371,21 @@
   <div class="subsubsection" id="vm-join-another">
     <h4>join &#8646; another</h4>
 
-    <div class="paragraph" id="vm-move-reg-above-join">
-      <h5>Move reg or mem above join</h5>
+    <div class="paragraph" id="vm-move-reg-mem-above-join">
+      <h5>Move reg/mem above join</h5>
       <div class="flex-container">
         <div class="width-half"><img src="{{ img_path }}/move-reg-above-join.svg"></div>
         <div class="width-half"><img src="{{ img_path }}/move-mem-above-join.svg"></div>
       </div>
 
+      <p>We can move reg/mem above join because:</p>
+      <ul>
+        <li>The moved instruction is executed in all paths (by inserting compensation code).</li>
+        <li>Not change control flow.</li>
+      </ul>
+
       <div class="example" id="vm-example-move-reg-above-join">
-        <h5>Move reg above join (= join point are moved down without reordering)</h5>
+        <h5>Move reg above join</h5>
         <div class="flex-container">
           <div>
             <div class="code-title">Before reordering</div>
@@ -365,7 +404,7 @@
       </div>
       <!-- vm-example-reg-above-join -->
     </div>
-    <!-- vm-move-reg-above-join -->
+    <!-- vm-move-reg-mem-above-join -->
 
     <div class="paragraph" id="vm-move-reg-or-mem-below-join">
       <h5>Move reg or mem below join</h5>

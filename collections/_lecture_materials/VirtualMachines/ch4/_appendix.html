@@ -13,16 +13,51 @@
       <li>Each variable be defined before it is used.</li>
     </ul>
 
-    <h4>Benefits</h4>
-    <p>Use-def chains are easily identified.</p>
+    <div class="subsubsection" id="vm-ssa-form-benefits">
+      <h4>Benefits</h4>
+      <p>Use-def chains are easily identified.</p>
 
-    <p>ex) Easy code sequence in C</p>
+      <div class="example">
+        <h5>Easy code sequence in C</h5>
 
-    <div class="flex-container">
-      <div>{% highlight c %}{{ ssa-form-ex-source }}{% endhighlight %}</div>
+        <div class="flex-container">
+          <div>{% highlight c %}{{ ssa-form-ex-source }}{% endhighlight %}</div>
 
-      <div>{% highlight c %}{{ ssa-form-ex-ir }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ ssa-form-ex-ir }}{% endhighlight %}</div>
+        </div>
+      </div>
     </div>
+
+    <div class="subsubsection" id="vm-ssa-form-static-vs-dynamic">
+      <h4>Static vs. Dynamic</h4>
+
+      <dl>
+        <dt style="width: 250px">Static single assignment form</dt>
+        <dd>Assign one variable per one assignment statement (statically)</dd>
+
+        <dt style="width: 250px">Dynamic single assignment form</dt>
+        <dd>Assign one variable per one executed instruction (dynamically)</dd>
+      </dl>
+
+      <div class="example">
+        <h5></h5>
+
+        <div class="flex-container">{% highlight c %}{{ static-vs-dynamic-example }}{% endhighlight %}</div>
+        <div class="flex-container">
+          <div>
+            <div class="code-title">Static assignment</div>
+            <div>{% highlight c %}{{ static-assignment }}{% endhighlight %}</div>
+          </div>
+          <div>
+            <div class="code-title">Dynamic assignment</div>
+            <div>{% highlight c %}{{ dynamic-assignment }}{% endhighlight %}</div>
+          </div>
+        </div>
+      </div>
+
+      <p>cf. <a href="https://users.elis.ugent.be/aces/edegem2002/vanbroekhoven.pdf">Dynamic Single Assignment</a></p>
+    </div>
+    <!-- vm-ssa-form-static-vs-dynamic -->
 
     <p>cf. <a href="https://en.wikipedia.org/wiki/Static_single_assignment_form">wikipedia</a></p>
   </div>
