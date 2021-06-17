@@ -13,7 +13,7 @@
       <th>Trace</th>
     </tr>
     <tr>
-      <th>Entry (join points)</th>
+      <th>Entry</th>
       <td>Single</td>
       <td>Multiple</td>
     </tr>
@@ -25,9 +25,14 @@
     <tr>
     </tr>
     <tr>
+      <th>Join points location</th>
+      <td>At top</td>
+      <td>In the middle</td>
+    </tr>
+    <tr>
       <th>Code duplication</th>
-      <td>-</td>
       <td>Tail duplication</td>
+      <td>-</td>
     </tr>
   </table>
 
@@ -81,7 +86,7 @@
     <p>Superblocks have advantages about optimizations:</p>
     <ul>
       <li>
-        Join points impose some restrictions.
+        Join points in traces impose some restrictions.
         <ul>
           <li>Ex) We cannot move reg/mem below join.</li>
           <div class="flex-container">

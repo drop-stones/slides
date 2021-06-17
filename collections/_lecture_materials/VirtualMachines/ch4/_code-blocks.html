@@ -107,8 +107,11 @@ br C
 {% assign consistent-reg-map-a = "
 // R1 <-> r1
 r1 = 100;
-r3 = r1   // r3 <-> R1
-br C
+br C'
+" %}
+{% assign consistent-reg-map-a-to-c = "
+C': r3 = r1 // R1 <-> r3
+    br C
 " %}
 
 {% assign inconsistent-reg-map-b = "
@@ -120,8 +123,11 @@ if cond, br C
 {% assign consistent-reg-map-b = "
 // R1 <-> r2
 r2 = 200
-r3 = r2   // r3 <-> R1
-if cond, br C
+if cond, br C''
+" %}
+{% assign consistent-reg-map-b-to-c = "
+C'': r3 = r2 // R1 <-> r3
+     if cond, br C
 " %}
 
 {% assign inconsistent-reg-map-c = "
@@ -178,13 +184,14 @@ label: // join points
 " %}
 
 {% assign ins-categories = "
-R1 = mem[R6]        // reg (mem if mem[R6] is volatile)
-R2 = mem[R6 + 4]    // reg (mem if mem[R6 + 4] is volatile)
-R3 = R1 + 1         // reg
-R4 = R1 << 2        // reg
-br exit if R7 == 0  // br
-R7 = R7 + 1         // reg
-mem[R6] = R3        // mem
+      R1 = mem[R6]        // reg (mem if mem[R6] is volatile)
+      R2 = mem[R6 + 4]    // reg (mem if mem[R6 + 4] is volatile)
+      R3 = R1 + 1         // reg
+      R4 = R1 << 2        // reg
+      br exit if R7 == 0  // br
+      R7 = R7 + 1         // reg
+      mem[R6] = R3        // mem
+exit:                     // join
 " %}
 
 <!-- br -->
@@ -288,14 +295,56 @@ mem[R6] = R3        // mem
 
 {% assign swap-br-before = "
 1 : ...
-2 : br label1
-3 : br label2
+2 : br label1  // br
+3 : br label2  // br
 " %}
 {% assign swap-br-after = "
 1 : ...
-3 : br label2
-2 : br label1
+3 : br label2  // br
+2 : br label1  // br
 " %}
+
+<!-- br-question -->
+{% assign br-question-1-before = "
+1 : if cond br label
+2 : r1 = mem[r2]
+" %}
+{% assign br-question-1-after = "
+2 : r1 = mem[r2]
+1 : if cond br label
+" %}
+{% assign br-question-1-answer = "
+2': t1 = mem[r2]
+1 : if cond br label
+2 : r1 = t1
+" %}
+
+{% assign br-question-2-before = "
+1 : mem[R1] = R2
+2 : br label
+" %}
+{% assign br-question-2-label-before = "
+3 : label:
+4 :   ...
+" %}
+{% assign br-question-2-after = "
+2 : br label
+1 : mem[R1] = R2
+" %}
+{% assign br-question-2-label-after = "
+3 : label:
+4 :   ...
+" %}
+{% assign br-question-2-answer = "
+2 : br label'
+1 : mem[R1] = R2
+" %}
+{% assign br-question-2-label-answer = "
+5 : label':
+6 :   mem[R1] = R2
+7 :   br label
+" %}
+
 
 <!-- join -->
 {% assign move-reg-above-join-branch-from = "
@@ -303,6 +352,7 @@ mem[R6] = R3        // mem
 2 : br label
 " %}
 {% assign move-reg-above-join-before = "
+  :   ...
 3 : label:          // join
 4 :   R7 = mem[R6]  // reg
 5 :   ...
@@ -312,10 +362,11 @@ mem[R6] = R3        // mem
 2 : br 4'
 " %}
 {% assign move-reg-above-join-compensation = "
-4': R7 = mem[R6]
+4': R7 = mem[R6]   // compensation
   : br label
 " %}
 {% assign move-reg-above-join-after = "
+  :   ...
 4 :   R7 = mem[R6]  // moved above
 3 : label:          // join
 5 :   ...
@@ -326,13 +377,13 @@ mem[R6] = R3        // mem
 2 : br label
 " %}
 {% assign move-reg-below-join-before = "
-3 :   R1 = R1 + 1   // reg
+3 :   R1 = 200      // reg
 4 : label:          // join
 5 :   ...
 " %}
 {% assign move-reg-below-join-after = "
 4 : label:          // join
-3 :   R1 = R1 + 1   // reg
+3 :   R1 = 200      // reg
 5 :   ...
 " %}
 
@@ -353,6 +404,52 @@ mem[R6] = R3        // mem
 5 : label2:     // join
 6 : label1:     // join
 7 :   R3 = R1 + R2
+" %}
+
+<!-- join-question -->
+{% assign join-question-1-before = "
+1 : ...
+2 : br label
+" %}
+{% assign join-question-1-label-before = "
+3 : label:           // join
+4 :   mem[R1] = R2   // mem
+5 :   ...
+" %}
+{% assign join-question-1-after = "
+1 : ...
+2 : br label'
+" %}
+{% assign join-question-1-compensation = "
+4': label'
+  :   mem[R1] = R2
+  :   br label
+" %}
+{% assign join-question-1-label-after = "
+4 :   mem[R1] = R2   // mem
+3 : label:           // join
+5 :   ...
+" %}
+
+{% assign join-question-2-before = "
+  : ...
+1 : mem[R1] = 100
+2 : br label
+" %}
+{% assign join-question-2-label-before = "
+  :   ...
+4 :   mem[R1] = 200  // mem
+5 : label:           // join
+" %}
+{% assign join-question-2-after = "
+  : ...
+1 : mem[R1] = 100
+2 : br label
+" %}
+{% assign join-question-2-label-after = "
+  :   ...
+5 : label:           // join
+4 :   mem[R1] = 200  // mem
 " %}
 
 <!-- straight-line -->
@@ -381,6 +478,17 @@ mem[R6] = R3        // mem
 3 : ...
 " %}
 
+<!-- reg-question -->
+{% assign reg-question-before = "
+1 : R1 = R2 + R3  // reg
+2 : R4 = R1 * R5  // reg
+" %}
+{% assign reg-question-after = "
+2': T1 = R1 * R5  // saved register
+1 : R1 = R2 + R3  // reg
+2 : R4 = T1       // reg
+" %}
+
 <!-- Summary -->
 {% assign extend-live-range = "Extend live range of reg instruction" %}
 {% assign comp-entrance = "Add compensation code at entrance" %}
@@ -389,30 +497,6 @@ mem[R6] = R3        // mem
 {% assign not-allowed-unless-cf = "Not allowed (changes cntrol flow)" %}
 {% assign not-allowed-unless-rare = "Not allowed (can only be done in rare cases)" %}
 {% assign no-effect = "No effect" %}
-
-<!-- question-4-5-1 -->
-{% assign question-4-5-1-q1-before = "
-1 : if cond br label
-2 : r1 = mem[r2]
-" %}
-{% assign question-4-5-1-q1-after = "
-2 : r1 = mem[r2]
-1 : if cond br label
-" %}
-{% assign question-4-5-1-q1-answer = "
-2': t1 = mem[r2]
-1 : if cond br label
-2 : r1 = t1
-" %}
-
-{% assign question-4-5-1-q2-before = "
-1 : r1 = r2 + r3
-2 : mem[r4] = r5
-" %}
-{% assign question-4-5-1-q2-after = "
-2 : mem[r4] = r5
-1 : r1 = r2 + r3
-" %}
 
 <!-- 4.5.2 -->
 {% assign original-source-code = "
@@ -542,10 +626,14 @@ h: t5    t10   t9    r4
 i: t5    t10   t9    r4
 " %}
 
+{% assign regmap-a = "
+   eax   ebx   ecx   edx
+a: t5    r2    r3    r4
+" %}
 {% assign register-live-ranges-a-to-b = "
-r1 r2 r3 r4 t5
+r1 r2 r3 r4 t5 t6
 |  |  |  |  |
-   x  |  |  |
+   x  |  |  |  |
    x  |  |  |
 " %}
 {% assign after-scheduling-a-to-b = "
@@ -559,6 +647,10 @@ a
 a
 " %}
 
+{% assign regmap-c = "
+   eax   ebx   ecx   edx
+c: t5    t6    r3    r4
+" %}
 {% assign register-live-ranges-a-to-d = "
 r1 r2 r3 r4 t5 t6 t7
 |  |  |  |  |
@@ -579,6 +671,10 @@ a
 c
 " %}
 
+{% assign regmap-d = "
+   eax   ebx   ecx   edx
+d: t5    t7    r3    r4
+" %}
 {% assign register-live-ranges-a-to-e = "
 r1 r2 r3 r4 t5 t6 t7 t8 t9
 |  |  |  |  |
@@ -608,8 +704,12 @@ d
 d
 " %}
 
+{% assign regmap-g = "
+   eax   ebx   ecx   edx
+g: t5    t8    t9    r4
+" %}
 {% assign register-live-ranges-a-to-g = "
-r1 r2 r3 r4 t5 t6 t7 t8 t9
+r1 r2 r3 r4 t5 t6 t7 t8 t9 t10
 |  |  |  |  |
    x  |  |  |  |
    x  |  |  |  |
@@ -617,7 +717,7 @@ r1 r2 r3 r4 t5 t6 t7 t8 t9
       |  |  |     |     |
       x  |  |     |     |
       x  |  |     |  |  |
-         |  |        |  |
+         |  |        |  |  |
 " %}
 {% assign after-scheduling-a-to-g = "
 a : t5 = r1 + r2, set CR0
@@ -638,6 +738,11 @@ d
 d
 d
 g
+" %}
+
+{% assign regmap-h = "
+   eax   ebx   ecx   edx
+h: t5    t10   t9    r4
 " %}
 
 {% assign register-live-ranges = "
@@ -751,13 +856,13 @@ b: r1   r2   r3   r4
 
 {% assign repair-code-source = "
 1: r1 = r2 + r3
-2: r9 = r1 + r5   // reg 1
-3: r6 = r1 * r7   // reg 2
+2: r9 = r1 + r5   // reg
+3: r6 = r1 * r7   // trap occur
 " %}
 {% assign repair-code-target = "
 1: R1 = R2 + R3
-3: R6 = R1 * R7   // reg 2
-2: R9 = R1 + R5   // reg 1
+3: R6 = R1 * R7   // trap occur
+2: R9 = R1 + R5   // reg
 " %}
 {% assign repair-code = "
 // if R6 = R1 * R7 traps,

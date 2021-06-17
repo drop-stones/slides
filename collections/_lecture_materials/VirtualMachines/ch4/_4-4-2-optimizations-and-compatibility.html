@@ -7,7 +7,7 @@
     <h4>Review: Compatibility for process VM</h4>
     <p>
       We must maintain an isomorphic relationship between guest VM and host platform.<br />
-      To achive this, we focus on all control transfer points:
+      To achive this, we focus on all control transfer points between guest and host:
     </p>
     <ul>
       <li>system call</li>
@@ -28,14 +28,14 @@
   <div class="subsubsection" id="vm-trap-compatibility">
     <h4>Trap compatibility</h4>
 
-    <p>A process VM is <em>trap compatibility</em> if:</p>
+    <p>A process VM is <em>trap compatible</em> if:</p>
     <ul>
       <li>any trap occur during the native execution if the trap occur during emulation.</li>
       <li>any trap occur during emulation if the trap occur during the native execution.</li>
     </ul>
     <p style="color: gray"><span>Note:</span> Except for a page fault (in Chapter.7)</p>
 
-    <p>Intuitively, <em>Trap timing in guest</em> == <em>Trap timing in host</em>.</p>
+    <p>Briefly, <em>Trap timing in guest</em> == <em>Trap timing in host</em>.</p>
 
     <p><em>Trap compatibility</em> must be maintained before and after optimization.</p>
 
@@ -53,13 +53,13 @@
         </div>
       </div>
 
-      <p>In this example, the optimization violate trap compatibility because:</p>
+      <p>In this example, the optimization violate <em>trap compatibility</em> because:</p>
       <ul>
         <li>In source, <code>r1 = r2 + r3</code> may trap.</li>
         <li>In target, no trap occurs because <code>r1 = r2 + r3</code> is removed.</li>
       </ul>
 
-      <p>The converse condition for trap compatibility can be maintained.</p>
+      <p>The converse condition for <em>trap compatibility</em> can be maintained.</p>
     </div>
     <!-- vm-example-remove-redundant-instructions -->
 
@@ -95,6 +95,7 @@
       <li>the runtime can reconstruct the same <em>memory state</em> as the state on guest VM.</li>
       <li>the runtime can reconstruct the same <em>register state</em> as the state on guest VM.</li>
     </ul>
+    <p>Briefly, <em>memory/register state in guest</em> == <em>memory/register state in host</em>.</p>
 
     <p><em>Memory</em> and <em>register state compatibility</em> must be maintained even after optimization.</p>
 
@@ -107,25 +108,26 @@
         </div>
 
         <div>
-          <div class="code-title">Target</div>
+          <div class="code-title">Target (NG)</div>
           <div>{% highlight c %}{{ target-4-28 }}{% endhighlight %}</div>
-        </div>
-
-        <div>
-          <div class="code-title">Target with saved register</div>
-          <div>{% highlight c %}{{ target-with-saved-reg-4-28 }}{% endhighlight %}</div>
         </div>
       </div>
 
       <p>
         It might be beneficial to reorder <code>r6 = r1 * r7</code> to a higher point because multiply take several cycles.<br />
-        But reordering line.2 and line.3 violates <em>register state compatibility</em> because when <code>r9 = r1 + r5</code> trap,:
+        But reordering line.2 and line.3 violates <em>register state compatibility</em> because when <code>r9 = r1 + r5</code> trap:
       </p>
       <ul>
         <li>in souce, <code>r6</code> has not been updated yet.</li>
         <li>in target, <code>R6</code> has been updated.</li>
       </ul>
 
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Target with saved register</div>
+          <div>{% highlight c %}{{ target-with-saved-reg-4-28 }}{% endhighlight %}</div>
+        </div>
+      </div>
       <p>
         To maintain <em>register state compatibility</em>, saved register <code>S1</code> hold the multiply results.<br />
         This optimized code update registers in the same order as original source.
@@ -165,6 +167,19 @@
     </div>
     <!-- vm-intrinsic-vs-extrinsic-compatibility -->
   </aside>
+
+  <div class="subsubsection" id="vm-4-4-2-summary">
+    <h4>Summary</h4>
+
+    <p>After optimization, we must maintain compatibility:</p>
+    <dl>
+      <dt style="width: 250px;">Trap compatibility</dt>
+      <dd>Trap timing in guest == Trap timing in host</dd>
+
+      <dt style="width: 250px;">Memory/Register compatibility</dt>
+      <dd>Memory/Register state in guest == Memory/Register state in host</dd>
+    </dl>
+  </div>
 
   <div class="question" id="vm-4-4-2-question">
     <h5>Answer whether this optimization maintains compatibility or not.</h5>

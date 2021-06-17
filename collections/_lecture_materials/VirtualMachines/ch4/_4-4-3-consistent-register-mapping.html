@@ -40,12 +40,7 @@
         Source registers are mapped on a per-translation-block basis.
         <ul>
           <li>Different translation blocks may have different register mappings.</li>
-        </ul>
-      </li>
-      <li>
-        Flexible mapping
-        <ul>
-          <li>While <code>r1</code> is used for <code>R1</code> in block A, it is also used for <code>R2</code> in block B.</li>
+          <li>Ex) While <code>r1</code> is used for <code>R1</code> in block A, it is also used for <code>R2</code> in block B.</li>
         </ul>
       </li>
       <li>Extra register copy is required for consistency.</li>
@@ -104,10 +99,12 @@
         <div>
           <div class="code-title">Block A</div>
           <div>{% highlight c %}{{ consistent-reg-map-a }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ consistent-reg-map-a-to-c }}{% endhighlight %}</div>
         </div>
         <div>
           <div class="code-title">Block B</div>
           <div>{% highlight c %}{{ consistent-reg-map-b }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ consistent-reg-map-b-to-c }}{% endhighlight %}</div>
         </div>
       </div>
 
@@ -164,9 +161,11 @@
         <div>{% highlight c %}{{ consistent-reg-map-f }}{% endhighlight %}</div>
       </div>
 
-      <p>In Section 4.6.3, consistent but not fixed methods are discussed.</p>
+      <p>This example shows that memory accesses (<code>reg[9], reg[10]</code>) occur.</p>
     </div>
     <!-- vm-example-simple-fixed-register-mapping -->
+
+    <p>In Section 4.6.3, consistent but not fixed methods are discussed.</p>
   </div>
   <!-- vm-consistent-register-mapping -->
 </div>

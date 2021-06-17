@@ -16,7 +16,7 @@
       </ul>
     </li>
     <li>
-      Discuss possible reordering.
+      Discuss pairwise-reordering (4 &times; 4 = 16).
       <ul>
         <li>br &#8646; another</li>
         <li>join &#8646; another</li>
@@ -33,7 +33,12 @@
         reg: Register updates
         <ul>
           <li>Description: instructions that produce a register result</li>
-          <li>Property: can be "undone" (using saved registers, saving into memory)</li>
+          <li>
+            Property: can be "undone" (using saved registers, saving into memory)
+            <ul>
+              <li>Register access is fast.</li>
+            </ul>
+          </li>
           <li>
             Examples:
             <ul>
@@ -47,7 +52,12 @@
         mem: Memory updates
         <ul>
           <li>Description: instructions that place a value in a memory</li>
-          <li>Property: cannot be "undone" easily (because saving memory have high cost of time and memory)</li>
+          <li>
+            Property: cannot be "undone" easily (because saving memory have high cost of time and memory)
+            <ul>
+              <li>Memory access is slow.</li>
+            </ul>
+          </li>
           <li>
             Examples:
             <ul>
@@ -61,7 +71,7 @@
         br: Branch instructions
         <ul>
           <li>Property: do not trap</li>
-          <li>Example: {% highlight c %}bz label // if zero_flag == 0 then br label{% endhighlight %}</li>
+          <li>Example: {% highlight c %}bz label // if ZF == 0 then br label{% endhighlight %}</li>
         </ul>
       </li>
 
@@ -160,7 +170,8 @@
 
       <p>We can move reg or mem below br because:</p>
       <ul>
-        <li>The moved instruction is executed both under <em>branch-taken</em> and <em>branch-not-taken</em>.</li>
+        <li>The moved instruction is executed both under <em>branch-taken</em> and <em>not-taken</em>.</li>
+        <li>br do not trap.</li>
         <li>Not change control flow.</li>
       </ul>
 
@@ -217,10 +228,6 @@
             <div class="code-title">After reordering</div>
             <div>{% highlight c %}{{ move-reg-above-br-after }}{% endhighlight %}</div>
           </div>
-          <div>
-            <div class="code-title">Omit register copy</div>
-            <div>{% highlight c %}{{ move-reg-above-br-no-update }}{% endhighlight %}</div>
-          </div>
         </div>
 
         <p>There are two reasons why we insert saved register <code>T1</code>:</p>
@@ -242,6 +249,17 @@
             </ul>
           </li>
         </ul>
+
+        <p>
+          If we do not use <code>R6</code>, we can omit the explicit register copy.<br>
+          Important point is that the correct value of R6 is available (<code>R6</code> holds old value, <code>T1</code> holds new value).
+        </p>
+        <div class="flex-container">
+          <div>
+            <div class="code-title">Omit register copy</div>
+            <div>{% highlight c %}{{ move-reg-above-br-no-update }}{% endhighlight %}</div>
+          </div>
+        </div>
       </div>
       <!-- vm-example-move-reg-above-reg -->
     </div>
@@ -256,12 +274,12 @@
       <p>We cannot move mem above br because:</p>
       <ul>
         <li>
-          The moved instruction is executed both under <em>branch-taken</em> and <em>branch-not-taken</em>.
+          The moved instruction is executed both under <em>branch-taken</em> and <em>not-taken</em>.
           <ul>
             <li>Originally, the instruction is executed only under <em>branch-not-taken</em>.</li>
           </ul>
         </li>
-        <li>Memory state cannot be saved. (or need extra instructions)</li>
+        <li>mem cannot be "undone". (or need extra instructions)</li>
       </ul>
 
       <div class="example" id="vm-example-move-mem-above-br">
@@ -284,7 +302,7 @@
           cannot be recoverable.<br />
         </p>
 
-        <div class="code-title"><p>Memory compatible but slow(?) reordering</p></div>
+        <div class="code-title"><p>Memory compatible but slow reordering</p></div>
         <div class="flex-container">
           <div>{% highlight c %}{{ meaningless-move-mem }}{% endhighlight %}</div>
           <div>
@@ -365,6 +383,55 @@
       <!-- vm-example-move-br-and-br -->
     </div>
     <!-- vm-swap-br-and-br -->
+
+    <div class="question" id="vm-br-another-question">
+      <h5>Answer whether this optimization is allowed and why.</h5>
+
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Before reordering</div>
+          <div>{% highlight c %}{{ br-question-1-before }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">After reordering</div>
+          <div>{% highlight c %}{{ br-question-1-after }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <details>
+        <summary class="answer"></summary>
+        No. A saved register is needed.
+        <div class="flex-container">
+          <div>{% highlight c %}{{ br-question-1-answer }}{% endhighlight %}</div>
+        </div>
+      </details>
+
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Before reordering</div>
+          <div>{% highlight c %}{{ br-question-2-before }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ br-question-2-label-before }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">After reordering</div>
+          <div>{% highlight c %}{{ br-question-2-after }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ br-question-2-label-after }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <details>
+        <summary class="answer"></summary>
+        No. <em>Compensation code</em> is needed.
+        <div class="flex-container">
+          <div>
+            <div>{% highlight c %}{{ br-question-2-answer }}{% endhighlight %}</div>
+            <div class="code-title">Compensation code</div>
+            <div>{% highlight c %}{{ br-question-2-label-answer }}{% endhighlight %}</div>
+          </div>
+        </div>
+      </details>
+    </div>
+    <!-- vm-br-another-question -->
   </div>
   <!-- vm-br-another -->
 
@@ -380,7 +447,7 @@
 
       <p>We can move reg/mem above join because:</p>
       <ul>
-        <li>The moved instruction is executed in all paths (by inserting compensation code).</li>
+        <li>The moved instruction is executed both in <em>fallthrough</em> and <em>join-from-outside</em> (by inserting compensation code).</li>
         <li>Not change control flow.</li>
       </ul>
 
@@ -413,6 +480,16 @@
         <div><img src="{{ img_path }}/move-mem-below-join.svg"></div>
       </div>
 
+      <p>We cannot move reg/mem below join because:</p>
+      <ul>
+        <li>
+          The moved instruction is executed both in <em>fallthrough</em> and <em>join-from-outside</em>.
+          <ul>
+            <li>Originally, the instruction is executed only in <em>fallthrough</em>.</li>
+          </ul>
+        </li>
+      </ul>
+
       <div class="example" id="vm-example-move-reg-below-join">
         <h5>Move reg below join</h5>
         <div class="flex-container">
@@ -444,6 +521,16 @@
         <div><img src="{{ img_path }}/swap-join-and-join.svg"></div>
       </div>
 
+      <p>We can swap join and join because:</p>
+      <ul>
+        <li>
+          Swapping join and join have no effect.
+          <ul>
+            <li>join is a point and not an instruction.</li>
+          </ul>
+        </li>
+      </ul>
+      
       <div class="example" id="vm-example-swap-join-points">
         <h5>Swap join points</h5>
         <div class="flex-container">
@@ -466,18 +553,67 @@
       <!-- vm-example-swap-join-points -->
     </div>
     <!-- vm-swap-join-points -->
+
+    <div class="question" id="vm-join-another-question">
+      <h5>Answer whether this optimization is allowed and why.</h5>
+
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Before reordering</div>
+          <div>{% highlight c %}{{ join-question-1-before }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ join-question-1-label-before }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">After reordering</div>
+          <div>{% highlight c %}{{ join-question-1-after }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ join-question-1-compensation }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ join-question-1-label-after }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <details>
+        <summary class="answer"></summary>
+        Yes. <em>Compensation code</em> ensures that <code>mem[R1] = R2</code> is executed both in <em>fallthrough</em> and <em>join-from-outside</em>.
+      </details>
+
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Before reordering</div>
+          <div>{% highlight c %}{{ join-question-2-before }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ join-question-2-label-before }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">After reordering</div>
+          <div>{% highlight c %}{{ join-question-2-after }}{% endhighlight %}</div>
+          <div>{% highlight c %}{{ join-question-2-label-after }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <details>
+        <summary class="answer"></summary>
+        No. The value of <code>mem[R1]</code> is changed in <em>join-from-outside</em>.
+      </details>
+
+    </div>
+    <!-- vm-join-another-question -->
   </div>
   <!-- vm-join-another -->
 
   <div class="subsubsection" id="vm-straight-line-reordering">
-    <h4>Straight-line reordering ({reg, mem} &#8646; {reg, mem})</h4>
+    <h4>Straight-line reordering (reg/mem &#8646; reg/mem)</h4>
 
     <div class="paragraph" id="vm-move-reg-above-reg-or-mem">
-      <h5>Move reg above reg or mem</h5>
+      <h5>Move reg above reg/mem</h5>
       <div class="flex-container">
         <div class="width-half"><img src="{{ img_path }}/swap-reg-and-reg.svg"></div>
         <div class="width-half"><img src="{{ img_path }}/move-reg-above-mem.svg"></div>
       </div>
+
+      <p>We can move reg above reg/mem because:</p>
+      <ul>
+        <li>reg can be "undone" using saved registers.</li>
+        <li>Not change control flow.</li>
+      </ul>
 
       <div class="example" id="vm-example-move-reg-above-mem">
         <h5>Move reg above mem</h5>
@@ -491,17 +627,24 @@
             <div>{% highlight c %}{{ move-reg-above-mem-after }}{% endhighlight %}</div>
           </div>
         </div>
+
+        <p>If <code>mem[R6] = R1</code> traps, <code>R7</code> holds the same value as source.</p>
       </div>
       <!-- vm-example-move-reg-above-mem -->
     </div>
     <!-- move-reg-above-reg-or-mem -->
 
     <div class="paragraph" id="vm-move-mem-above-reg-or-mem">
-      <h5>Move mem above reg or mem</h5>
+      <h5>Move mem above reg/mem</h5>
       <div class="flex-container">
         <div><img src="{{ img_path }}/move-mem-above-reg.svg"></div>
         <div><img src="{{ img_path }}/swap-mem-and-mem.svg"></div>
       </div>
+
+      <p>We cannot move mem above reg/mem because:</p>
+      <ul>
+        <li>mem cannot be "undone".</li>
+      </ul>
 
       <div class="example" id="vm-example-move-mem-above-reg">
         <h5>Move mem above reg</h5>
@@ -520,12 +663,33 @@
           We assume that mem cannot be recoverable ("undone") before.<br />
           If
           <code>1: R1 = R2 + R3</code>
-          will trap, we cannot recover the original state.
+          trap, we cannot recover the original value of <code>mem[R4]</code>.
         </p>
       </div>
       <!-- vm-example-move-mem-above-reg -->
     </div>
     <!-- vm-move-mem-above-reg-or-mem -->
+  
+    <div class="question" id="vm-straight-line-reordering-question">
+      <h5>Answer whether this optimization is allowed and why.</h5>
+
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Before reordering</div>
+          <div>{% highlight c %}{{ reg-question-before }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">After reordering</div>
+          <div>{% highlight c %}{{ reg-question-after }}{% endhighlight %}</div>
+        </div>
+      </div>
+
+      <details>
+        <summary class="answer"></summary>
+        No. We must use the value of <code>R1 = R2 + R3</code> at <code>T1 = R1 * R5</code>.
+      </details>
+    </div>
+    <!-- vm-straight-line-reordering-question -->
   </div>
   <!-- vm-straight-line-reordering -->
 
@@ -595,7 +759,7 @@
       </li>
       <li>
         Move
-        <em>mem</em>
+        <em>mem(/reg)</em>
         above
         <em>join</em>
         (by adding compensation code)
@@ -604,45 +768,6 @@
   </div>
   <!-- vm-4-5-1-summary -->
 
-  <div class="question" id="question-4-5-1">
-    <h5>Answer whether this optimization is allowed and why.</h5>
-
-    <div class="flex-container">
-      <div>
-        <div class="code-title">Before reordering</div>
-        <div>{% highlight c %}{{ question-4-5-1-q1-before }}{% endhighlight %}</div>
-      </div>
-      <div>
-        <div class="code-title">After reordering</div>
-        <div>{% highlight c %}{{ question-4-5-1-q1-after }}{% endhighlight %}</div>
-      </div>
-    </div>
-
-    <details>
-      <summary class="answer"></summary>
-      No. A saved register is needed.
-      <div class="flex-container">
-        <div>{% highlight c %}{{ question-4-5-1-q1-answer }}{% endhighlight %}</div>
-      </div>
-    </details>
-
-    <div class="flex-container">
-      <div>
-        <div class="code-title">Before reordering</div>
-        <div>{% highlight c %}{{ question-4-5-1-q2-before }}{% endhighlight %}</div>
-      </div>
-      <div>
-        <div class="code-title">After reordering</div>
-        <div>{% highlight c %}{{ question-4-5-1-q2-after }}{% endhighlight %}</div>
-      </div>
-    </div>
-
-    <details>
-      <summary class="answer"></summary>
-      No. If <code>r1 = r2 + r3</code> trap, we cannot recover <code>mem[r4]</code>.
-    </details>
-  </div>
-  <!-- question-4-5-1 -->
 
 </div>
 <!-- vm-4-5-1-primitive-instruction-reordering -->

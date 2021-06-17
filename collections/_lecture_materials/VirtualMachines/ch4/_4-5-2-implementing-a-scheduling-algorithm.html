@@ -127,7 +127,10 @@
   <div class="subsubsection" id="vm-4-5-2-step4">
     <h4>Step 4: Determine Checkpoints</h4>
 
-    <p><em>Checkpoints</em> are places where <em>all</em> instructions in the original code have been completed up to that point.</p>
+    <p>
+      <em>Checkpoints</em> are places where <em>all</em> instructions in the original code have been completed up to that point.<br>
+      At <em>checkpoints</em>, <em>Guest state</em> == <em>Host state</em>.
+    </p>
 
     <p>
       Intuitively, checkpoints are similar to save points in game.<br>
@@ -190,10 +193,13 @@
       {% highlight c %}{{ scheduled-reg-map2 }}{% endhighlight %}
     </details>
 
-    <p>
-      For instruction <code>c</code> or <code>b</code>, we need to extend <em>register live ranges</em> at <code>a</code>.<br>
-      (<code>x</code> means extended live ranges.)
-    </p>
+    <details>
+      <summary>
+        For instruction <code>c</code> or <code>b</code>, we need to extend <em>register live ranges</em> at <code>a</code>.<br>
+        (<code>x</code> means extended live ranges.)
+      </summary>
+      {% highlight c %}{{ regmap-a }}{% endhighlight %}
+    </details>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -211,7 +217,10 @@
       </div>
     </div>
 
-    <p>For instruction <code>d</code>, we need to extend <em>register live ranges</em> at <code>c</code>.</p>
+    <details>
+      <summary>For instruction <code>d</code>, we need to extend <em>register live ranges</em> at <code>c</code>.</summary>
+      {% highlight c %}{{ regmap-c }}{% endhighlight %}
+    </details>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -229,7 +238,10 @@
       </div>
     </div>
 
-    <p>For instruction <code>e</code>, we need to extend <em>register live ranges</em> at <code>d</code>.</p>
+    <details>
+      <summary>For instruction <code>e</code>, we need to extend <em>register live ranges</em> at <code>d</code>.</summary>
+      {% highlight c %}{{ regmap-d }}{% endhighlight %}
+    </details>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -247,7 +259,10 @@
       </div>
     </div>
 
-    <p>For instruction <code>h</code>, we need to extend <em>register live ranges</em> at <code>g</code>.</p>
+    <details>
+      <summary>For instruction <code>h</code>, we need to extend <em>register live ranges</em> at <code>g</code>.</summary>
+      {% highlight c %}{{ regmap-g }}{% endhighlight %}
+    </details>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -265,23 +280,36 @@
       </div>
     </div>
 
-    <p>For instruction <code>i</code>, we need to extend <em>register live ranges</em> at <code>h</code>.</p>
-    <div class="flex-container">
-      <div>
-        <div class="code-title">Register Live Ranges</div>
-        <div>{% highlight c %}{{ register-live-ranges }}{% endhighlight %}</div>
+    <div class="question" id="extend-register-live-range-question">
+      <h5>Answer register live ranges</h5>
+      <details>
+        <summary>For instruction <code>i</code>, we need to extend <em>register live ranges</em> at <code>h</code>.</summary>
+        {% highlight c %}{{ regmap-h }}{% endhighlight %}
+      </details>
+      <div class="flex-container">
+        <div>
+          <div class="code-title">Scheduled Code</div>
+          &nbsp;
+          <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">Checkpoint</div>
+          &nbsp;
+          <div>{% highlight c %}{{ checkpoint }}{% endhighlight %}</div>
+        </div>
       </div>
-      <div>
-        <div class="code-title">Scheduled Code</div>
-        &nbsp;
-        <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
-      </div>
-      <div>
-        <div class="code-title">Checkpoint</div>
-        &nbsp;
-        <div>{% highlight c %}{{ checkpoint }}{% endhighlight %}</div>
-      </div>
+
+      <details>
+        <summary class="answer"></summary>
+        <div class="flex-container">
+          <div>
+            <div class="code-title">Register Live Ranges</div>
+            <div>{% highlight c %}{{ register-live-ranges }}{% endhighlight %}</div>
+          </div>
+        </div>
+      </details>
     </div>
+    <!-- extend-register-live-range-question -->
 
     <p>
       After calculation of <em>register live ranges</em>, we assign target registers to SSA variables.<br>
@@ -386,7 +414,7 @@
       </li>
       <li>Find the checkpoint for the trapping instruction.</li>
       <li>Reconstruct the RegMAP at the checkpoint.</li>
-      <li>Interpret source instructions from the checkpoint.</li>
+      <li>Interpret next source instructions after the checkpoint.</li>
     </ol>
 
     <div class="example">
@@ -443,7 +471,7 @@
       </div>
 
       <details>
-        <summary>Explanation</summary>
+        <summary class="answer"></summary>
         In target code execution, <code>c</code> traps and register states at <code>a</code> is reconstructed.<br>
         In source code interpretation, <code>c</code> is not executed.<br>
       </details>
@@ -487,9 +515,9 @@
     <p>For handling condition codes, an efficient method is <em>lazy evaluation</em>.</p>
 
     <p>
-      However, we must care about condition codes in reordering.<br>
+      We must care about condition codes in reordering.<br>
       For precise state recovery, we must recover condition codes.<br>
-      Condition codes recovery is as follows:
+      Condition codes recovery need the following setups:
     </p>
     <ul>
       <li>
