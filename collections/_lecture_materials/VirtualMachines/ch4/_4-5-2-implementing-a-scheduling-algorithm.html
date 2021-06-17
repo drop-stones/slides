@@ -188,18 +188,17 @@
       <li>In other words, we need to extend <em>register live ranges</em>.</li>
     </ul>
 
+    {% comment %}
     <details>
       <summary><i class="fa fa-table aria-hidden="true"></i> Register Map</summary>
       {% highlight c %}{{ scheduled-reg-map2 }}{% endhighlight %}
     </details>
+    {% endcomment %}
 
-    <details>
-      <summary>
-        For instruction <code>c</code> or <code>b</code>, we need to extend <em>register live ranges</em> at <code>a</code>.<br>
-        (<code>x</code> means extended live ranges.)
-      </summary>
-      {% highlight c %}{{ regmap-a }}{% endhighlight %}
-    </details>
+    <p>
+      For instruction <code>c</code> or <code>b</code>, we need to extend <em>register live ranges</em> at <code>a</code>.<br>
+      (<code>x</code> means extended live ranges.)
+    </p>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -215,12 +214,13 @@
         &nbsp;
         <div>{% highlight c %}{{ checkpoint-a-to-b }}{% endhighlight %}</div>
       </div>
+      <div>
+        <div class="code-title">RegMAP</div>
+        <div>{% highlight c %}{{ regmap-a }}{% endhighlight %}</div>
+      </div>
     </div>
 
-    <details>
-      <summary>For instruction <code>d</code>, we need to extend <em>register live ranges</em> at <code>c</code>.</summary>
-      {% highlight c %}{{ regmap-c }}{% endhighlight %}
-    </details>
+    <p>For instruction <code>d</code>, we need to extend <em>register live ranges</em> at <code>c</code>.</p>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -236,12 +236,13 @@
         &nbsp;
         <div>{% highlight c %}{{ checkpoint-a-to-d }}{% endhighlight %}</div>
       </div>
+      <div>
+        <div class="code-title">RegMAP</div>
+        <div>{% highlight c %}{{ regmap-c }}{% endhighlight %}</div>
+      </div>
     </div>
 
-    <details>
-      <summary>For instruction <code>e</code>, we need to extend <em>register live ranges</em> at <code>d</code>.</summary>
-      {% highlight c %}{{ regmap-d }}{% endhighlight %}
-    </details>
+    <p>For instruction <code>e</code>, we need to extend <em>register live ranges</em> at <code>d</code>.</p>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -257,12 +258,13 @@
         &nbsp;
         <div>{% highlight c %}{{ checkpoint-a-to-e }}{% endhighlight %}</div>
       </div>
+      <div>
+        <div class="code-title">RegMap</div>
+        <div>{% highlight c %}{{ regmap-d }}{% endhighlight %}</div>
+      </div>
     </div>
 
-    <details>
-      <summary>For instruction <code>h</code>, we need to extend <em>register live ranges</em> at <code>g</code>.</summary>
-      {% highlight c %}{{ regmap-g }}{% endhighlight %}
-    </details>
+    <p>For instruction <code>h</code>, we need to extend <em>register live ranges</em> at <code>g</code>.</p>
     <div class="flex-container">
       <div>
         <div class="code-title">Register Live Ranges</div>
@@ -278,24 +280,27 @@
         &nbsp;
         <div>{% highlight c %}{{ checkpoint-a-to-g }}{% endhighlight %}</div>
       </div>
+      <div>
+        <div class="code-title">RegMAP</div>
+        <div>{% highlight c %}{{ regmap-g }}{% endhighlight %}</div>
+      </div>
     </div>
 
     <div class="question" id="extend-register-live-range-question">
       <h5>Answer register live ranges</h5>
-      <details>
-        <summary>For instruction <code>i</code>, we need to extend <em>register live ranges</em> at <code>h</code>.</summary>
-        {% highlight c %}{{ regmap-h }}{% endhighlight %}
-      </details>
+      <p>For instruction <code>i</code>, we need to extend <em>register live ranges</em> at <code>h</code>.</p>
       <div class="flex-container">
         <div>
           <div class="code-title">Scheduled Code</div>
-          &nbsp;
           <div>{% highlight nasm %}{{ after-scheduling }}{% endhighlight %}</div>
         </div>
         <div>
           <div class="code-title">Checkpoint</div>
-          &nbsp;
           <div>{% highlight c %}{{ checkpoint }}{% endhighlight %}</div>
+        </div>
+        <div>
+          <div class="code-title">RegMAP</div>
+          <div>{% highlight c %}{{ regmap-h }}{% endhighlight %}</div>
         </div>
       </div>
 
