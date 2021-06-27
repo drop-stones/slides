@@ -1,0 +1,72 @@
+<div id="mc-4-overview">
+  <h2>Overview</h2>
+
+  <p>In Ch.3, we models systems as <em>Kripke structures</em>.</p>
+
+  {% include_relative {{ mermaid_dir }}/kripke-model.html %}
+ 
+  <p>In Ch.4, we discuss <em>temporal logic</em> that specify the dynamic behavior of systems.</p>
+
+  <p><em>Temporal Logic</em> can specify the following properties:</p>
+  <ul>
+    <li>
+      <em>next</em> : a property holds in next time, after the one computation.
+      <ul>
+        <li>ex) If <code>c</code> holds, <code>c</code> will hold in next time.</li>
+      </ul>
+    </li>
+
+    <li>
+      <em>eventually</em> : a property holds in the future.
+      <ul>
+        <li>ex) The program will eventually finish.</li>
+      </ul>
+    </li>
+
+    <li>
+      <em>never</em> : a property never holds.
+      <ul>
+        <li>ex) An error state is never reached.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>In this chapter, we focus on the following logics in temporal logics:</p>
+  <ul>
+    <li>CTL* (Computation Tree Logic)</li>
+    <li>CTL</li>
+    <li>ACTL* (Universal CTL)</li>
+    <li>LTL (Leanear Temporal Logic)</li>
+  </ul>
+
+  <div id="mc-4-contents">
+    <h3>Contents</h3>
+
+    <ul>
+      <li><a href="#mc-4-1-the-computation-tree-logic-ctl*">{{ 4-1-title }}</a></li>
+      <li>
+        <a href="#mc-4-2-syntax-and-semantics-of-ctl*">{{ 4-2-title }}</a>
+        <ul>
+          <li><a href="#mc-4-2-1-syntax-of-ctl*">{{ 4-2-1-title }}</a></li>
+          <li><a href="#mc-4-2-2-semantics-of-ctl*">{{ 4-2-2-title }}</a></li>
+          <li><a href="#mc-4-2-3-negation-normal-form">{{ 4-2-3-title }}</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#mc-4-3-temporal-logics-based-on-ctl*">{{ 4-3-title }}</a>
+        <ul>
+          <li><a href="#mc-4-3-1-the-branching-time-logic-ctl">{{ 4-3-1-title }}</a></li>
+          <li><a href="#mc-4-3-2-the-universal-computation-tree-logics-actl*-and-actl">{{ 4-3-2-title }}</a></li>
+          <li><a href="#mc-4-3-3-linear-temporal-logic-ltl">{{ 4-3-3-title }}</a></li>
+          <li><a href="#mc-4-3-4-relationships-between-fragments-of-ctl*">{{ 4-3-4-title }}</a></li>
+        </ul>
+      </li>
+      <li><a href="#mc-4-4-temporal-logic-with-set-atomic-propositions-and-set-semantics">{{ 4-4-title }}</a></li>
+      <li><a href="#mc-4-5-fairness">{{ 4-5-title }}</a></li>
+      <li><a href="#mc-4-6-counterexamples">{{ 4-6-title }}</a></li>
+      <li><a href="#mc-4-7-safety-and-liveness-properties">{{ 4-7-title }}</a></li>
+    </ul>
+  </div>
+  <!-- mc-4-contents -->
+</div>
+<!-- mc-4-overview -->

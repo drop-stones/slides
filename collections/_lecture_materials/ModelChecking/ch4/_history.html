@@ -1,0 +1,100 @@
+<div id="mc-4-history">
+  <h2>History of Temporal Logic</h2>
+
+  <p class="note">NOTE: This descriptions are informal.</p>
+
+  <div id="propositional-logic">
+    <h3>Propositional Logic</h3>
+    <p>Describe the relationship between <em>atomic propositions</em>.</p>
+
+    <div>
+      <h4>Syntax</h4>
+        \[
+          \phi :=
+            p \mid
+            \lnot \phi \mid
+            \phi \lor \psi \mid
+            \phi \land \psi
+        \]
+      <p>
+        \( \phi, \psi \): Syntax of propositional logic <br>
+        \( p \in AP \): Atomic proposition
+      </p>
+    </div>
+
+    <div>
+      <h4>Example</h4>
+      <p>"If I didn't have lunch, I am hungry" is expressed as</p>
+      <div class="flex-container">
+        <p>\( \lnot \) "I had lunch" \( \Rightarrow \) "I am hungry"</p>
+      </div>
+    </div>
+  </div>
+  <!-- propositional-logic -->
+
+  <div id="first-order-logic">
+    <h3>First-Order Logic</h3>
+    <p>Extend propositional logic with <em>quantifications</em>.</p>
+
+    <div>
+      <h4>Syntax</h4>
+        \[
+          \phi := 
+            p(x) \mid
+            \lnot \phi \mid
+            \phi \lor \psi \mid
+            \phi \land \psi \mid
+            \exists x, \phi \mid
+            \forall x, \phi
+        \]
+        <p>
+          \( \phi \) : Syntax of first-order logic<br>
+          \( p \in MP \): Monadic predicate
+        </p>
+    </div>
+
+    <div>
+      <h4>Example</h4>
+      <p>"There exists a man who is hungry" is expressed as</p>
+      <div class="flex-container">
+        <p>\( \exists x \in Man, isHungry(x) \)</p>
+      </div>
+    </div>
+  </div>
+  <!-- first-order-logic -->
+
+  <div id="temporal-logic">
+    <h3>Temporal Logic</h3>
+    <p>Describe atomic propositions <em>along time</em>.</p>
+
+    <div>
+      <h4>Syntax</h4>
+        \[
+          \phi :=
+            p \mid
+            \lnot \phi \mid
+            \phi \lor \psi \mid
+            \phi \land \psi \mid
+            F \phi \mid
+            G \phi \mid
+            X \phi \mid
+            ...
+        \]
+        <p>
+          \( \phi \) : Syntax of temporal logic<br>
+          \( p \in AP \) : Atomic proposition
+        </p>
+    </div>
+
+    <div>
+      <h4>Example</h4>
+      <p>"I will eventually be hungry in the future" is expressed as</p>
+      <div class="flex-container">
+        <p>\( F \) "I am hungry"</p>
+      </div>
+    </div>
+  </div>
+  <!-- temporal-logic -->
+
+</div>
+<!-- mc-4-history -->

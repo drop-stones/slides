@@ -3,4 +3,20 @@ title: Model Checking Ch.4
 subtitle: Temporal Logic
 ---
 
+{% include_relative _variables.html %}
 {% assign img_path = '/assets/img/lecture_materials/ModelChecking/ch4' | relative_url %}
+{% assign mermaid_dir = 'mermaid' %}
+
+<div class="chapter" id="mc-ch4">
+  {% include_relative _4-overview.html %}
+
+  {% include_relative _history.html %}
+
+  {% include_relative _4-1-the-computation-tree-logic-ctl.html %}
+  {% include_relative _4-2-syntax-and-semantics-of-ctl.html %} 
+  {% include_relative _4-3-temporal-logics-based-on-ctl.html %}
+  {% include_relative _4-4-set-atomic-propositions.html %}
+  {% include_relative _4-5-fairness.html %}
+  {% include_relative _4-6-counterexamples.html %}
+  {% include_relative _4-7-safety-and-liveness-properties.html %}
+</div>

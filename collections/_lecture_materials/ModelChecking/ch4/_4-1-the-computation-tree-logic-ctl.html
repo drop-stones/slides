@@ -1,0 +1,56 @@
+<div id="mc-4-1-the-computation-tree-logic-ctl*">
+  <h2>{{ 4-1-title }}</h2>
+
+  <p>
+    <em>CTL* (computation tree logic)</em> is semantically similar to computation trees.<br>
+    Given an initial state $s_0$ in a Kripke structure $ M $, the tree is formed by unwinding $ M $.
+  </p>
+
+  <div class="flex-container">
+    {% include_relative {{ mermaid_dir }}/kripke-model.html %}
+    {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
+  </div>
+
+  <p>CTL* formulas are composed of <em>path quantifiers</em> and <em>temporal operators</em>:</p>
+  <ul>
+    <li>
+      <em>Path quantifiers</em>
+      <ul>
+        <li>
+          $ \bm{A} \varphi $ : "all computation paths"
+          <ul>
+            <li>This means that all paths from a given state have property $ \varphi $</li>
+          </ul>
+        </li>
+        <li>
+          $ \bm{E} \varphi $ : "there exists a computation path"
+          <ul>
+            <li>This means that at least one path from a given state has property $ \varphi $</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <em>Temporal operators</em>
+      <ul>
+        <li>
+          $ \bm{X} p $ : "next time $ p $"
+          <ul>
+            <li>Intuitively, this requires that proposition $ p $ holds on the second state of the path</li>
+          </ul>
+        </li>
+        <li>
+          $ \bm{F} p $ : "eventually $ p $" or "in the future $ p $"
+          <ul>
+            <li>This is used to assert that property $ p $ holds at some state on the path</li>
+          </ul>
+        </li>
+        <li>
+          $ \bm{G} p $ : "always $p$" 
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
+<!-- mc-4-1-the-computation-tree-logic-ctl* -->
