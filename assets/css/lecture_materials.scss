@@ -90,6 +90,19 @@ $border-left-width-h5: 8px;
   }
 }
 
+.table {
+  display: table;
+
+  .table-row {
+    display: table-row;
+
+    .table-cell {
+      display: table-cell;
+      padding-left: 1em;
+    }
+  }
+}
+
 .code-title {
   font-family: monospace;
   color: $code-title-color;
