@@ -1,4 +1,56 @@
 <div id="mc-4-2-1-syntax-of-ctl*">
   <h3>{{ 4-2-1-title }}</h3>
+
+  <p>
+    The syntax of CTL* is the extension of propositional logic.<br>
+    There are two types of formulas:
+  </p>
+  <ul>
+    <li><em>State formulas</em>: true or false in a specific state</li>
+    <li><em>Path formulas</em>: true of false along a specific path</li>
+  </ul>
+
+  <div class="mc-ctl-state-formulas" style="padding-bottom: 1em;">
+    State formulas:
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">A1</div>
+        <div class="table-cell">If \( p \in AP \), then \( p \) is a state formula. (\( AP \) is the set of atomic propositions)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">A2</div>
+        <div class="table-cell">If \( f \) and \( g \) are state formulas, then \( \lnot f, f \lor g \) and \( f \land g \) are state formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">A3</div>
+        <div class="table-cell">If \( f \) is a path formula, then \( \bm{E} f \) and \( \bm{A} f \) are state formulas.</div>
+      </div>
+    </div>
+    Path formulas:
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">A4</div>
+        <div class="table-cell">If \( f \) is a state formula, then \( f \) is also a path formula.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">A5</div>
+        <div class="table-cell">
+          If \( f \) and \( g \) are path formulas, 
+          then \( \lnot f, f \lor g, f \land g, \bm{X} f, \bm{F} f, \bm{G} f, f \bm{U} g \) and \( f \bm{R} g \) are path formulas.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- mc-ctl-state-formulas -->
+
+  <p>
+    CTL* is the set of <em>state formulas</em> permitted by the above rules.<br>
+    <em>State formulas</em> are:
+  </p>
+  <ul>
+    <li>Boolean propositions</li>
+    <li>Temporal formulas with path quantifier</li>
+    <li>Boolean combinations</li>
+  </ul>
 </div>
 <!-- mc-4-2-1-syntax-of-ctl* -->

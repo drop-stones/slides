@@ -1,4 +1,48 @@
 <div id="mc-4-2-3-negation-normal-form">
   <h3>{{ 4-2-3-title }}</h3>
+
+  <p><em>Negation normal form (NNF)</em>:</p>
+  <ul>
+    <li>a syntactic form of logical formulas</li>
+    <li>Negations are applied only to atomic propositions in NNF</li>
+    <li>NNF of CTL* is useful for model checking.</li>
+  </ul>
+
+  <p>
+    We show that CTL* is equivalent to NNF of CTL* because:
+    \[
+      \begin{array}
+        \lnot \bm{A} \phi &\equiv& \bm{E} \lnot \phi \\
+        \lnot \bm{E} \phi &\equiv& \bm{A} \lnot \phi \\
+        \lnot \bm{G} \phi &\equiv& \bm{F} \lnot \phi \\
+        \lnot \bm{F} \phi &\equiv& \bm{G} \lnot \phi \\
+        \lnot \bm{X} \phi &\equiv& \bm{X} \lnot \phi \\
+        \lnot ( \phi \bm{U} \psi ) &\equiv& ( \lnot \phi \bm{R} \lnot \psi ) \\
+        \lnot ( \phi \bm{R} \psi ) &\equiv& ( \lnot \phi \bm{U} \lnot \psi ) \\
+        \lnot ( \phi \land  \psi ) &\equiv& ( \lnot \phi \lor   \lnot \psi ) \\
+        \lnot ( \phi \lor   \psi ) &\equiv& ( \lnot \phi \land  \lnot \psi ) \\
+      \end{array}
+    \]
+  </p>
+
+  <div class="example">
+    <h5>Example</h5>
+
+    \[
+      \lnot(( A \bm{U} B) \lor \bm{F} C) \equiv ( \lnot (A \bm{U} B) \land \lnot \bm{F} C) \equiv (\lnot A \bm{R} \lnot B) \land \bm{G} \lnot C
+    \]
+
+    <ul>
+      <li>
+        The conversion of a CTL* formula to NNF is linear in the size of the formula.
+        <ul><li>This is true for many fragments of CTL*.</li></ul>
+      </li>
+      <li>
+        For NNF of CTL*, we need to have \( \land, \lor, \bm{E}, \bm{A}, \bm{X}, \bm{U}\), and \( \bm{R} \).
+        <ul><li>A reduction to \( \bm{E}, \bm{X}, \bm{U} \) is not possible.</li></ul>
+      </li>
+    </ul>
+  </div>
+
 </div>
 <!-- mc-4-2-3-negation-normal-form -->

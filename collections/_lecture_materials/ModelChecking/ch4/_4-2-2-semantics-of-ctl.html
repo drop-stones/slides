@@ -1,4 +1,209 @@
 <div id="mc-4-2-2-semantics-of-ctl*">
   <h3>{{ 4-2-2-title }}</h3>
+
+  <div id="mc-review-kripke-structure">
+    <h4>Review: Kripke structure \( M \)</h4>
+
+    \( M = (S, S_0, R, AP, L) \)
+    <div class="table" style="padding-bottom: 1em">
+      <div class="table-row">
+        <div class="table-cell">\( S \)</div>
+        <div class="table-cell">the set of states</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">\( S_0 \in S \)</div>
+        <div class="table-cell">the set of initial states</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">\( R \in S \times S \)</div>
+        <div class="table-cell">the transition relation, left total</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">\( AP \)</div>
+        <div class="table-cell">the set of atomic propositions</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">\( L : S \rightarrow 2^{AP} \)</div>
+        <div class="table-cell">a function that labels each state with a set of atomic propositions</div>
+      </div>
+      Path \( \pi \) in \( M \)
+      <div class="table-row">
+        <div class="table-cell">\( \pi = s_0, s_1, ..., \)</div> 
+        <div class="table-cell">\( s_0 \in S_0 \), and \( (s_i, s_{i+1}) \in R \)</div>
+      </div>
+    </div>
+    
+    <p>We use \( \pi^i \) to denote the suffix of \( \pi \) starting at \( s_i \).</p>
+  </div>
+  <!-- mc-review-kripke-structure -->
+
+  <div id="mc-modeling-relation">
+    <h4>The modeling relation \( \models \) and Equivalence \( \equiv \)</h4>
+
+    <div class="table" style="padding-bottom: 1em;">
+      <div class="table-row">
+        <div class="table-cell">\( M, s \models f \)</div>
+        <div class="table-cell">\( f \) holds at state \( s \) in a kripke structure \( M \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">\( M, \pi \models f \)</div>
+        <div class="table-cell">\( f \) holds at state \( \pi \) in a kripke structure \( M \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">\( f \equiv g \)</div>
+        <div class="table-cell">\( M, s \models f \) if and only if \( M, s \models g \) for all \( M, s \) </div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"></div>
+        <div class="table-cell">\( M, \pi \models f \) if and only if \( M, \pi \models g \) for all \( M, \pi \) </div>
+      </div>
+    </div>
+  </div>
+  <!-- mc-modeling-relation -->
+
+  <div id="mc-ctl-state-formulas">
+    <h4>Definition: Semantics of CTL*</h4>
+
+    <p>
+      Let \( f_1, f_2 \) be <em>state formulas</em>, and let \( g_1, g_2 \) be <em>path formulas</em>.<br>
+      We further assume that all atomic propositions are included in AP.
+    </p>
+
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">1.</div>
+        <div class="table-cell">\( M, s \models p \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( p \in L(s), \) for \( p \in AP \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">2.</div>
+        <div class="table-cell">\( M, s \models \lnot f_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, s \not\models f_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">3.</div>
+        <div class="table-cell">\( M, s \models f_1 \lor f_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, s \models f_1 \) or \( M, s \models f_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">4.</div>
+        <div class="table-cell">\( M, s \models f_1 \land f_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, s \models f_1 \) and \( M, s \models f_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">5.</div>
+        <div class="table-cell">\( M, s \models \bm{E} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there is an infinite path \( \pi \) starting from \( s \) such that \( M, \pi \models g_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">6.</div>
+        <div class="table-cell">\( M, s \models \bm{A} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">for every infinite path \( \pi \) starting from \( s \) we have \( M, \pi \models g_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">7.</div>
+        <div class="table-cell">\( M, \pi \models f_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( s \) is the first state of \( \pi \), and \( M, s \models f_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">8.</div>
+        <div class="table-cell">\( M, \pi \models \lnot g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, \pi \not\models g_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">9.</div>
+        <div class="table-cell">\( M, \pi \models g_1 \lor g_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, \pi \models g_1 \) or \( M, \pi \models g_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">10.</div>
+        <div class="table-cell">\( M, \pi \models g_1 \land g_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, \pi \models g_1 \) and \( M, \pi \models g_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">11.</div>
+        <div class="table-cell">\( M, \pi \models \bm{X} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, \pi^{1} \models g_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">12.</div>
+        <div class="table-cell">\( M, \pi \models \bm{F} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there exists a \( k \geq 0 \) such that \( M, \pi^{k} \models g_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">13.</div>
+        <div class="table-cell">\( M, \pi \models \bm{G} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">for all \( i \geq 0 \), \( M, \pi^{i} \models g_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">14.</div>
+        <div class="table-cell">\( M, \pi \models g_1 \bm{U} g_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there exists a \( k \geq 0 \) such that \( M, \pi^{k} \models g_2 \) and<br>
+                                for all \( 0 \leq j < k, M, \pi^{i} \models g_1 \) </div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">15.</div>
+        <div class="table-cell">\( M, \pi \models g_1 \bm{R} g_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">for all \( j \geq 0 \), if for every \( i < j, M, \pi^{i} \not\models g_1 \), then <br>
+                                \( M, \pi^{i} \models g_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">16.</div>
+        <div class="table-cell">\( M \models f_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">for all \( s \in S_0, M, s \models f_1 \)</div>
+      </div>
+    </div>
+  </div>
+  <!-- mc-ctl-state-formulas -->
+
+  <div>
+    <h4>Some properties</h4>
+
+    <ul>
+      <li>
+        \( \lor, \lnot, \bm{X}, \bm{U} \) and \( \bm{E} \) are sufficient to express any CTL* formula:<br>
+        \[
+          \begin{array}
+            f \land g   &\equiv& \lnot ( \lnot f \lor \lnot g ) \\
+            f \bm{R} g  &\equiv& \lnot ( \lnot f \bm{U} \lnot g) \\
+            \bm{F} f    &\equiv& true \bm{U} f \\
+            \bm{G} f    &\equiv& \lnot \bm{F} \lnot f \\
+            \bm{A}(f)   &\equiv& \lnot \bm{E} (\lnot f)
+          \end{array}
+        \]
+      </li>
+      <li>
+        Clause 16 of definition has a unexpected effect when formulas are interpreted over \( M \) with multiple initial states.
+        <ul>
+          <li>\( S_0 = \{ s_0, s_1 \} \)</li>
+          <li>\( M, s_0 \models \bm{EX} p \) and \( M, s_1 \not\models \bm{EX} p \)</li>
+          <li>\( M \not\models \bm{EX} p \) because \( M, s_1 \not\models \bm{EX} p \)</li>
+          <li>\( M \not\models \lnot \bm{EX} p \) because \( M, s_0 \models \bm{EX} p \)</li>
+          <li>Consequently, neither \( \bm{EX} p \) nor \( \lnot \bm{EX} p \) holds in \( M \)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="flex-container">
+      {% include_relative {{ mermaid_dir }}/multiple-initial-state-kripke-structure.html %}
+    </div>
+  </div>
+
 </div>
 <!-- mc-4-2-2-semantics-of-ctl* -->

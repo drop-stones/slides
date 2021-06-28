@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="132.12193mm"
+   height="59.941971mm"
+   viewBox="0 0 132.12193 59.941971"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   sodipodi:docname="sublogics.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.0356019"
+     inkscape:cx="158.84482"
+     inkscape:cy="152.56828"
+     inkscape:window-width="3440"
+     inkscape:window-height="1383"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-30.162445,-106.37176)">
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path880"
+       cx="96.223412"
+       cy="136.34274"
+       rx="65.928467"
+       ry="29.838486" />
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.276582;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path1056"
+       cx="116.8516"
+       cy="136.34274"
+       rx="40.356461"
+       ry="20.527674" />
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path948"
+       cx="82.977364"
+       cy="136.34274"
+       rx="45.184078"
+       ry="20.305805" />
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path1052"
+       cx="136.97699"
+       cy="136.34274"
+       rx="17.892185"
+       ry="14.513104" />
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.264999;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path1054"
+       cx="102.07016"
+       cy="136.34274"
+       rx="25.784182"
+       ry="11.091656" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
+       x="137.13712"
+       y="111.06158"
+       id="text5848"><tspan
+         sodipodi:role="line"
+         id="tspan5846"
+         style="stroke-width:0.264583"
+         x="137.13712"
+         y="111.06158">CTL*</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
+       x="55.027901"
+       y="138.26898"
+       id="text13706"><tspan
+         sodipodi:role="line"
+         id="tspan13704"
+         style="stroke-width:0.264583"
+         x="55.027901"
+         y="138.26898">CTL</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
+       x="112.38864"
+       y="114.34458"
+       id="text16680"><tspan
+         sodipodi:role="line"
+         id="tspan16678"
+         style="stroke-width:0.264583"
+         x="112.38864"
+         y="114.34458">ACTL*</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
+       x="95.362556"
+       y="138.26898"
+       id="text20182"><tspan
+         sodipodi:role="line"
+         id="tspan20180"
+         style="stroke-width:0.264583"
+         x="95.362556"
+         y="138.26898">ACTL</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.29167px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';letter-spacing:0px;stroke-width:0.264583"
+       x="132.53152"
+       y="138.27156"
+       id="text21770"><tspan
+         sodipodi:role="line"
+         id="tspan21768"
+         style="stroke-width:0.264583"
+         x="132.53152"
+         y="138.27156">LTL</tspan></text>
+  </g>
+</svg>

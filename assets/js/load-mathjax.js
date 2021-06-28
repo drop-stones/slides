@@ -7,7 +7,9 @@ window.MathJax = {
     }
   },
   chtml: {
-    mtextInheritFont: true
+    mtextInheritFont: true,
+    //displayAlign: 'left',
+    //displayIndent: '2em'
   },
 };
 

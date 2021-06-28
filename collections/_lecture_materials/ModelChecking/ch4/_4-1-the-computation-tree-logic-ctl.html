@@ -79,5 +79,61 @@
     {% include_relative {{ mermaid_dir }}/temporal-operator.html %}
   </div>
 
+  <div class="example">
+    <h5>Example</h5>
+  
+    <div class="flex-container">
+      <div>
+        {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
+        <div class="flex-container">
+          <p>
+            \( s_0 \) = root state<br>
+            \( \pi_1 \) = leftmost path<br>
+            \( \pi_2 \) = rightmost path
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <ul>
+      <li>
+        \( \pi_1 \models \bm{G} b \)
+        <ul>
+          <li>On \( \pi_1 \), property \( b \) holds in every state.</li>
+        </ul>
+      </li>
+      <li>
+        \( \pi_2 \not\models \bm{G} b \)
+        <ul>
+          <li>On \( \pi_2 \), property \( b \) does not hold in every state.</li>
+        </ul>
+      </li>
+      <li>
+        \( s_0 \models \bm{EG} b \)
+        <ul>
+          <li>One path (but not all paths) from the initial state \( s_0 \) satisfy \( \bm{G} b \)</li>
+        </ul>
+      </li>
+      <li>
+        \( s_0 \not\models \bm{AG} b \)
+        <ul>
+          <li>All paths from the initial state \( s_0 \) do not satisfy \( \bm{G} b \)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>This example shows that:</p>
+    <ul>
+      <li>
+        <em>Path quantifiers</em> describe properties of a state.
+        <ul><li>"Does a certain path start in this state?"</li></ul>
+      </li>
+      <li>
+        <em>Temporal operators</em> describe properties of paths.
+        <ul><li>"Can a certain state be reached along this path?"</li></ul>
+      </li>
+    </ul>
+  </div>
+
 </div>
 <!-- mc-4-1-the-computation-tree-logic-ctl* -->
