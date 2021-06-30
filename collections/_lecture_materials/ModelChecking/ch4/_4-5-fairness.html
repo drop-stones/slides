@@ -1,4 +1,104 @@
 <div id="mc-4-5-fairness">
   <h2>{{ 4-5-title }}</h2>
+
+  <p>
+    Please see the Kripke structure.<br>
+    Do you think \( \pi_0 = \{ s_0, s_0, ..., s_0, ... \}, \pi_1 = \{ s_0, s_1, s_1, ..., s_1, ... \} \) is realistic?
+  </p>
+  <div class="flex-container">
+    {% include_relative {{ mermaid_dir }}/fairness.html %}
+  </div>
+
+  <p>
+    NO!!<br>
+    We want to remove \( \pi_0, \pi_1 \) &#8594; <em>fairness constraints</em>
+  </p>
+
+  <div>
+    <h4>Fairness constraints</h4>
+
+    <p><em>Fairness constraints</em> define the set of states that we want the system to visit fairly.</p>
+
+    <p>
+      \( F = \{ P_1, ..., P_k \} \subseteq 2^S \) 
+    </p>
+
+    <p>In example, \( F = \{ \{ s_0 \}, \{ s_1 \} \} \).</p>
+  </div>
+
+  <div>
+    <h4>Fair Path</h4>
+      
+    We define that the path \( \pi \) is <em>fair</em> if:
+    <ul>
+      <li>\( \pi \) visit \( s_0 \) many times and</li>
+      <li>\( \pi \) visit \( s_1 \) many times.</li>
+    </ul>
+
+    \( \pi_0 \text{ and } \pi_1 \) are not <em>fair</em> because:
+    <ul>
+      <li>\( \pi_0 \) does not visit \( s_1 \) many times</li>
+      <li>\( \pi_1 \) does not visit \( s_0 \) many times</li>
+    </ul>
+
+    <h5>Formal Definition</h5>
+    \[ inf(\pi) = \{ s \mid s = s_i \text{ for infinitely many } i \} \]
+    We define that \( \pi \) is <em>fair</em> if and only if
+    \[ \text{for every } P \in F, inf(\pi) \cap P \neq \{\} \]
+  </div>
+
+  <div>
+    <h4>Fairness in CTL*</h4>
+
+    \[ fpath := \bigwedge_{P \in F} \bigvee_{s \in P} \bm{GF} \{s\} \]
+
+    \( \bm{GF} \{s\} \) means \( s \) appears infinitely.<br>
+    {% include_relative {{ mermaid_dir }}/GroballyFuture.html %}
+
+    <p>Fairness can be added into CTL* syntax:</p>
+    <ul>
+      <li>
+        \( \bm{E} ( fpath \land \phi ) \)
+        <ul>
+          <li>there exists a path that is both fair and satisfies \( \phi \).</li>
+        </ul>
+      </li>
+      <li>
+        \( \bm{A} ( fpath \rightarrow \phi ) \)
+        <ul>
+          <li>for every path, if it is fair, then it must satisfies \( \phi \).</li>
+          <li>We can ignore no-fair paths. (e.g, \( \pi_0, \pi_1 \) )</li>
+          <li>If we define \( \bm{A} ( fpath \land \phi ) \), we cannot check the properties of \( s_0 \).</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="flex-container">
+      {% include_relative {{ mermaid_dir }}/fairness.html %}
+    </div>
+  </div>
+
+  <div>
+    <h4>Fairness in CTL</h4>
+
+    <p>
+      In CTL, we cannot express \( \bm{GF} \) because of its syntax rules.<br>
+      In order to deal with fairness in CTL, we modify its semantics.
+    </p>
+
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">5.</div>
+        <div class="table-cell">\( M, s \models_{F} \bm{E} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there exists a fair path \( \pi \) starting from \( s \) such that \( \pi \models_{F} g_1 \).</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">6.</div>
+        <div class="table-cell">\( M, s \models_{F} \bm{A} g_1 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">for all fair paths \( \pi \) starting from \( s \), \( \pi \models_{F} g_1 \).</div>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- mc-4-5-fairness -->

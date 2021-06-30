@@ -1,4 +1,52 @@
 <div id="mc-4-4-temporal-logic-with-set-atomic-propositions-and-set-semantics">
   <h2>{{ 4-4-title }}</h2>
+
+  <p>
+    In logics, it is common to associate a formula with the set of assignments that satisfy it.<br>
+    \[ 0 < \phi < 3 = \{ \phi = 1, \phi = 2 \} \]
+  </p>
+  
+  <p>
+    In temporal logics, we associate a formula with the set of states in which the formula is true.<br>
+    \[ [\![ \bm{EX} (b \land c) ]\!]_{M} = \{ s_0, s_3 \} \]
+  </p>
+
+  <div class="flex-container">
+    {% include_relative {{ mermaid_dir }}/ctl-example.html %}
+  </div>
+
+  <div>
+    <h4>Formal Definition</h4>
+
+    \[ [\![ f ]\!]_{M} := \{ s \in S \mid M, s \models f \} \]
+  </div>
+
+  <div>
+    <h4>Set Atomic Proposition</h4>
+
+    We can think \( \{ s_0, ..., s_n \} \) as an atomic proposition because:
+    <ul>
+      <li>\( M, s_0 \models a \)</li>
+      <li>\( M, s_0 \models \{ s0, s_3, ... \} \)</li>
+    </ul>
+
+    This formal syntax is:
+    <div class="flex-container">
+      <p>If \( \{ s_0, ..., s_n \} \in S \), then \( \{ s_0, ..., s_n \} \) is a CTL* state formula called <em>set atomic proposition</em>.</p>
+    </div>
+  </div>
+
+  <div>
+    <h4>Extending CTL* semantics</h4>
+    
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">1a.</div>
+        <div class="table-cell">\( M, s \models \{ s_0, s_1, ..., s_n \} \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( s \in \{ s_0, s_1, ..., s_n \} \)</div>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- mc-4-4-temporal-logic-with-set-atomic-propositions-and-set-semantics -->

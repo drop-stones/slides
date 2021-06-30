@@ -1,4 +1,73 @@
 <div id="mc-4-3-2-the-universal-computation-tree-logics-actl*-and-actl">
   <h3>{{ 4-3-2-title }}</h3>
+
+  <em>ACTL*</em> have some restriction compared to CTL*:
+  <ul>
+    <li>Only the universal path quantification \( \bm{A} \) is allowed (\( \bm{E} \) is not allowed).</li>
+    <li>NNF (Negation Normal Form): negation are applied only to atomic propositions.</li>
+  </ul>
+
+  <div id="mc-actl*-syntax">
+    <h4>Syntax of ACTL*</h4>
+
+    State formulas:
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">C1</div>
+        <div class="table-cell">If \( p \in AP \), then \( p \) and \( \lnot p \) are ACTL* state formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">C2</div>
+        <div class="table-cell">If \( f \) and \( g \) are ACTL* state formulas, then \( f \lor g \) and \( f \land g \) are ACTL* state formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">C3</div>
+        <div class="table-cell">If \( f \) is an ACTL* path formula, then \( \bm{A} f \) is an ACTL* state formula.</div>
+      </div>
+    </div>
+
+    Path formulas:
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">C4</div>
+        <div class="table-cell">If \( f \) is an ACTL* state formula, then \( f \) is also an ACTL* path formula.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">C5</div>
+        <div class="table-cell">If \( f \) and \( g \) are ACTL* path formulas, then \( f \lor g, f \land g, \bm{X} f, \bm{F} f, \bm{G} f, f \bm{U} g \), and \( f \bm{R} g \) are ACTL* path formulas.</div>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    The logic <em>ECTL*</em> is defined analogously with \( \bm{E} \) instead of \( \bm{A} \).<br>
+    Note that for both ACTL* and ECTL*, \( \bm{X}, \bm{U} \) and \( \bm{R} \) are sufficient in order to represent other temporal operators.
+  </p>
+
+  <div id="mc-actl-syntax">
+    <h4>Syntax of ACTL</h4>
+
+    <em>ACTL</em> have one more restriction of CTL:
+    <ul>
+      <li>Path quantifier and Temporal operators always occur in pairs.</li>
+    </ul>
+
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">D1</div>
+        <div class="table-cell">If \( p \in AP \), then \( p \) and \( \lnot p \) are ACTL formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">D2</div>
+        <div class="table-cell">If \( f \) is an ACTL formula, then \( \bm{AX} f, \bm{AF} f \), and \( \bm{AG} f \) are ACTL formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">D3</div>
+        <div class="table-cell">If \( f \) and \( g \) are ACTL formulas, then \( f \land g, f \lor g, \bm{A} (f \bm{U} g), \bm{A} (f \bm{R} g) \) are ACTL formulas.</div>
+      </div>
+    </div>
+
+    <p>Note that \( \bm{AX}, \bm{AU} \) and \( \bm{AR} \) are sufficient to represent other operators.</p>
+  </div>
 </div>
 <!-- mc-4-3-2-the-universal-computation-tree-logics-actl*-and-actl -->

@@ -1,4 +1,34 @@
 <div id="mc-4-7-safety-and-liveness-properties">
   <h2>{{ 4-7-title }}</h2>
+
+  <div>
+    <h4>Safety Property</h4>
+
+    <p>
+      A safety property guarantee that something wrong will never happen.
+    </p>
+    <ul>
+      <li>A safety property is expressed as \( \bm{AG} p \).</li>
+      <li>
+        If a safety property is violated, there is a finite execution that a "bad" event occurs.
+        <ul><li>Counterexample is a path that holds \( \bm{F} \lnot p \). (See <a href="#agp-counter-example">\( \bm{AG} p \)</a>)</li></ul>
+      </li>
+    </ul>
+  </div>
+  
+  <div>
+    <h4>Liveness Property</h4>
+
+    <p>
+      A liveness property guarantee that something good will eventually happen.
+    </p>
+    <ul>
+      <li>A liveness property is expressed as \( \bm{AF} p \) or \( \bm{A}(p \bm{U} q) \).</li>
+      <li>
+        If a liveness property is violated, there is a <em>lasso-shaped</em> counterexample.
+        <ul><li>Counterexample is an infinite path that holds \( \bm{G} \lnot p \). (See <a href="#afp-counter-example">\( \bm{AF} p \)</a>)</li></ul>
+      </li>
+    </ul>
+  </div>
 </div>
 <!-- mc-4-7-safety-and-liveness-properties -->

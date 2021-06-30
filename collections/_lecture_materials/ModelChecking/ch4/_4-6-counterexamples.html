@@ -1,4 +1,72 @@
 <div id="mc-4-6-counterexamples">
   <h2>{{ 4-6-title }}</h2>
+
+  <p>
+    In model checking, we check that the systems holds some properties.<br>
+    If the check failed, we want know the reasons.<br>
+    <em>Counterexample generation</em> provide valuable feedback.
+  </p>
+
+  <em>Counterexample</em> requires:
+  <ul>
+    <li>easy-to-understand description</li>
+    <li>a finite representation</li>
+  </ul>
+  <p class="note">NOTE: We will discuss the structure of counterexamples more in Chapter 13</p>
+
+  <div class="example" id="axp-counter-example">
+    <h5>Simple Specification \( \bm{AX} p \)</h5>
+    <p>Counterexample of \( \bm{AX} p \) is a path that holds \( \bm{X} \lnot p \).</p>
+    <div class="flex-container">
+      {% include_relative {{ mermaid_dir }}/axp-counter-example.html %}
+    </div>
+  </div>
+ 
+  <div class="example" id="agp-counter-example">
+    <h5>Specification \( \bm{AG} p \)</h5>
+    <p>Counterexample of \( \bm{AG} p \) is a finite path that holds \( \bm{F} \lnot p \).</p>
+    {% include_relative {{ mermaid_dir }}/agp-counter-example.html %}
+  </div>
+
+  <div class="example" id="afp-counter-example">
+    <h5>Specification \( \bm{AF} p \)</h5>
+    <p>
+      Counterexample of \( \bm{AF} p \) is an infinite path, all of its states satisfying \( \lnot p \).<br>
+      For finite Kripke structures, a counterexample \( \pi \) exists:
+      \[ \pi = \pi_0 ( \pi_1 )^\omega = \pi_0 \pi_1 \pi_1 \pi_1 ...\]
+      A path of that form is called <em>lasso</em>.
+    </p>
+    {% include_relative {{ mermaid_dir }}/afp-counter-example.html %}
+  </div>
+
+  <div>
+    <h4>Prove the existence of a lasso-shape counterexample</h4>
+    <p>
+      We prove the existence of a lasso-shape counterexample for finite Kripke structures \( M \).<br>
+      This proof procedure is similar to the proof procedure of the pumping lemma.
+    </p>
+
+    <ul>
+      <li>
+        Let the path \( \pi = s_0, s_1, ... \) be a counterexample for \( \bm{AF} p \).
+        <ul><li>for all \( s_i \) we have \( M, s_i \models \lnot p \).</li></ul>
+      </li>
+      <li>
+        There must be two indices \( 1 \leq n < m \) such that \( s_n = s_m \)
+        <ul><li>because \( M \) has only a finite number of states</li></ul>
+      </li>
+      <li>We can form \( \pi = \pi_0 (\pi_1^{\omega}) \) such that: 
+        <ul>
+          <li>\( \pi_0 = s_0, ... s_{n-1} \)</li>
+          <li>\( \pi_1 = s_n, ..., s_{m-1} \)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>
+      This can prove that every LTL formula has a lasso-shaped counterexample.
+    </p>
+  </div>
+
 </div>
 <!-- mc-4-6-counterexamples -->

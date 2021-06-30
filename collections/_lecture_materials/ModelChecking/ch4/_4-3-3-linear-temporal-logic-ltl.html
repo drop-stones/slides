@@ -1,4 +1,45 @@
 <div id="mc-4-3-3-linear-temporal-logic-ltl">
   <h3>{{ 4-3-3-title }}</h3>
+
+  <em>LTL</em> formulas are of the form \( \bm{A} f \):
+  <ul>
+    <li>Only \( \bm{A} \) is allowed.</li>
+    <li>\( f \) is a CTL* path formula that does not include path quantifiers.</li>
+  </ul>
+
+  <div>
+    <h4>Syntax of LTL</h4>
+
+    LTL formulas:
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">E0</div>
+        <div class="table-cell">If \( f \) is an LTL path formula, then \( \bm{A} f \) is a LTL formula.</div>
+      </div>
+    </div>
+
+    LTL path formulas:
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">E1</div>
+        <div class="table-cell">If \( p \in AP \), then \( p \) is an LTL path formula.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">E2</div>
+        <div class="table-cell">If \( f \) is an LTL path formula, then \( \lnot f, \bm{X} f, \bm{F} f \) and \( \bm{G} f \) are LTL path formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">E3</div>
+        <div class="table-cell">If \( f \) and \( g \) are LTL path formulas, then \( f \land g, f \lor g, f \bm{U} g \) and \( f \bm{R} g \) are LTL path formulas.</div>
+      </div>
+    </div>
+
+    <p>Note that \( \bm{X} \) and \( \bm{U} \) are sufficient to represent other operators. (See <a href="#mc-ctl*-properties">Some properties</a>)</p>
+    
+    We can omit \( \bm{A} \) because LTL formulas must have \( \bm{A} \).
+    <ul>
+      <li>\( M \models f \) means \( M \models \bm{A} f \).</li>
+    </ul>
+  </div>
 </div>
 <!-- mc-4-3-3-linear-temporal-logic-ltl -->

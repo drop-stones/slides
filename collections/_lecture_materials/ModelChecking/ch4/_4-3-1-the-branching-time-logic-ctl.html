@@ -1,4 +1,133 @@
 <div id="mc-4-3-1-the-branching-time-logic-ctl">
   <h3>{{ 4-3-1-title }}</h3>
+
+  <p><em>CTL</em> have a restriction that the path quantifier and the temporal operators always occur in pairs.</p>
+  <ul>
+    <li>ex) \( \bm{AX} \phi, \bm{EG} \phi, \bm{AXEG} \phi \)</li>
+  </ul>
+
+  <div id="ctl-syntax">
+    <h4>Syntax</h4>
+
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">B1</div>
+        <div class="table-cell">If \( p \in AP \), then \( p \) is a CTL formula.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">B2</div>
+        <div class="table-cell">If \( f \) is a CTL formula, then \( \lnot f, \bm{AX} f, \bm{EX} f, \bm{AF} f, \bm{EF} f, \bm{AG} f, \) and \( \bm{EG} f \) are CTL formulas.</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">B3</div>
+        <div class="table-cell">If \( f \) and \( g \) are CTL formulas, then \( f \land g, f \lor g, \bm{A}(f \bm{U} g), \bm{E}(f \bm{U} g), \bm{A}(f \bm{R} g), \) and \( \bm{E}(f \bm{R} g) \) are CTL formulas.</div>
+      </div>
+    </div>
+
+    <p>
+      CTL operators can be expressed using three operators \( \bm{EX}, \bm{EG} \) and \( \bm{EU} \):
+      \[
+        \begin{array}
+          \bm{AX} f &\equiv& \lnot \bm{EX} (\lnot f) \\
+          \bm{EF} f &\equiv& \bm{E} (true \bm{U} f) \\
+          \bm{AG} f &\equiv& \lnot \bm{EF} (\lnot f) \\
+          \bm{AF} f &\equiv& \lnot \bm{EG} (\lnot f) \\
+          \bm{A} (f \bm{U} g) &\equiv& \lnot \bm{E} (\lnot g \bm{U} (\lnot f \land \lnot g)) \land \lnot \bm{EG} \lnot g \\
+          \bm{A} (f \bm{R} g) &\equiv& \lnot \bm{E} (\lnot f \bm{U} \lnot g) \\
+          \bm{E} (f \bm{R} g) &\equiv& \lnot \bm{A} (\lnot f \bm{U} \lnot g)
+        \end{array}
+      \]
+    </p>
+  </div>
+
+  <div>
+    <h4>Semantics</h4>
+
+    <p>We define CTL using \( \bm{EX}, \bm{EG} \) and \( \bm{EU} \).</p>
+
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell">1.</div>
+        <div class="table-cell">\( M, s \models p \) for \( p \in AP \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( p \in L(s) \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">2.</div>
+        <div class="table-cell">\( M, s \models \lnot f\)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, s \not\models f \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">3.</div>
+        <div class="table-cell">\( M, s \models f_1 \lor f_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, s \models f_1 \) or \( M, s \models f_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">4.</div>
+        <div class="table-cell">\( M, s \models f_1 \land f_2 \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">\( M, s \models f_1 \) and \( M, s \models f_2 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">5.</div>
+        <div class="table-cell">\( M, s \models \bm{EX} f \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there exists a state t such that \( R(s, t) \) and \( M, s \models f \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">6.</div>
+        <div class="table-cell">\( M, s \models \bm{EG} f \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there exists an infinite path \( \pi \) starting at \( s \) such that for all \( i \geq 0, M, s_i \models f \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">7.</div>
+        <div class="table-cell">\( M, s \models \bm{E} (f_1 \bm{U} f_2) \)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">there exists an infinite path \( \pi \) starting at \( s \) and there exists a \( k \geq 0 \) such that \( M, s_k \models f_2 \) and for all \( 0 \leq j < k, M, s_j \models f_1 \)</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell">8.</div>
+        <div class="table-cell">\( M \models f\)</div>
+        <div class="table-cell">\( \Leftrightarrow \)</div>
+        <div class="table-cell">for all \( s \in S_0, M, s \models f \)</div>
+      </div>
+    </div>
+
+    <p>The remaining seven CTL operators can be introduced.</p>
+  </div>
+
+  <div>
+    <h4>Subformulas of a CTL formula</h4>
+
+    <p><em>Subformulas of a CTL formula</em> is inner CTL formulas.</p>
+    <ul>
+      <li>
+        Subformulas of \( \bm{AXEX} p \) about CTL syntax
+        <ul>
+          <li>\( \bm{AXEX} p \)</li>
+          <li>\( \bm{EX} p \)</li>
+          <li>\( p \)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>Note that <em>subformulas of a CTL* formula</em> is inner CTL* formulas.</p>
+    <ul>
+      <li>
+        Subformulas of \( \bm{AXEX} p \) about CTL* syntax
+        <ul>
+          <li>\( \bm{AXEX} p \)</li>
+          <li>\( \bm{XEX} p \)</li>
+          <li>\( \bm{EX} p \)</li>
+          <li>\( \bm{X} p \)</li>
+          <li>\( p \)</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
 </div>
 <!-- mc-4-3-1-the-branching-time-logic-ctl -->

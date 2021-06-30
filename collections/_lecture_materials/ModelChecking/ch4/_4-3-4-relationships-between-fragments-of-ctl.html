@@ -1,4 +1,30 @@
 <div id="mc-4-3-4-relationships-between-fragments-of-ctl*">
   <h3>{{ 4-3-4-title }}</h3>
+
+  <div class="flex-contaier">
+    <img src="{{ img_path }}/sublogics.svg">
+  </div>
+
+  Five logics have different expressive powers.
+  <ul>
+    <li>
+      CTL*: most powerful
+      <ul><li>OK: \( \bm{AFG} p, \bm{AG}(\bm{EF}p), \bm{AFG}p \lor \bm{AG}(\bm{EF}p) \)</li></ul>
+    </li>
+    <li>
+      CTL: path quantifier + temporal operator
+      <ul>
+        <li>OK: \( \bm{AG}(\bm{EF}p) \)</li>
+        <li>NG: \( \bm{AG}(\bm{EF}p), \bm{AFG}p \lor \bm{AG}(\bm{EF}p)\)</li>
+      </ul>
+    </li>
+    <li>
+      LTL: \( \bm{A} f \)
+      <ul>
+        <li>OK: \( \bm{AFG} p \)</li>
+        <li>NG: \( \bm{AG}(\bm{EF}p), \bm{AFG}p \lor \bm{AG}(\bm{EF}p) \)</li>
+      </ul>
+    </li>
+  </ul>
 </div>
 <!-- mc-4-3-4-relationships-between-fragments-of-ctl* -->
