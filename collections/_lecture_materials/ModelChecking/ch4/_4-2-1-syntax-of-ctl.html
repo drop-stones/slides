@@ -1,10 +1,9 @@
 <div id="mc-4-2-1-syntax-of-ctl*">
   <h3>{{ 4-2-1-title }}</h3>
 
-  <p>
-    The syntax of CTL* is the extension of propositional logic.<br>
-    There are two types of formulas:
-  </p>
+  <p>The syntax of CTL* is the extension of propositional logic.</p>
+
+  There are two types of formulas:
   <ul>
     <li><em>State formulas</em>: true or false in a specific state</li>
     <li><em>Path formulas</em>: true of false along a specific path</li>
@@ -43,14 +42,59 @@
   </div>
   <!-- mc-ctl-state-formulas -->
 
-  <p>
-    CTL* is the set of <em>state formulas</em> permitted by the above rules.<br>
-    <em>State formulas</em> are:
-  </p>
+  CTL* is the set of <em>state formulas</em> permitted by the above rules.<br>
+  <em>State formulas</em> are:
   <ul>
     <li>Boolean propositions</li>
     <li>Temporal formulas with path quantifier</li>
     <li>Boolean combinations</li>
   </ul>
+
+  <div class="example">
+    <h5>Examples of formulas</h5>
+
+    <div class="flex-container">
+      <div>
+        <div class="table">
+          <div class="table-row">
+            <div class="table-cell">A.1</div>
+            <div class="table-cell">\( s_0 \models a \)</div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">A.2</div>
+            <div class="table-cell">\( s_0 \models a \land b \)</div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">A.4</div>
+            <div class="table-cell">\( \pi_0 \models a \)</div>
+            <div class="table-cell">because \( \pi_0 \) have the initial state \( s_0 \)</div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">A.5</div>
+            <div class="table-cell">\( \pi_0 \models \bm{G} b \)</div>
+            <div class="table-cell">Temporal operators specify paths \( \pi \)</div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">A.3</div>
+            <div class="table-cell">\( s_0 \models \bm{EG} b \)</div>
+            <div class="table-cell">Path quantifiers specify states \( s \)</div>
+          </div>
+        </div>
+
+        <details>
+          <summary>Q. Is \( \pi_0 \models \bm{EG} b \) correct?</summary>
+          Correct because of:
+          <ul>
+            <li>A.3 ( \( \bm{EG} b \) is state formula )</li>
+            <li>A.4 ( state formula is path formula )</li>
+          </ul> 
+        </details>
+      </div>
+      <div>
+        {% include_relative {{ mermaid_dir }}/ctl-example.html %}
+        \[ \pi_0 = \{ s_0, s_1, s_3, ... \} \text{ (left most path)} \]
+      </div>
+    </div>
+  </div>
 </div>
 <!-- mc-4-2-1-syntax-of-ctl* -->

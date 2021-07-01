@@ -1,32 +1,46 @@
 <div id="mc-4-1-the-computation-tree-logic-ctl*">
   <h2>{{ 4-1-title }}</h2>
 
-  <p>
-    <em>CTL* (computation tree logic)</em> is semantically similar to computation trees.<br>
-    Given an initial state \( s_0 \) in a Kripke structure \( M \), the tree is formed by unwinding \( M \).
-  </p>
+  <p>In this section, we introduce <em>CTL*</em>, a type of temporal logic.</p>
+
+  <em>CTL* (computation tree logic)</em> defines properties of <em>computation tree</em>:
+  <ul>
+    <li>
+      Convert Kripke structure \( M \) to <em>computation tree</em>.
+      <ul><li>unwind \( M \) from the initial state.</li></ul>
+    </li>
+    <li><em>Computation trees</em> show all possible executions from the initial state.</li>
+  </ul>
 
   <div class="flex-container">
-    {% include_relative {{ mermaid_dir }}/kripke-model.html %}
-    {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
+    <div>
+      Kripke structure \( M \)
+      {% include_relative {{ mermaid_dir }}/kripke-model.html %}
+    </div>
+    <div>
+      Computation Tree of \( M \)
+      {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
+    </div>
   </div>
 
-  <p>CTL* formulas are composed of <em>path quantifiers</em> and <em>temporal operators</em>:</p>
+  In Ch.3, we define that the transition relation of \( M \) is <em>left-total</em>:
+  <ul>
+    <li>Each state has a successor.</li>
+    <li>All branches are infinite.</li>
+  </ul>
+
+  CTL* formulas are composed of <em>path quantifiers</em> and <em>temporal operators</em>:
   <ul>
     <li>
       <em>Path quantifiers</em>
       <ul>
         <li>
           \( \bm{A} \varphi \) : "all computation paths"
-          <ul>
-            <li>This means that all paths from a given state have property \( \varphi \)</li>
-          </ul>
+          <ul><li>This means that all paths from a given state have property \( \varphi \)</li></ul>
         </li>
         <li>
           \( \bm{E} \varphi \) : "there exists a computation path"
-          <ul>
-            <li>This means that at least one path from a given state has property \( \varphi \)</li>
-          </ul>
+          <ul><li>This means that at least one path from a given state has property \( \varphi \)</li></ul>
         </li>
       </ul>
     </li>
@@ -35,21 +49,15 @@
       <ul>
         <li>
           \( \bm{X} p \) : "next time \( p \)"
-          <ul>
-            <li>Intuitively, this requires that proposition \( p \) holds on the second state of the path</li>
-          </ul>
+          <ul><li>Intuitively, this requires that proposition \( p \) holds on the second state of the path</li></ul>
         </li>
         <li>
           \( \bm{F} p \) : "eventually \( p \)" or "in the future \( p \)"
-          <ul>
-            <li>This is used to assert that property \( p \) holds at some state on the path</li>
-          </ul>
+          <ul><li>This is used to assert that property \( p \) holds at some state on the path</li></ul>
         </li>
         <li>
           \( \bm{G} p \) : "always \( p \)" or "globally \( p \)"
-          <ul>
-            <li>This specifies that proposition \( p \) holds at every state on the path</li>
-          </ul>
+          <ul><li>This specifies that proposition \( p \) holds at every state on the path</li></ul>
         </li>
         <li>
           \( p \bm{U} q \) : "\( p \) until \( q \)"
@@ -88,8 +96,8 @@
         <div class="flex-container">
           <p>
             \( s_0 \) = root state<br>
-            \( \pi_1 \) = leftmost path<br>
-            \( \pi_2 \) = rightmost path
+            \( \pi_0 \) = leftmost path<br>
+            \( \pi_1 \) = rightmost path
           </p>
         </div>
       </div>
@@ -97,32 +105,24 @@
 
     <ul>
       <li>
-        \( \pi_1 \models \bm{G} b \)
-        <ul>
-          <li>On \( \pi_1 \), property \( b \) holds in every state.</li>
-        </ul>
+        \( \pi_0 \models \bm{G} b \)
+        <ul><li>On \( \pi_0 \), property \( b \) holds in every state.</li></ul>
       </li>
       <li>
-        \( \pi_2 \not\models \bm{G} b \)
-        <ul>
-          <li>On \( \pi_2 \), property \( b \) does not hold in every state.</li>
-        </ul>
+        \( \pi_1 \not\models \bm{G} b \)
+        <ul><li>On \( \pi_1 \), property \( b \) does not hold in every state.</li></ul>
       </li>
       <li>
         \( s_0 \models \bm{EG} b \)
-        <ul>
-          <li>One path (but not all paths) from the initial state \( s_0 \) satisfy \( \bm{G} b \)</li>
-        </ul>
+        <ul><li>One path (but not all paths) from the initial state \( s_0 \) satisfy \( \bm{G} b \)</li></ul>
       </li>
       <li>
         \( s_0 \not\models \bm{AG} b \)
-        <ul>
-          <li>All paths from the initial state \( s_0 \) do not satisfy \( \bm{G} b \)</li>
-        </ul>
+        <ul><li>All paths from the initial state \( s_0 \) do not satisfy \( \bm{G} b \)</li></ul>
       </li>
     </ul>
 
-    <p>This example shows that:</p>
+    This example shows that:
     <ul>
       <li>
         <em>Path quantifiers</em> describe properties of a state.

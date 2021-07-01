@@ -1,7 +1,7 @@
 <div id="mc-4-3-1-the-branching-time-logic-ctl">
   <h3>{{ 4-3-1-title }}</h3>
 
-  <p><em>CTL</em> have a restriction that the path quantifier and the temporal operators always occur in pairs.</p>
+  <em>CTL</em> have a restriction that the path quantifier and the temporal operators always occur in pairs.
   <ul>
     <li>ex) \( \bm{AX} \phi, \bm{EG} \phi, \bm{AXEG} \phi \)</li>
   </ul>
@@ -27,7 +27,7 @@
     <p>
       CTL operators can be expressed using three operators \( \bm{EX}, \bm{EG} \) and \( \bm{EU} \):
       \[
-        \begin{array}
+        \begin{array} \\
           \bm{AX} f &\equiv& \lnot \bm{EX} (\lnot f) \\
           \bm{EF} f &\equiv& \bm{E} (true \bm{U} f) \\
           \bm{AG} f &\equiv& \lnot \bm{EF} (\lnot f) \\
@@ -97,10 +97,13 @@
     </div>
 
     <p>The remaining seven CTL operators can be introduced.</p>
+
+    <h5>Basic CTL operators</h5>
+    {% include_relative {{ mermaid_dir }}/basic-ctl-operators.html %}
   </div>
 
   <div>
-    <h4>Subformulas of a CTL formula</h4>
+    <h4>Subformulas</h4>
 
     <p><em>Subformulas of a CTL formula</em> is inner CTL formulas.</p>
     <ul>

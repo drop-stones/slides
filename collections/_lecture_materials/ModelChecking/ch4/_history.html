@@ -14,7 +14,10 @@
             p \mid
             \lnot \phi \mid
             \phi \lor \psi \mid
-            \phi \land \psi
+            \phi \land \psi \,
+            ( \mid
+              \phi \rightarrow \psi
+            )
         \]
       <p>
         \( \phi, \psi \): Syntax of propositional logic <br>
@@ -32,6 +35,7 @@
   </div>
   <!-- propositional-logic -->
 
+  {% comment %}
   <div id="first-order-logic">
     <h3>First-Order Logic</h3>
     <p>Extend propositional logic with <em>quantifications</em>.</p>
@@ -62,6 +66,7 @@
     </div>
   </div>
   <!-- first-order-logic -->
+  {% endcomment %}
 
   <div id="temporal-logic">
     <h3>Temporal Logic</h3>
@@ -92,6 +97,16 @@
       <div class="flex-container">
         <p>\( F \) "I am hungry"</p>
       </div>
+    </div>
+
+    <div>
+      <h4>Propositional Logic vs. Temporal Logic</h4>
+
+      Propositional Logic: a single point in time (like a picture)
+      {% include_relative {{ mermaid_dir }}/propositional-logic.html %}
+
+      Temporal Logic: continuous time (like a movie)
+      {% include_relative {{ mermaid_dir }}/temporal-logic.html %}
     </div>
   </div>
   <!-- temporal-logic -->

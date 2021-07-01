@@ -46,8 +46,6 @@ $border-left-width-h5: 8px;
 }
 
 .example {
-  padding-bottom: 2em;
-
   h5 {
     border: none;
     font-size: 1em;
@@ -113,4 +111,14 @@ $border-left-width-h5: 8px;
 
 .note {
   color: gray;
+}
+
+.mermaid {
+  padding-bottom: 2em;
+}
+
+.fix-right {
+  position: fixed;
+  top: 50px;
+  right: 50px;
 }

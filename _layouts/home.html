@@ -16,11 +16,13 @@ layout: default
   <details>
     <summary>Lecture Materials</summary>
     {%- for lecture_material in site.lecture_materials -%}
-      <dl>
-        <a href="{{ lecture_material.url | replace: 'index.html', '' | relative_url }}">
-          {{ lecture_material.title }}
-        </a>
-      <dl>
+      {% if lecture_material.url contains "index" %}
+        <dl>
+          <a href="{{ lecture_material.url | replace: 'index.html', '' | relative_url }}">
+            {{ lecture_material.title }}
+          </a>
+        <dl>
+      {% endif %}
     {%- endfor -%}
     
   </details>

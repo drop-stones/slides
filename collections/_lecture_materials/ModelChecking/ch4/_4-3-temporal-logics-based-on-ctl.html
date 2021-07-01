@@ -3,9 +3,14 @@
 
   <p>In this section, we consider several sublogics of CTL*.</p>
   
+  <div class="flex-container">
+    <img src="{{ img_path }}/sublogics.svg">
+  </div>
+ 
+  We can divide the sublogics into two groups:
   <ul>
     <li>
-      <em>Branching-time logics</em> : multiple path quantifiers \( \bm{A}, \bm{E} \)
+      <em>Branching-time logics</em> : multiple \( \bm{A}, \bm{E} \) repeatedly quantifies over the paths.
       <ul>
         <li>CTL</li>
         <li>ACTL*</li>
@@ -13,22 +18,29 @@
       </ul>
     </li>
     <li>
-      <em>Linear-time logics</em> : single path quantifier \( \bm{A}, \bm{E} \)
+      <em>Linear-time logics</em> : a single path quantifier \( \bm{A} \) quantifies over all paths.
       <ul>
         <li>LTL</li>
       </ul>
     </li>
   </ul>
 
-  <p>All four logics have:</p>
+  <div class="flex-container">
+    <div>
+      Branching-time logics
+      {% include_relative {{ mermaid_dir }}/branching-time-logics.html %}
+    </div>
+    <div>
+      Linear-time logics
+      {% include_relative {{ mermaid_dir }}/linear-time-logics.html %}
+    </div>
+  </div>
+
+  All four logics have:
   <ul>
     <li>syntactic restriction of CTL*.</li>
     <li>the same semantics of CTL*.</li>
   </ul>
-
-  <div class="flex-container">
-    <img src="{{ img_path }}/sublogics.svg">
-  </div>
 
   {% include_relative _4-3-1-the-branching-time-logic-ctl.html %}
   {% include_relative _4-3-2-the-universal-computation-tree-logics.html %}

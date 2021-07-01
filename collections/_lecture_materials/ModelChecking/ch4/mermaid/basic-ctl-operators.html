@@ -1,0 +1,44 @@
+<div class="flex-container">
+  <div>
+    \( M, s_0 \models \bm{EF} g \)
+    <div class="mermaid">
+    graph TB
+      s0(( )) --> s1(( )) --> s3(( ))
+      s0 --> s2(( ))
+      s1 --> s4(( ))
+      s2 --> s5(( ))
+      s2 --> s6((g))
+    </div>
+
+    \( M, s_0 \models \bm{EG} g \)
+    <div class="mermaid">
+    graph TB
+      s0((g)) --> s1(( )) --> s3(( ))
+      s0 --> s2((g))
+      s1 --> s4(( ))
+      s2 --> s5(( ))
+      s2 --> s6((g))
+    </div>
+  </div>
+  <div>
+    \( M, s_0 \models \bm{AF} g \)
+    <div class="mermaid">
+    graph TB
+      s0(( )) --> s1((g)) --> s3(( ))
+      s0 --> s2(( ))
+      s1 --> s4(( ))
+      s2 --> s5((g))
+      s2 --> s6((g))
+    </div>
+
+    \( M, s_0 \models \bm{AG} g \)
+    <div class="mermaid">
+    graph TB
+      s0((g)) --> s1((g)) --> s3((g))
+      s0 --> s2((g))
+      s1 --> s4((g))
+      s2 --> s5((g))
+      s2 --> s6((g))
+    </div>
+  </div>
+</div>
