@@ -6,10 +6,13 @@
   <em>CTL* (computation tree logic)</em> defines properties of <em>computation tree</em>:
   <ul>
     <li>
-      Convert Kripke structure \( M \) to <em>computation tree</em>.
-      <ul><li>unwind \( M \) from the initial state.</li></ul>
+      <em>Computation tree</em> shows all possible executions from the initial state.
+      <ul><li>One branch represents a possible execution.</li></ul>
     </li>
-    <li><em>Computation trees</em> show all possible executions from the initial state.</li>
+    <li>
+      <em>Computation tree</em> is formed by unwinding the Kripke structure \( M \) from the initial state.
+      <ul><li>Computation tree represents all paths of \( M \).</li></ul>
+    </li>
   </ul>
 
   <div class="flex-container">
@@ -44,6 +47,11 @@
         </li>
       </ul>
     </li>
+  </ul>
+
+  {% include_relative {{ mermaid_dir }}/path-quantifiers.html %}
+
+  <ul>
     <li>
       <em>Temporal operators</em>
       <ul>
@@ -91,6 +99,26 @@
     <h5>Example</h5>
   
     <div class="flex-container">
+      <div style="width: 60%;" class="flex-center">
+        <ul>
+          <li>
+            \( \pi_0 \models \bm{G} b \)
+            <ul><li>On \( \pi_0 \), property \( b \) holds in every state.</li></ul>
+          </li>
+          <li>
+            \( \pi_1 \not\models \bm{G} b \)
+            <ul><li>On \( \pi_1 \), property \( b \) does not hold in every state.</li></ul>
+          </li>
+          <li>
+            \( s_0 \models \bm{EG} b \)
+            <ul><li>One path (but not all paths) from the initial state \( s_0 \) satisfy \( \bm{G} b \)</li></ul>
+          </li>
+          <li>
+            \( s_0 \not\models \bm{AG} b \)
+            <ul><li>All paths from the initial state \( s_0 \) do not satisfy \( \bm{G} b \)</li></ul>
+          </li>
+        </ul>
+      </div>
       <div>
         {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
         <div class="flex-container">
@@ -102,25 +130,6 @@
         </div>
       </div>
     </div>
-
-    <ul>
-      <li>
-        \( \pi_0 \models \bm{G} b \)
-        <ul><li>On \( \pi_0 \), property \( b \) holds in every state.</li></ul>
-      </li>
-      <li>
-        \( \pi_1 \not\models \bm{G} b \)
-        <ul><li>On \( \pi_1 \), property \( b \) does not hold in every state.</li></ul>
-      </li>
-      <li>
-        \( s_0 \models \bm{EG} b \)
-        <ul><li>One path (but not all paths) from the initial state \( s_0 \) satisfy \( \bm{G} b \)</li></ul>
-      </li>
-      <li>
-        \( s_0 \not\models \bm{AG} b \)
-        <ul><li>All paths from the initial state \( s_0 \) do not satisfy \( \bm{G} b \)</li></ul>
-      </li>
-    </ul>
 
     This example shows that:
     <ul>

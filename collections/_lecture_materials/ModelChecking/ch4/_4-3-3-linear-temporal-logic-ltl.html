@@ -4,9 +4,14 @@
   <em>LTL</em> formulas are of the form \( \bm{A} f \):
   <ul>
     <li>Only \( \bm{A} \) is allowed.</li>
-    <li>\( f \) is a CTL* path formula that does not include path quantifiers.</li>
+    <li>
+      \( f \) is a CTL* path formula that does not include path quantifiers.
+      <ul>
+        <li>\( f \) specifies only a single path.</li>
+        <li>\( \bm{A} f \) specifies that all paths from state \( s \) holds \( f \).</li>
+      </ul>
+    </li>
     <li>ex) \( \bm{AFGX} p, \bm{AG} (p \bm{R} q) \)</li>
-    <li>\( f \) specifies only a path.</li>
   </ul>
 
   {% include_relative {{ mermaid_dir }}/linear-time-logic-example.html %}

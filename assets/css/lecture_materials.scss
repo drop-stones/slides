@@ -90,6 +90,12 @@ $border-left-width-h5: 8px;
   }
 }
 
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .table {
   display: table;
   padding-bottom: 1em;
