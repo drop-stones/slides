@@ -13,7 +13,7 @@
           <div class="table-cell">the set of states</div>
         </div>
         <div class="table-row">
-          <div class="table-cell">\( S_0 \in S \)</div>
+          <div class="table-cell">\( S_0 \subseteq S \)</div>
           <div class="table-cell">the set of initial states</div>
         </div>
         <div class="table-row">
@@ -31,7 +31,7 @@
         Path \( \pi \) in \( M \)
         <div class="table-row">
           <div class="table-cell">\( \pi = s_0, s_1, ..., \)</div>
-          <div class="table-cell">\( s_0 \in S_0 \), and \( (s_i, s_{i+1}) \in R \)</div>
+          <div class="table-cell">\( s_k \in S_0 \), and \( (s_i, s_{i+1}) \in R \)</div>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
         </div>
         <div class="table-row">
           <div class="table-cell">\( M, \pi \models f \)</div>
-          <div class="table-cell">\( f \) holds at state \( \pi \) in a kripke structure \( M \)</div>
+          <div class="table-cell">\( f \) holds at path \( \pi \) in a kripke structure \( M \)</div>
         </div>
         <div class="table-row">
           <div class="table-cell">\( f \equiv g \)</div>
@@ -166,7 +166,7 @@
         <div class="table-cell">\( \Leftrightarrow \)</div>
         <div class="table-cell">
           for all \( j \geq 0 \), if for every \( i < j, M, \pi^{i} \not\models g_1 \), then <br />
-          \( M, \pi^{i} \models g_2 \)
+          \( M, \pi^{j} \models g_2 \)
         </div>
       </div>
       <div class="table-row">
