@@ -37,8 +37,8 @@
 
     \( \pi_0 \text{ and } \pi_1 \) are not <em>fair</em> because:
     <ul>
-      <li>\( \pi_0 \) does not visit \( s_1 \) many times</li>
-      <li>\( \pi_1 \) does not visit \( s_0 \) many times</li>
+      <li>\( \pi_0 \) does not visit \( s_1 \) many times (visit 0 time)</li>
+      <li>\( \pi_1 \) does not visit \( s_0 \) many times (visit 1 time)</li>
     </ul>
 
     <h5>Formal Definition</h5>
@@ -54,6 +54,8 @@
 
     \( \bm{GF} \{s\} \) means \( s \) appears infinitely.<br>
     {% include_relative {{ mermaid_dir }}/GroballyFuture.html %}
+
+    <p>In example, \( fpath = \bm{GF} \{ s_0 \} \land \bm{GF} \{ s_1 \} \).</p>
 
     Fairness can be added into CTL* syntax:
     <ul>

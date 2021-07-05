@@ -5,8 +5,8 @@
 
   There are two types of formulas:
   <ul>
-    <li><em>State formulas</em>: true or false in a specific state</li>
-    <li><em>Path formulas</em>: true of false along a specific path</li>
+    <li><em>State formulas</em> specify the properties of a specific state</li>
+    <li><em>Path formulas</em> specify the properties of a specific path</li>
   </ul>
 
   <div class="mc-ctl-state-formulas" style="padding-bottom: 1em;">
@@ -45,9 +45,18 @@
   CTL* is the set of <em>state formulas</em> permitted by the above rules.<br>
   <em>State formulas</em> are:
   <ul>
-    <li>Boolean propositions</li>
-    <li>Temporal formulas with path quantifier</li>
-    <li>Boolean combinations</li>
+    <li>
+      Boolean propositions
+      <ul><li>ex) \( p \)</li></ul>
+    </li>
+    <li>
+      Temporal formulas with path quantifier
+      <ul><li>ex) \( \bm{AX} q \)</li></ul>
+    </li>
+    <li>
+      Boolean combinations
+      <ul><li>ex) \( p \land \bm{AX} q \)</li></ul>
+    </li>
   </ul>
 
   <div class="example">
@@ -95,7 +104,7 @@
       </div>
       <div>
         {% include_relative {{ mermaid_dir }}/ctl-example.html %}
-        \[ \pi_0 = \{ s_0, s_1, s_3, ... \} \text{ (left most path)} \]
+        \[ \pi_0 = \{ s_0, s_1, s_3, ... \} \text{ (leftmost path)} \]
       </div>
     </div>
   </div>
