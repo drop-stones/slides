@@ -26,14 +26,14 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{F} (b \land c) \)</h5>
     <p>
-      \( \bm{F} (b \land c) = \{ \pi_0, \pi_1, ... \} \)<br>
+      \( \bm{F} (b \land c) = \{ \pi_0, \pi_1 \} \)<br>
       ( This means \( \pi_0, \pi_1 \models \bm{F} (b \land c) \))
     </p>
 
-    <h5>Step.2: \( \bm{E} \{ \pi_0, \pi_1, ... \} \)</h5>
+    <h5>Step.2: \( \bm{E} \{ \pi_0, \pi_1 \} \)</h5>
     <p>
-      \( \bm{E} \{ \pi_0, \pi_1, ... \} = \{ s_0, s_1, ... \} \)<br>
-      ( This means \( s_0, s_1 \models \bm{E} \{ \pi_0, \pi_1, ... \} = \bm{EF} (b \land c) \))
+      \( \bm{E} \{ \pi_0, \pi_1 \} = \{ s_0, s_1 \} \)<br>
+      ( This means \( s_0, s_1 \models \bm{E} \{ \pi_0, \pi_1 \} = \bm{EF} (b \land c) \))
     </p>
   </div>
 
@@ -47,7 +47,7 @@ title: CTL* Complex Semantics
     
     <h5>Step.2: \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \} \)</h5>
     <p>
-      \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \}  = \{ s_0, s_1, s_2, ... \} \)
+      \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \}  = \{ s_0, s_1, s_2 \} \)
     </p>
   </div>
 
@@ -56,21 +56,21 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{X} b \)</h5>
     <p>
-      \( \bm{X} b = \{ \pi_0, \pi_1, ... \} \)
+      \( \bm{X} b = \{ \pi_0, \pi_1 \} \)
     </p>
 
     <h5>Step.2: \( \bm{GX} b \)</h5>
     <p>
-      \( \bm{GX} b = \{ \pi_0, ... \} \)<br>
+      \( \bm{GX} b = \{ \pi_0 \} \)<br>
       <ul>
         <li>\( \pi_0 \) holds \( b \) globally.</li>
         <li>\( \pi_1 \) does not hold \( b \) globally.</li>
       </ul>
     </p>
 
-    <h5>Step.3: \( \bm{E} \{ \pi_0, ... \} \)</h5>
+    <h5>Step.3: \( \bm{E} \{ \pi_0 \} \)</h5>
     <p>
-      \( \bm{E} \{ \pi_0, ... \} = \{ s_0, ... \} \)
+      \( \bm{E} \{ \pi_0 \} = \{ s_0 \} \)
     </p>
   </div>
   
@@ -79,19 +79,19 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{G} c \)</h5>
     <p>
-      \( \bm{G} c = \{ \pi_1^4, \pi_2^2, ... \} \)
+      \( \bm{G} c = \{ \pi_1^4, \pi_2^2 \} \)
     </p>
 
     <h5>Step.2: \( \bm{FG} c \)</h5>
     <p>
-      \( \bm{FG} c = \{ \pi_1, \pi_2, \pi_1^4, \pi_2^2, ... \} \)
+      \( \bm{FG} c = \{ \pi_1, \pi_2, \pi_1^4, \pi_2^2 \} \)
     </p>
 
     <h5>Step.3: \( \bm{AFG} c \)</h5>
     <p>
       \( M, s_0 \not\models \bm{AFG} c \)<br>
       <ul>
-        <li>\( s_0 \) have \( \{ \pi_0, \pi_1, \pi_2, ... \} \).</li>
+        <li>\( s_0 \) have \( \{ \pi_0, \pi_1, \pi_2 \} \).</li>
         <li>\( \pi_0 \) does not hold \( \bm{FG} c \).</li>
       </ul>
     </p>
@@ -102,11 +102,11 @@ title: CTL* Complex Semantics
 
     <details>
       <summary>Step.1</summary>
-      \( \bm{X} (a \land b) = \{ \pi_0^1, ... \} \)
+      \( \bm{X} (a \land b) = \{ \pi_0^1 \} \)
     </details>
     <details>
       <summary>Step.2</summary>
-      \( \bm{A} \{ \pi_0^1, ... \} = \{ \} \)
+      \( \bm{A} \{ \pi_0^1 \} = \{ \} \)
     </details>
     <details>
       <summary>Step.3</summary>
