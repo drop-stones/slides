@@ -4,14 +4,17 @@
   <em>Negation normal form (NNF)</em>:
   <ul>
     <li>a syntactic form of logical formulas</li>
-    <li>Negations are applied only to atomic propositions in NNF</li>
+    <li>
+      Negations are applied only to atomic propositions in NNF
+      <ul><li>ex) \( \bm{AG} ( \lnot p \bm{R} \lnot q ) \)</li></ul>
+    </li>
     <li>NNF of CTL* is useful for model checking.</li>
   </ul>
 
   <p>
     We show that CTL* is equivalent to NNF of CTL* because:
     \[
-      \begin{array}
+      \begin{array} \\
         \lnot \bm{A} \phi &\equiv& \bm{E} \lnot \phi \\
         \lnot \bm{E} \phi &\equiv& \bm{A} \lnot \phi \\
         \lnot \bm{G} \phi &\equiv& \bm{F} \lnot \phi \\
@@ -24,6 +27,15 @@
       \end{array}
     \]
   </p>
+
+  <div class="note">
+    Complement: \( \lnot ( p \bm{U} q ) \) means:
+    <ul>
+      <li>\( \bm{G} \lnot q \) or</li>
+      <li>If \( q \) occurs, \( \lnot p \) will occur before it.</li>
+    </ul>
+    {% include_relative {{ mermaid_dir }}/negation-normal-form.html %}
+  </div>
 
   <div class="example">
     <h5>Example</h5>
