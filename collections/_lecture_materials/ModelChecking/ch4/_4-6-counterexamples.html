@@ -4,7 +4,7 @@
   <p>
     In model checking, we check that the system holds some properties.<br>
     If the check failed, we want to know the reasons.<br>
-    <em>Counterexample generation</em> provide valuable feedback.
+    <em>Counterexample generation</em> provide the reasons as traces that violate the properties.
   </p>
 
   <em>Counterexample</em> requires:
@@ -24,7 +24,10 @@
  
   <div class="example" id="agp-counter-example">
     <h5>Specification \( \bm{AG} p \)</h5>
-    <p>Counterexample of \( \bm{AG} p \) is a finite path that holds \( \bm{F} \lnot p \).</p>
+    <p>
+      Counterexample of \( \bm{AG} p \) is a finite path that holds \( \bm{F} \lnot p \).<br>
+      (The counterexample is a witness for \( \lnot \bm{AG} p = \bm{EF} \lnot p \).)
+    </p>
     {% include_relative {{ mermaid_dir }}/agp-counter-example.html %}
   </div>
 
@@ -32,6 +35,7 @@
     <h5>Specification \( \bm{AF} p \)</h5>
     <p>
       Counterexample of \( \bm{AF} p \) is an infinite path, all of its states satisfying \( \lnot p \).<br>
+      (The counterexample is a witness for \( \lnot \bm{AF} p = \bm{EG} \lnot p \).)<br>
       For finite Kripke structures, a counterexample \( \pi \) exists:
       \[ \pi = \pi_0 ( \pi_1 )^\omega = \pi_0 \pi_1 \pi_1 \pi_1 ...\]
       A path of that form is called <em>lasso</em>.
