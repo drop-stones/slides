@@ -1,3 +1,5 @@
+@import "github";
+
 // description list
 dt {
   float: left;
@@ -22,6 +24,11 @@ th {
 
 td {
   text-align: center;
+}
+
+// for highlight with linenos
+td.code {
+  text-align: left;
 }
 
 img {

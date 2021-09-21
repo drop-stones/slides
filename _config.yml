@@ -46,6 +46,8 @@ collections_dir: collections
 collections:
   lecture_materials:
     output: true
+  study:
+    output: true
 
 defaults:
   - scope:
@@ -53,6 +55,11 @@ defaults:
       type: "lecture_materials"
     values:
       layout: "lecture_material"
+  - scope:
+      path: ""
+      type: "study"
+    values:
+      layout: "study"
   - scope:
       path: ""
     values:

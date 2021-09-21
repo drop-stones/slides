@@ -24,7 +24,19 @@ layout: default
         <dl>
       {% endif %}
     {%- endfor -%}
-    
+  </details>
+
+  <details>
+    <summary>Study</summary>
+    {%- for study_article in site.study -%}
+      {% if study_article.url contains "index" %}
+        <dl>
+          <a href="{{ study_article.url | replace: 'index.html', '' | relative_url }}">
+            {{ study_article.title }}
+          </a>
+        </dl>
+      {% endif %}
+    {% endfor %}
   </details>
 
 </div>

@@ -1,0 +1,16 @@
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  .width-half {
+    width: 50%;
+  }
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -1,0 +1,478 @@
+---
+title: 夏ゼミ 2021-09-22
+---
+
+{% include_relative _code_blocks.html %}
+{% assign img_path = '/assets/img/study/2021-09-22' | relative_url %}
+
+<div class="section">
+  <h2>提案手法の概要</h2>
+
+  <h5>目的: データの保護</h5>
+  <ul>
+    <li>Buffer Overflowの検知</li>
+    <li>Use After Freeの検知</li>
+    <li>etc</li>
+  </ul>
+
+  <h5>手法: Data-Flow Integrity + Field-sensitiveポインタ解析</h5>
+  <p>以下の２つを組み合わせて，構造体の要素を区別したデータフローの保護を実現する:</p>
+  <ul>
+    <li>
+      Data-Flow Integrity: データフローの保護
+      <ul>
+        <li>静的解析: 定義と使用の関係(DefUse)を求める</li>
+        <li>動的解析: 実行時に各変数の定義と使用の関係が正しいのか確認する</li>
+      </ul>
+    </li>
+    <li>
+      Field-sensitiveポインタ解析: 構造体の要素を区別したポインタ解析
+      <ul>
+        <li>構造体を区別したDefUseを求める</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Step1: 静的解析</h5>
+  <p>Field-sensitiveなDef-Useを求める．</p>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ example }}{% endhighlight %}
+    </div>
+    <div>
+      {% include_relative _example-defuse.html %}
+    </div>
+  </div>
+
+  <h5>Step2: 動的解析</h5>
+  <p>Shadow Memoryを用いて以下を行う:</p>
+  <ul>
+    <li>変数の定義場所の保存</li>
+    <li>変数の使用時，定義場所が正しいかどうかのチェック</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      <div>
+        {% highlight c linenos %}{{ example }}{% endhighlight %}
+      </div>
+      <div>
+        {% include_relative _example-defuse.html %}
+      </div>
+    </div>
+    <div>
+      <div>
+        <div>Memory</div>
+        <img src="{{img_path}}/example-memory.drawio.svg"/>
+      </div>
+      <div>
+        <div>Shadow Memory</div>
+        <img src="{{img_path}}/example-shadow-memory.drawio.svg">
+      </div>
+    </div>
+  </div>
+
+  <h5>Motivating Example</h5>
+  vs Data-Flow Integrity[OSDI'06]
+  <ul>
+    <li>DFIは，構造体の要素を区別して保護できない(Field-insensitive)</li>
+    <li>提案手法は，Field-sensitiveポインタ解析を用いることで，構造体の要素を区別して保護する</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ vs-dfi }}{% endhighlight %}
+    </div>
+    <div>
+      <div>Shadow Memory</div>
+      <img src="{{img_path}}/dfi-usedef.drawio.svg">
+    </div>
+    <div>
+      DFIによるDef-Use
+      <table>
+        <tr>
+          <th></th>
+          <th>DEF</th>
+          <th>Use</th>
+        </tr>
+        <tr>
+          <th>op</th>
+          <td>L.7, L.8</td>
+          <td>L.9</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+        提案手法によるDef-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>op.func</th>
+            <td>L.7</td>
+            <td>L.9</td>
+          </tr>
+          <tr>
+            <th>op.opd</th>
+            <td>L.8</td>
+            <td>-</td>
+          </tr>
+        </table>
+    </div>
+  </div>
+  
+  vs EffectiveSan[PLDI'18] (Type-Based Sanitizer)
+  <ul>
+    <li>
+      EffectiveSanは，静的解析 + 動的解析を組み合わせ，非常に正確な型(Effective Type)を求める
+      <ul>
+        <li>構造体の要素とその要素を区別できる</li>
+        <li>動的にサイズが決まる型を実行時に求められる</li>
+      </ul>
+    </li>
+    <li>提案手法も，Shadow Memoryを利用して正確に保護できる</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ example-vla }}{% endhighlight %}
+    </div>
+    <div>
+      <div>
+        Def-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>str[i]</th>
+            <td>L.3</td>
+            <td>L.4</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <div>Shadow Memory</div>
+        <img src="{{img_path}}/effectiveSan-vla-memory.drawio.svg">
+      </div>
+    </div>
+  </div>
+
+
+  <ul>
+    <li>一方，EffectiveSanは，Use-After-Freeを正確に検知できない</li>
+    <li>提案手法は，定義と使用の関係から，Use-After-Freeを検知する</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ vs-effectivesan }}{% endhighlight %}
+    </div>
+    <div>
+      <div>
+        Def-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>key</th>
+            <td>L.3</td>
+            <td>L.4</td>
+          </tr>
+          <tr>
+            <th>illegal_key</th>
+            <td>-</td>
+            <td>L.9</td>
+          </tr>
+        </table>
+      </div>
+      <div>Shadow Memory</div>
+      <img src="{{img_path}}/effectiveSan-uaf-memory.drawio.svg">
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>進捗</h2>
+
+  <ul>
+    <li>
+      実装
+      <ul class="check">
+        <li>Def-Use解析</li>
+        <li>データフローの実行時チェック</li>
+        <li>外部(標準)ライブラリへの対応</li>
+      </ul>
+    </li>
+    <li>
+      実験
+      <ul class="check">
+        <li>Motivating Exampleを含むテストコード</li>
+        <li>合成検体: cfi-eval</li>
+      </ul>
+      <ul class="cross">
+        <li>
+          リアル検体
+          <ul class="cross">
+            <li>gravity</li>
+            <li>GNU cflow</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>外部ライブラリへの対応</h4>
+  <h5>定義関数</h5>
+  <ul>
+    <li>
+      read(), scanf()など，外部入力による変数の定義をShadow Memoryに反映させる
+      <ul>
+        <li>引数・返り値から，どこに，何バイト書き込んだかを取得する</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <div>{% highlight c linenos %}{{ def-stdlib }}{% endhighlight %}</div>
+    <div>
+      <div>Shadow Memory</div>
+      <img src="{{img_path}}/dfi-usedef.drawio.svg">
+    </div>
+    <div>
+        提案手法によるDef-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>op.func</th>
+            <td>L.7</td>
+            <td>L.9</td>
+          </tr>
+          <tr>
+            <th>op.opd</th>
+            <td>L.8</td>
+            <td>-</td>
+          </tr>
+        </table>
+    </div>
+  </div>
+
+  <h5>malloc(), free()</h5>
+  <ul>
+    <li>
+      malloc()時に，確保したオブジェクトの情報を保存する
+      <ul>
+        <li>引数・返り値から，どこに，何バイトのオブジェクトを確保したか取得する</li>
+        <li>Effective Typeから着想を得た</li>
+      </ul>
+    </li>
+    <li>
+      free()時に，malloc()で確保されたオブジェクトに"FREE"とマーク
+      <ul>
+        <li>既にfreeされていた場合，Double Freeとして報告</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <div>{% highlight c linenos %}{{ malloc-free }}{% endhighlight %}</div>
+  </div>
+  <div class="flex-container">
+    <div>
+      <div>L.1: malloc(n)</div>
+      <img src="{{img_path}}/malloc-memory.drawio.svg">
+    </div>
+    <div>
+      <div>L.3: free()</div>
+      <img src="{{img_path}}/free-memory.drawio.svg">
+    </div>
+    <div>
+      <div>L.6: Use</div>
+      <img src="{{img_path}}/uaf-memory.drawio.svg">
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>実験結果</h2>
+
+  <h4>cfi-eval: Control-Flow Attackの保護評価</h4>
+  <table>
+    <tr>
+      <th>Classification</th>
+      <th colspan="2">CBench Testsuite</th>
+      <th>提案手法</th>
+    </tr>
+    <tr>
+      <th rowspan="2">Indirect Call</th>
+      <td rowspan="2">Code Pointer</td>
+      <td>Overwrite</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <td>Reuse</td>
+      <td>&cross;</td>
+    </tr>
+    <tr>
+      <th rowspan="3">Indirect Jump</th>
+      <td rowspan="2">Tail Call</td>
+      <td>Overwrite</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <td>Reuse</td>
+      <td>&cross;</td>
+    </tr>
+    <tr>
+      <td colspan="2">setjmp/longjmp</td>
+      <td>&cross; (対応可)</td>
+    </tr>
+    <tr>
+      <th>Return Address</th>
+      <td colspan="2">Return Address Overwrite</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <th>Type Confusion</th>
+      <td colspan="2">Function Type Confusion</td>
+      <td>&cross;</td>
+    </tr>
+    <tr>
+      <th>Assembly Support</th>
+      <td colspan="2">Indirect Call/Jump</td>
+      <td>&cross;</td>
+    </tr>
+    <tr>
+      <th>Cross DSO Support</th>
+      <td colspan="2">Dynamic Shared Objects</td>
+      <td>&xutri;</td>
+    </tr>
+  </table>
+
+  <ul>
+    <li>
+      Type Confusion, Assembly Support
+      <ul>
+        <li>サポート対象外</li>
+      </ul>
+    </li>
+    <li>
+      Cross DSO Support
+      <ul>
+        <li>DSOファイルのLLVM IRと一緒に解析・コンパイルできる場合のみ有効</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Reuse: Def-Useの保護では防げない攻撃</h5>
+  <ul>
+    <li>もし，Input()が1の場合，配列の範囲外であるy[0]が読まれる</li>
+    <li>しかし，xとyのどちらもグローバル変数であり，定義元を判別できない</li>
+  </ul>
+  <div class="flex-container">
+    <div>{% highlight c linenos %}{{ code-pointer-reuse }}{% endhighlight %}</div>
+    <div>
+      <div>Def-Use</div>
+      <table>
+        <tr>
+          <th></th>
+          <th>DEF</th>
+          <th>USE</th>
+        </tr>
+        <tr>
+          <th>g.x[0]</th>
+          <td>Global init (L.0)</td>
+          <td>L.9</td>
+        </tr>
+        <tr>
+          <th>g.y[0]</th>
+          <td>Global init (L.0)</td>
+          <td>-</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+  <h4>リアル検体: gravity, GNU cflow</h4>
+  <h5>解析結果</h5>
+  <p>リアル検体への適応・解析の報告予定だったが間に合わず，，，</p>
+
+  <h5>リアル検体のビルド &#8658; LLVM IRファイルの取得</h5>
+  <ul>
+    <li>
+      多くのC,C++プロジェクトには，ビルドシステムによるビルドの自動化がされる
+      <ul>
+        <li>gravity: CMake</li>
+        <li>GNU cflow: Autotools</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      <img src="{{img_path}}/build-workflow.drawio.svg">
+    </div>
+  </div>
+
+  <ul>
+    <li>ビルドシステムに手を加え，LLVM IRを取得する</li>
+    <li>
+      コンパイルオプション: Link Time Optimization (LTO)
+      <ul>
+        <li>リンク時に最適化するためのオプション</li>
+        <li>LLVM IRがコンパイルされる</li>
+      </ul>
+    </li>
+    <li>
+      リンカー: gold
+      <ul>
+        <li>LLVM IRのLTOに対応しているリンカー</li>
+        <li>プロジェクト全体を一つのLLVM IRファイルにまとめられる</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      <img src="{{img_path}}/lto-build-workflow.drawio.svg">
+    </div>
+  </div>
+
+  <p>C,C++を解析対象にしている & LLVMを使用する人の手助けはできるかも</p>
+
+  <div class="section">
+    <h2>今後について</h2>
+    <ul>
+      <li>
+        リアル検体への対応・解析
+        <ul>
+          <li>gravity</li>
+          <li>GNU cflow</li>
+          <li>その他３つの検体</li>
+        </ul>
+      </li>
+      <li>
+        最適化の検討・実装
+        <ul>
+          <li>Def-Useの確認箇所を絞る</li>
+          <li>
+            参考論文
+            <ul>
+              <li><a href="https://ieeexplore.ieee.org/document/7163065">High System-Code Security with Low Overhead[IEEE'15]</a></li>
+              <li><a href="https://www.usenix.org/conference/osdi21/presentation/zhang">SANRAZOR[OSDI'21]</a></li>
+              <li><a href="https://www.cs.cmu.edu/~oor/papers/cred.pdf">CRED[NDSS'04]</a></li>
+              <li><a href="https://www.researchgate.net/publication/329160074_DOPdefender_An_Approach_to_Thwarting_Data-Oriented_Programming_Attacks_Based_on_a_Data-Aware_Aut">DOPDefender[COMP&SEC'18]</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+</div>
