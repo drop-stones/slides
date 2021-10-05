@@ -1,0 +1,93 @@
+---
+title: PhASAR
+subtitle: An Inter-procedural Static Analysis Framework for C/C++
+---
+
+<div class="section" id="introduction">
+  <h2>Introduction</h2>
+
+  <h4>Background</h4>
+  <ul>
+    <li>
+      Software written in C/C++ is hard to analyze because of:
+      <ul>
+        <li>unsafe type system</li>
+        <li>unrestricted use of pointers</li>
+        <li>(for C++) virtual dispatch</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Solution</h4>
+  <ul>
+    <li>
+      This work presents the novel program-analysis framework PhASAR.
+      <ul><li>PhASAR: a LLVM-based Static Analysis Framework</li></ul>
+    </li>
+    <li>PhASAR make static analysis more accessible and easy to use.</li>
+  </ul>
+
+  <h4>Result</h4>
+  <ul>
+    <li>PhASAR provides whole-program analysis that scales well to real-world programs.</li>
+  </ul>
+</div>
+
+<div class="section" id="data-flow-analysis">
+  <h2>Data-Flow Analysis</h2>
+
+  <h4>Review: Basics of Data-Flow Analysis</h4>
+  <h5>Data-Flow Schema: common parts of data-flow analysis</h5>
+  show example
+  <ul>
+    <li>Domain</li>
+    <li>Direction</li>
+    <li>Transfer Function</li>
+    <li>Boundary</li>
+    <li>Meet</li>
+    <li>Equations</li>
+    <li>Initialize</li>
+  </ul>
+
+  <h5>Data-Flow Frameworks: conditions for convergence</h5>
+  show example
+  <ul>
+    <li>Monotone Framework</li>
+    <li>
+      Distributive Framework
+      <ul>
+        <li>IFDS (Interprocedural Finite Distributive Subset)</li>
+        <li>IDE (Interprocedural Distributive Environments)</li>
+      </ul>
+    </li>
+    <li>Pushdown Systems</li>
+  </ul>
+
+  <h5>Iterative Algorithm: solve the data-flow problem</h5>
+  show example
+
+  <h4>PhASAR's support</h4>
+  <ul>
+    <li>Monotone Framework</li>
+    <li>IFDS</li>
+    <li>IDE</li>
+    <li>WPDS (Weighted Pushdown Systems)</li>
+  </ul>
+</div>
+
+<div class="section" id="monotone-example">
+  <h2>Example: Encoding a Monotone Analysis</h2>
+  exampleを解くためのコード説明(全部具体例でやっちゃう)
+</div>
+
+<div class="section" id="evaluation">
+  <h2>Evaluation</h2>
+</div>
+
+<div class="section" id="reference">
+  <h2>Reference</h2>
+  <ul>
+    <li><a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-17465-1_22.pdf">PhASAR paper</a></li>
+    <li><a href="https://github.com/secure-software-engineering/phasar">github</a></li>
+  </ul>
+</div>
