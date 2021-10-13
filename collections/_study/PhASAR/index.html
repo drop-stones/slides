@@ -3,10 +3,12 @@ title: PhASAR
 subtitle: An Inter-procedural Static Analysis Framework for C/C++
 ---
 
+{% include_relative _code_blocks.html %}
+
 <div class="section" id="introduction">
   <h2>Introduction</h2>
 
-  <h4>Background</h4>
+  <h4>Problem</h4>
   <ul>
     <li>
       Software written in C/C++ is hard to analyze because of:
@@ -38,16 +40,82 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
 
   <h4>Review: Basics of Data-Flow Analysis</h4>
   <h5>Data-Flow Schema: common parts of data-flow analysis</h5>
-  show example
   <ul>
-    <li>Domain</li>
-    <li>Direction</li>
-    <li>Transfer Function</li>
-    <li>Boundary</li>
-    <li>Meet</li>
-    <li>Equations</li>
-    <li>Initialize</li>
+    <li>
+      <strong>Domain</strong>: The set of possible data-flow values
+      <ul>
+        <li>Data-flow value: Analysis Interests</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Direction</strong>: Data-flow propagation direction
+      <ul>
+        <li>Forward or Backward</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Transfer Function</strong>: Semantics of the statement
+      <ul>
+        <li>Input: Data-flow values before the statement</li>
+        <li>Output: Data-flow values after the statement</li>
+        <li>
+          This function can be expressed as the following functions:
+          <ul>
+            <li>gen: Create new data-flow values</li>
+            <li>kill: Delete existing data-flow values</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <strong>Meet</strong>: Operator that merge two (or more) data-flow values
+      <ul>
+        <li>
+          This operator is used at:
+          <ul>
+            <li>join points</li>
+            <li>data-flow values update</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><strong>Initialize</strong>: Initial data-flow values</li>
   </ul>
+
+  <div class="flex-container">
+    <div class="width-half">
+      <table>
+        <tr>
+          <th></th>
+          <th>Reaching Definitions</th>
+        </tr>
+        <tr>
+          <th>Domain</th>
+          <td>Assignment(Store) Instructions</td>
+        </tr>
+        <tr>
+          <th>Direction</th>
+          <td>Forward</td>
+        </tr>
+        <tr>
+          <th>Transfer<br />Function</th>
+          <td>gen \( \cup \) (x - kill)</td>
+        </tr>
+        <tr>
+          <th>Meet</th>
+          <td>\( \cup \)</td>
+        </tr>
+        <tr>
+          <th>Initialize</th>
+          <td>\( \phi \)</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <p>Example: Reaching Definitions</p>
+      {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
+    </div>
+  </div>
 
   <h5>Data-Flow Frameworks: conditions for convergence</h5>
   show example
@@ -82,6 +150,185 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
 
 <div class="section" id="evaluation">
   <h2>Evaluation</h2>
+  
+  <h3>Scalability</h3>
+  Perform the following analyses on real programs:
+  <ul>
+    <li>
+      Trivial Analysis
+      <ul>
+        <li>Framework: IFDS/IDE</li>
+        <li>Data-flow fact: Tautological fact</li>
+        <li>Baseline analysis for IFDS/IDE</li>
+      </ul>
+    </li>
+    <li>
+      Taint Analysis
+      <ul>
+        <li>Framework: IFDS/IDE</li>
+        <li>Data-flow fact: Tainted values</li>
+        <li>provide PhASAR's IFDS/IDE analysis is scalable</li>
+      </ul>
+    </li>
+  </ul>
+
+  <table>
+    <tr>
+      <th>Program</th>
+      <th>kLOC</th>
+      <th>Stmts</th>
+      <th>Ptrs</th>
+      <th>Allocs</th>
+      <th>Total Time[s]<br />(Trivial / Taint)</th>
+    </tr>
+    <tr>
+      <td>wc</td>
+      <td>132</td>
+      <td>63166</td>
+      <td>10644</td>
+      <td>396</td>
+      <td>2/13</td>
+    </tr>
+    <tr>
+      <td>ls</td>
+      <td>152</td>
+      <td>71712</td>
+      <td>13200</td>
+      <td>438</td>
+      <td>4/5</td>
+    </tr>
+    <tr>
+      <td>cat</td>
+      <td>130</td>
+      <td>62588</td>
+      <td>10584</td>
+      <td>391</td>
+      <td>2/3</td>
+    </tr>
+    <tr>
+      <td>cp</td>
+      <td>141</td>
+      <td>64097</td>
+      <td>11722</td>
+      <td>443</td>
+      <td>3/792</td>
+    </tr>
+    <tr>
+      <td>whoami</td>
+      <td>129</td>
+      <td>61860</td>
+      <td>10433</td>
+      <td>389</td>
+      <td>2/2</td>
+    </tr>
+    <tr>
+      <td>dd</td>
+      <td>137</td>
+      <td>65287</td>
+      <td>11150</td>
+      <td>408</td>
+      <td>2/40</td>
+    </tr>
+    <tr>
+      <td>fold</td>
+      <td>130</td>
+      <td>62201</td>
+      <td>10509</td>
+      <td>390</td>
+      <td>2/2</td>
+    </tr>
+    <tr>
+      <td>join</td>
+      <td>134</td>
+      <td>64196</td>
+      <td>11042</td>
+      <td>402</td>
+      <td>2/2</td>
+    </tr>
+    <tr>
+      <td>kill</td>
+      <td>130</td>
+      <td>62304</td>
+      <td>10527</td>
+      <td>394</td>
+      <td>2/2</td>
+    </tr>
+    <tr>
+      <td>uniq</td>
+      <td>131</td>
+      <td>62663</td>
+      <td>10650</td>
+      <td>396</td>
+      <td>2/2</td>
+    </tr>
+    <tr>
+      <td>MPT</td>
+      <td>3514</td>
+      <td>1351735</td>
+      <td>755567</td>
+      <td>176540</td>
+      <td>458/379</td>
+    </tr>
+    <tr>
+      <td>PhASAR</td>
+      <td>3554</td>
+      <td>1368297</td>
+      <td>763796</td>
+      <td>178486</td>
+      <td>1064/993</td>
+    </tr>
+  </table>
+  
+  <p><strong>Results of experiments</strong>: PhASAR is capable of analyzing even a million-line program within minutes.</p>
+
+</div>
+
+<div class="section" id="related_work">
+  <h2>Related Work</h2>
+  <table>
+    <tr>
+      <th>Tool</th>
+      <th>Language</th>
+      <th>Description</th>
+      <th>User-defined Data-Flow Analysis</th>
+    </tr>
+    <tr>
+      <td>Soot</td>
+      <td>Java, Android</td>
+      <td>Data-Flow Analysis Framework</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <td>WALA</td>
+      <td>Java bytecode</td>
+      <td>Data-Flow Analysis Framework</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <td>clang-tidy</td>
+      <td>C/C++</td>
+      <td>Bug checker(interface misuse, style validation, etc)</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <td>Clang Static Analyzer</td>
+      <td>C/C++</td>
+      <td>Symbolic Execution Tool</td>
+      <td>&check;</td>
+    </tr>
+    <tr>
+      <td>SVF</td>
+      <td>C/C++</td>
+      <td>Value-Flow computation</td>
+      <td>&cross;</td>
+    </tr>
+    <tr>
+      <td><strong>PhASAR</strong></td>
+      <td>C/C++</td>
+      <td>Data-Flow Analysis Framework</td>
+      <td>&check;</td>
+    </tr>
+  </table>
 </div>
 
 <div class="section" id="reference">
