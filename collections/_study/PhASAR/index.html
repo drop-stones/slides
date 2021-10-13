@@ -118,34 +118,183 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
   </div>
 
   <h5>Data-Flow Frameworks: conditions for convergence</h5>
-  show example
+  <p>To solve data-flow problems efficiently, we put conditions on transfer function \(f\).</p>
   <ul>
-    <li>Monotone Framework</li>
+    <li>
+      Monotone Framework
+      <ul>
+        <li>Conditions: \(x \leq y \) implies \(f(x) \leq f(y)\)</li>
+        <li>
+          Another expression: \(f(x \land y) \leq f(x) \land f(y)\)
+          <!--
+          <ul>
+            <li>\(x \land y \leq x\) and \(x \land y \leq y\)</li>
+            <li>\(f(x \land y) \leq f(x)\) and \(f(x \land y) \leq f(y)\)</li>
+            <li>\(f(x \land y) \leq f(x) \land f(y)\)</li>
+          </ul>
+          -->
+        </li>
+      </ul>
+    </li>
     <li>
       Distributive Framework
       <ul>
-        <li>IFDS (Interprocedural Finite Distributive Subset)</li>
-        <li>IDE (Interprocedural Distributive Environments)</li>
+        <li>Conditions: \(f(x \land y) = f(x) \land f(y)\)</li>
+        <li>
+          Methods:
+          <ul>
+            <li>IFDS (Interprocedural Finite Distributive Subset)</li>
+            <li>IDE (Interprocedural Distributive Environments)</li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li>Pushdown Systems</li>
+    <li>
+      Pushdown Systems
+      <ul>
+        <li>Conditions: Same as Distributive Framework</li>
+        <li>
+          Methods:
+          <ul>
+            <li>WPDS</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
   </ul>
+  <p>Reaching Definitions can be solved by these frameworks.</p>
 
   <h5>Iterative Algorithm: solve the data-flow problem</h5>
+  show algorithm
   show example
 
   <h4>PhASAR's support</h4>
+  <p>PhASAR has the following functions:</p>
   <ul>
-    <li>Monotone Framework</li>
-    <li>IFDS</li>
-    <li>IDE</li>
-    <li>WPDS (Weighted Pushdown Systems)</li>
+    <li>
+      Points-to Analysis
+      <ul>
+        <li>Andersen-style</li>
+        <li>Steensgard-style</li>
+      </ul>
+    </li>
+    <li>
+      Inter-procedural Control Flow Graph
+    </li>
+    <li>
+      Type Hierarchy Analysis
+      <ul>
+        <li>Construct the type hierarchy for composite types</li>
+        <li>Reconstruct the virtual-method tables</li>
+      </ul>
+    </li>
+    <li>
+      Data-Flow Frameworks
+      <ul>
+        <li>Monotone Framework</li>
+        <li>IFDS</li>
+        <li>IDE</li>
+        <li>WPDS (Weighted Pushdown Systems)</li>
+      </ul>
+    </li>
   </ul>
 </div>
 
 <div class="section" id="monotone-example">
   <h2>Example: Encoding a Monotone Analysis</h2>
-  exampleを解くためのコード説明(全部具体例でやっちゃう)
+  <p>To solve data-flow problems using PhASAR, we need to define the followings:</p>
+  <ul>
+    <li>Framework + Direction</li>
+    <li>Domain</li>
+    <li>Initialize</li>
+    <li>Transfer Function</li>
+    <li>Meet</li>
+    <li>Convergence Check</li>
+  </ul>
+
+  <p>Let's encode reaching definitions using PhASAR!</p>
+  <p>If you are interested in implementation, see <a href="https://github.com/drop-stones/phasar-reaching-definitions">here</a>.</p>
+
+  <h4>Framework + Direction</h4>
+  <ul>
+    <li>
+      Framework: Intra-procedural Monotone Framework
+      <ul>
+        <li>The most simple framework</li>
+      </ul>
+    </li>
+    <li>Direction: Forward</li>
+  </ul>
+  {% highlight c++ linenos %}{{ framework }}{% endhighlight %}
+
+  <h4>Domain</h4>
+  <ul>
+    <li>
+      Data-Flow Fact: Assignment(Store) Instruction
+      <ul><li>Collect definition statements.</li></ul>
+    </li>
+    <li>
+      Analysis granularity: Single Instruction
+      <ul><li>Compute data-flow values for each statement.</li></ul>
+    </li>
+  </ul>
+  {% highlight c++ linenos %}{{ domain }}{% endhighlight %}
+
+  <h4>Initialize</h4>
+  <ul>
+    <li>
+      Initialize: \( \phi \)
+      <ul>
+        <li>There are no definitions at the start.</li>
+      </ul>
+    </li>
+  </ul>
+  {% highlight c++ linenos %}{{ initialize }}{% endhighlight %}
+
+  <h4>Transfer Function</h4>
+  <ul>
+    <li>
+      Transfer Function: \( gen \cup ( x - kill ) \)
+      <ul>
+        <li>gen: a new definition statement</li>
+        <li>kill: old statements that are assigned to the same variable as gen</li>
+      </ul>
+    </li>
+  </ul>
+  {% highlight c++ linenos %}{{ transfer_function }}{% endhighlight %}
+
+  <h4>Meet Operator</h4>
+  <ul>
+    <li>Meet Operator: \( \cup \)</li>
+  </ul>
+  {% highlight c++ linenos %}{{ meet_operator }}{% endhighlight %}
+
+  <h4>Convergence Check</h4>
+  <ul>
+    <li>Check whether data-flow values are changed</li>
+  </ul>
+  {% highlight c++ linenos %}{{ convergence_check }}{% endhighlight %}
+
+  <h3>Analysis Result</h3>
+  <p>Encoding Complete!!</p>
+
+  <p>Analyzing the example code, we obtain the following results.</p>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
+    </div>
+    <div>
+        After L.3
+        {% highlight c %}{{ l_3 }}{% endhighlight %}
+        After L.6
+        {% highlight c %}{{ l_6 }}{% endhighlight %}
+        After L.9
+        {% highlight c %}{{ l_9 }}{% endhighlight %}
+        After L.10
+        {% highlight c %}{{ l_10 }}{% endhighlight %}
+    </div>
+  </div>
 </div>
 
 <div class="section" id="evaluation">
@@ -335,6 +484,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
   <h2>Reference</h2>
   <ul>
     <li><a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-17465-1_22.pdf">PhASAR paper</a></li>
-    <li><a href="https://github.com/secure-software-engineering/phasar">github</a></li>
+    <li><a href="https://github.com/secure-software-engineering/phasar">PhASAR github</a></li>
+    <li><a href="https://github.com/drop-stones/phasar-reaching-definitions">Reaching Definitions Implementation</a></li>
   </ul>
 </div>

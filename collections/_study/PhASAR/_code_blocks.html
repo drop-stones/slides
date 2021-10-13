@@ -1,6 +1,5 @@
 {% assign reaching_definitions_example = '
-int x, y, z, *p;
-p = &x;
+int x, y, z;
 x = 100;
 y = 200;
 if (...) {
@@ -10,5 +9,82 @@ if (...) {
   y = 500;
   z = 600;
 }
-*p = 700;
+'%}
+
+{% assign framework = '
+class ReachingDefinitions : public IntraMonoProblem<Domain> {
+  // implement some functions here
+};
+'%}
+
+{% assign domain = '
+struct ReachingDefinitionsAnalysisDomain : public LLVMAnalysisDomainDefault {
+  // Data-flow fact
+  using d_t = const llvm::StoreInst *;
+  using mono_container_t = BitVectorSet<d_t>;
+  
+  // Analysis granularity
+  using n_t = const llvm::Instruction *;
+};
+'%}
+
+{% assign transfer_function = '
+mono_container_t normalFlow(n_t inst, mono_container_t in) {
+  mono_container_t out = in;
+  if (inst is StoreInst) {
+    // kill
+    for (def : out) {
+      if (inst.targetOperand == def.targetOperand)
+        out.erase(def);
+    }
+    
+    // gen
+    out.insert(inst);
+  }
+  return out;
+}
+'%}
+
+{% assign meet_operator = '
+mono_container_t merge(mono_container_t lhs, mono_container_t rhs) {
+  return lhs.setUnion(rhs);
+}
+'%}
+
+{% assign initialize = '
+map<n_t, mono_container_t>
+initialSeeds() {
+  return {};
+}
+'%}
+
+{% assign convergence_check = '
+bool equal_to(mono_container_t lhs, mono_container_t rhs) {
+  return lhs == rhs;
+}
+'%}
+
+{% assign l_3 = '
+store 100, x
+store 200, y
+'%}
+
+{% assign l_6 = '
+store 100, x
+store 300, y
+store 400, z
+'%}
+
+{% assign l_9 = '
+store 100, x
+store 500, y
+store 600, z
+'%}
+
+{% assign l_10 = '
+store 100, x
+store 300, y
+store 400, z
+store 500, y
+store 600, z
 '%}
