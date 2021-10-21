@@ -15,28 +15,32 @@ layout: default
 
   <details>
     <summary>Lecture Materials</summary>
+    <ul>
     {%- for lecture_material in site.lecture_materials -%}
       {% if lecture_material.url contains "index" %}
-        <dl>
+        <li>
           <a href="{{ lecture_material.url | replace: 'index.html', '' | relative_url }}">
             {{ lecture_material.title }}
           </a>
-        <dl>
+        </li>
       {% endif %}
     {%- endfor -%}
+    </ul>
   </details>
 
   <details>
     <summary>Study</summary>
+    <ul>
     {%- for study_article in site.study -%}
       {% if study_article.url contains "index" %}
-        <dl>
+        <li>
           <a href="{{ study_article.url | replace: 'index.html', '' | relative_url }}">
             {{ study_article.title }}
           </a>
-        </dl>
+        </li>
       {% endif %}
     {% endfor %}
+    </ul>
   </details>
 
 </div>

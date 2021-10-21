@@ -4,6 +4,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
 ---
 
 {% include_relative _code_blocks.html %}
+{% assign img_path = '/assets/img/study/PhASAR' | relative_url %}
 
 <div class="section" id="introduction">
   <h2>Introduction</h2>
@@ -26,7 +27,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       This work presents the novel program-analysis framework PhASAR.
       <ul><li>PhASAR: a LLVM-based Static Analysis Framework</li></ul>
     </li>
-    <li>PhASAR make static analysis more accessible and easy to use.</li>
+    <li>PhASAR make static analysis more <strong>accessible</strong> and <strong>easy</strong> to use.</li>
   </ul>
 
   <h4>Result</h4>
@@ -80,6 +81,18 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       </ul>
     </li>
     <li><strong>Initialize</strong>: Initial data-flow values</li>
+  </ul>
+
+  <h5>Example: Reaching Definitions</h5>
+  <p>Reaching Definitions is a data-flow analysis that statically determines which definitions may reach a given point in the code.</p>
+  <ul>
+    <li>
+      ex) At L.4, the following definitions may reach:
+      <ul>
+        <li>{% highlight c %}x = 100;{% endhighlight %}</li>
+        <li>{% highlight c %}y = 200;{% endhighlight %}</li>
+      </ul>
+    </li>
   </ul>
 
   <div class="flex-container">
@@ -165,39 +178,124 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
   <p>Reaching Definitions can be solved by these frameworks.</p>
 
   <h5>Iterative Algorithm: solve the data-flow problem</h5>
-  show algorithm
-  show example
-
-  <h4>PhASAR's support</h4>
-  <p>PhASAR has the following functions:</p>
+  <p>Iterative Algorithm for a forward data-flow problem</p>
   <ul>
     <li>
-      Points-to Analysis
+      node N: Unit for calculating the data-flow fact
       <ul>
-        <li>Andersen-style</li>
-        <li>Steensgard-style</li>
-      </ul>
-    </li>
-    <li>
-      Inter-procedural Control Flow Graph
-    </li>
-    <li>
-      Type Hierarchy Analysis
-      <ul>
-        <li>Construct the type hierarchy for composite types</li>
-        <li>Reconstruct the virtual-method tables</li>
-      </ul>
-    </li>
-    <li>
-      Data-Flow Frameworks
-      <ul>
-        <li>Monotone Framework</li>
-        <li>IFDS</li>
-        <li>IDE</li>
-        <li>WPDS (Weighted Pushdown Systems)</li>
+        <li>Per Statement</li>
+        <li>Per Basic Block</li>
+        <li>...</li>
       </ul>
     </li>
   </ul>
+  {% highlight c %}{{ iterative-algorithm }}{% endhighlight %}
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
+    </div>
+    <div>
+        OUT[L.3]
+        {% highlight c %}{{ l_3 }}{% endhighlight %}
+        <details>
+          <summary>Q1. OUT[L.6]</summary>
+          {% highlight c %}{{ l_6 }}{% endhighlight %}
+        </details>
+        <details>
+          <summary>Q2. OUT[L.9]</summary>
+          {% highlight c %}{{ l_9 }}{% endhighlight %}
+        </details>
+        <details>
+          <summary>Q3. OUT[L.10]</summary>
+          {% highlight c %}{{ l_10 }}{% endhighlight %}
+        </details>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="phasar-architecture">
+  <h2>PhASAR's Architecture</h2>
+  
+  <h4>Goal of PhASAR</h4>
+  <ul>
+    <li>Make static analysis more accessible and easy to use.</li>
+    <li>Allow analysis designers to concentrate on the goal of a data-flow analysis.</li>
+  </ul>
+
+  <h4>To achieve</h4>
+  <p>Precise data-flow analysis requires some information:</p>
+  <ul>
+    <li>
+      Control-flow Graph
+      <ul>
+        <li>for propagation of data-flow facts</li>
+      </ul>
+    </li>
+    <li>
+      Class Hierarchy
+      <ul>
+        <li>for precise type information</li>
+      </ul>
+    </li>
+    <li>
+      Points-to Information
+      <ul>
+        <li>for precise analysis</li>
+      </ul>
+    </li>
+    <li>
+      Algorithmic Frameworks
+      <ul>
+        <li>to solve data-flow problem</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Architecture</h4>
+  <div class="flex-container">
+    <div class="width-half">
+      <ul>
+        <li>
+          Points-to Analysis
+          <ul>
+            <li>Andersen-style</li>
+            <li>Steensgard-style</li>
+          </ul>
+        </li>
+        <li>
+          Inter-procedural Control Flow Graph
+        </li>
+        <li>
+          Type Hierarchy Analysis
+          <ul>
+            <li>Construct the type hierarchy for composite types</li>
+            <li>Reconstruct the virtual-method tables</li>
+          </ul>
+        </li>
+        <li>
+          Data-Flow Frameworks
+          <ul>
+            <li>Monotone Framework</li>
+            <li>IFDS</li>
+            <li>IDE</li>
+            <li>WPDS (Weighted Pushdown Systems)</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="width-half">
+      <div>PhASAR's high-level architecture</div>
+      <img src="{{img_path}}/architecture.drawio.svg">
+    </div>
+  </div>
+
+  <h4>How to use</h4>
+  <ol>
+    <li>Choose data-flow framework</li>
+    <li>Define your data-flow problem according to the framework</li>
+    <li>PhASAR solve the problem automatically!!</li>
+  </ol>
 </div>
 
 <div class="section" id="monotone-example">
@@ -234,7 +332,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       <ul><li>Collect definition statements.</li></ul>
     </li>
     <li>
-      Analysis granularity: Single Instruction
+      Node N: Single Instruction
       <ul><li>Compute data-flow values for each statement.</li></ul>
     </li>
   </ul>
@@ -285,13 +383,13 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
     </div>
     <div>
-        After L.3
+        OUT[L.3]
         {% highlight c %}{{ l_3 }}{% endhighlight %}
-        After L.6
+        OUT[L.6]
         {% highlight c %}{{ l_6 }}{% endhighlight %}
-        After L.9
+        OUT[L.9]
         {% highlight c %}{{ l_9 }}{% endhighlight %}
-        After L.10
+        OUT[L.10]
         {% highlight c %}{{ l_10 }}{% endhighlight %}
     </div>
   </div>

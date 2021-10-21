@@ -11,6 +11,16 @@ if (...) {
 }
 '%}
 
+{% assign iterative-algorithm = '
+for (each node N) OUT[N] = Init();
+while (change to any OUT occur) {
+  for (each node N) {
+    IN[N] = union of all OUT[predecessor];
+    OUT[N] = f(IN[N]);
+  }
+}
+'%}
+
 {% assign framework = '
 class ReachingDefinitions : public IntraMonoProblem<Domain> {
   // implement some functions here
@@ -18,12 +28,12 @@ class ReachingDefinitions : public IntraMonoProblem<Domain> {
 '%}
 
 {% assign domain = '
-struct ReachingDefinitionsAnalysisDomain : public LLVMAnalysisDomainDefault {
+struct ReachingDefinitionsDomain : public LLVMAnalysisDomainDefault {
   // Data-flow fact
   using d_t = const llvm::StoreInst *;
   using mono_container_t = BitVectorSet<d_t>;
   
-  // Analysis granularity
+  // Node N
   using n_t = const llvm::Instruction *;
 };
 '%}
