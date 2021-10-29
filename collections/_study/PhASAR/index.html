@@ -112,7 +112,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
         </tr>
         <tr>
           <th>Transfer<br />Function</th>
-          <td>gen \( \cup \) (x - kill)</td>
+          <td>OUT = gen \( \cup \) (IN - kill)</td>
         </tr>
         <tr>
           <th>Meet</th>
@@ -194,6 +194,9 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
   <div class="flex-container">
     <div>
       {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
+    </div>
+    <div>
+      <img src="{{img_path}}/reaching_definitions_example.drawio.svg">
     </div>
     <div>
         OUT[L.4]
