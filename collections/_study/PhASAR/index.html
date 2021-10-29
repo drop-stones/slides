@@ -87,10 +87,10 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
   <p>Reaching Definitions is a data-flow analysis that statically determines which definitions may reach a given point in the code.</p>
   <ul>
     <li>
-      ex) At L.4, the following definitions may reach:
+      ex) At L.5, the following definitions may reach:
       <ul>
-        <li>{% highlight c %}x = 100;{% endhighlight %}</li>
-        <li>{% highlight c %}y = 200;{% endhighlight %}</li>
+        <li>{% highlight c %}3: x = 200;{% endhighlight %}</li>
+        <li>{% highlight c %}4: y = 300;{% endhighlight %}</li>
       </ul>
     </li>
   </ul>
@@ -196,19 +196,19 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
     </div>
     <div>
-        OUT[L.3]
-        {% highlight c %}{{ l_3 }}{% endhighlight %}
+        OUT[L.4]
+        {% highlight c %}{{ l_4 }}{% endhighlight %}
         <details>
-          <summary>Q1. OUT[L.6]</summary>
-          {% highlight c %}{{ l_6 }}{% endhighlight %}
+          <summary>Q1. OUT[L.7]</summary>
+          {% highlight c %}{{ l_7 }}{% endhighlight %}
         </details>
         <details>
-          <summary>Q2. OUT[L.9]</summary>
-          {% highlight c %}{{ l_9 }}{% endhighlight %}
-        </details>
-        <details>
-          <summary>Q3. OUT[L.10]</summary>
+          <summary>Q2. OUT[L.10]</summary>
           {% highlight c %}{{ l_10 }}{% endhighlight %}
+        </details>
+        <details>
+          <summary>Q3. OUT[L.11]</summary>
+          {% highlight c %}{{ l_11 }}{% endhighlight %}
         </details>
     </div>
   </div>
@@ -383,14 +383,14 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       {% highlight c linenos %}{{ reaching_definitions_example }}{% endhighlight %}
     </div>
     <div>
-        OUT[L.3]
-        {% highlight c %}{{ l_3 }}{% endhighlight %}
-        OUT[L.6]
-        {% highlight c %}{{ l_6 }}{% endhighlight %}
-        OUT[L.9]
-        {% highlight c %}{{ l_9 }}{% endhighlight %}
+        OUT[L.4]
+        {% highlight c %}{{ l_4 }}{% endhighlight %}
+        OUT[L.7]
+        {% highlight c %}{{ l_7 }}{% endhighlight %}
         OUT[L.10]
         {% highlight c %}{{ l_10 }}{% endhighlight %}
+        OUT[L.11]
+        {% highlight c %}{{ l_11 }}{% endhighlight %}
     </div>
   </div>
 </div>

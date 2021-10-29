@@ -1,13 +1,14 @@
 {% assign reaching_definitions_example = '
 int x, y, z;
 x = 100;
-y = 200;
+x = 200;
+y = 300;
 if (...) {
-  y = 300;
-  z = 400;
+  y = 400;
+  z = 500;
 } else {
-  y = 500;
-  z = 600;
+  y = 600;
+  z = 700;
 }
 '%}
 
@@ -74,27 +75,27 @@ bool equal_to(mono_container_t lhs, mono_container_t rhs) {
 }
 '%}
 
-{% assign l_3 = '
-store 100, x
-store 200, y
+{% assign l_4 = '
+3: x = 200
+4: y = 300
 '%}
 
-{% assign l_6 = '
-store 100, x
-store 300, y
-store 400, z
-'%}
-
-{% assign l_9 = '
-store 100, x
-store 500, y
-store 600, z
+{% assign l_7 = '
+3: x = 200
+6: y = 400
+7: z = 500
 '%}
 
 {% assign l_10 = '
-store 100, x
-store 300, y
-store 400, z
-store 500, y
-store 600, z
+3:  x = 200
+9:  y = 600
+10: z = 700
+'%}
+
+{% assign l_11 = '
+3:  x = 200
+6:  y = 400
+7:  z = 500
+9:  y = 600
+10: z = 700
 '%}
