@@ -189,7 +189,10 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       </ul>
     </li>
   </ul>
-  {% highlight c %}{{ iterative-algorithm }}{% endhighlight %}
+  <div class="flex-container">
+    {% highlight c %}{{ iterative-algorithm }}{% endhighlight %}
+    <img style="width: 45%" src="{{img_path}}/iterative_algorithm.drawio.svg">
+  </div>
 
   <div class="flex-container">
     <div>
@@ -321,7 +324,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
     <li>
       Framework: Intra-procedural Monotone Framework
       <ul>
-        <li>The most simple framework</li>
+        <li>The simplest framework</li>
       </ul>
     </li>
     <li>Direction: Forward</li>
@@ -331,7 +334,7 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
   <h4>Domain</h4>
   <ul>
     <li>
-      Data-Flow Fact: Assignment(Store) Instruction
+      Data-Flow Value (Fact): Assignment(Store) Instruction
       <ul><li>Collect definition statements.</li></ul>
     </li>
     <li>
@@ -362,6 +365,9 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       </ul>
     </li>
   </ul>
+  <div class="flex-container">
+    <img src="{{img_path}}/transfer_function.drawio.svg">
+  </div>
   {% highlight c++ linenos %}{{ transfer_function }}{% endhighlight %}
 
   <h4>Meet Operator</h4>
