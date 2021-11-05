@@ -16,7 +16,7 @@ if (...) {
 for (each node N) OUT[N] = Init();
 while (change to any OUT occur) {
   for (each node N) {
-    IN[N] = union of all OUT[predecessor];
+    IN[N] = Meet all OUT[predecessor];
     OUT[N] = f(IN[N]);
   }
 }

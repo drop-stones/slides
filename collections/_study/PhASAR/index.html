@@ -130,6 +130,20 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
     </div>
   </div>
 
+  <div class="flex-container">
+    <ul>
+      <li>
+        ex) Transfer function at L.3
+        <ul>
+          <li>kill: { x = 100 }</li>
+          <li>gen: { x = 200 }</li>
+        </ul>
+      </li>
+    </ul>
+    
+    <img src="{{img_path}}/transfer_function.drawio.svg">
+  </div>
+
   <h5>Data-Flow Frameworks: conditions for convergence</h5>
   <p>To solve data-flow problems efficiently, we put conditions on transfer function \(f\).</p>
   <ul>
@@ -175,7 +189,10 @@ subtitle: An Inter-procedural Static Analysis Framework for C/C++
       </ul>
     </li>
   </ul>
-  <p>Reaching Definitions can be solved by these frameworks.</p>
+  <p>
+    Reaching Definitions can be solved by these frameworks.<br />
+    We select monotone framework for reaching definitions.
+  </p>
 
   <h5>Iterative Algorithm: solve the data-flow problem</h5>
   <p>Iterative Algorithm for a forward data-flow problem</p>
