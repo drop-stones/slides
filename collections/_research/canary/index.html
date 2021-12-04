@@ -1,0 +1,33 @@
+---
+title: Canary
+subtitle: Practical Static Detection of Inter-thread Value-Flow Bugs
+---
+
+<!-- include -->
+{% include_relative _variables.html %}
+{% include_relative _codes.html %}
+{% assign img_path = '/assets/img/research/canary' | relative_url %}
+
+<!-- menu -->
+<ul>
+  <li><a href="#abstract">{{ abst-title }}</a></li>
+  <li><a href="#goal">{{ goal-title }}</a></li>
+  <li>
+    <a href="#proposed_method">{{ method-title }}</a>
+    <ul>
+      <li><a href="#vfg">{{ vfg-title }}</a></li>
+      <li><a href="#reachability">{{ reachability-title }}</a></li>
+    </ul>
+  </li>
+  <li><a href="#evaluation">{{ evaluation-title }}</a></li>
+  <li><a href="#conclusion">{{ conclusion-title }}</a></li>
+  <li><a href="#relation_to_research">{{ relation-title }}</a></li>
+</ul>
+
+<!-- contents -->
+{% include_relative _abstract.html %}
+{% include_relative _goal.html %}
+{% include_relative _proposed_method.html %}
+{% include_relative _evaluation.html %}
+{% include_relative _conclusion.html %}
+{% include_relative _relation_to_research.html %}

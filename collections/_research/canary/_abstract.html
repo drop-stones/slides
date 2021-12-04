@@ -1,0 +1,31 @@
+<div class="section" id="abstract">
+  <h2>{{ abst-title }}</h2>
+
+  <h4>Problem</h4>
+  <ul>
+    <li>Concurrent programs are error prone because of
+      <ul>
+        <li>interleavings of threads</li>
+        <li>state explosion</li>
+        <li>computational complexity</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Proposed Method: Canary</h4>
+  <ul>
+    <li>
+      A value-flow analysis framework for concurrent programs
+      <ul>
+        <li>Build <strong>inter-thread VFG</strong></li>
+        <li>Convert concurrency bug detection into <strong>source-sink reachability problem</strong></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Result</h4>
+  <ul>
+    <li>Detect 18 previously unknown concurrency bugs in famous projects</li>
+  </ul>
+
+</div>

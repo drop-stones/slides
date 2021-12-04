@@ -29,13 +29,13 @@ layout: default
   </details>
 
   <details>
-    <summary>Study</summary>
+    <summary>Research</summary>
     <ul>
-    {%- for study_article in site.study -%}
-      {% if study_article.url contains "index" %}
+    {%- for research_article in site.research -%}
+      {% if research_article.url contains "index" %}
         <li>
-          <a href="{{ study_article.url | replace: 'index.html', '' | relative_url }}">
-            {{ study_article.title }}
+          <a href="{{ research_article.url | replace: 'index.html', '' | relative_url }}">
+            {{ research_article.title }}
           </a>
         </li>
       {% endif %}

@@ -1,0 +1,27 @@
+
+{% assign thread1 = '
+// Thread 1
+int main() {
+  int **x = malloc(); // alloc_x
+  int *a  = malloc(); // alloc_a
+  *x = a;             // alloc_x -> a
+  fork(thread2, x);
+
+  if(cond) {
+    int *c = *x;
+    print(*c);
+  }
+}
+'%}
+
+{% assign thread2 = '
+// Thread 2
+void thread2(int **y) {
+  int *b = malloc();  // alloc_b
+
+  if (!cond) {
+    *y = b;           // alloc_x -> b
+    free(b);
+  }
+}
+'%}
