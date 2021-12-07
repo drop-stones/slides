@@ -1,6 +1,23 @@
 <div class="section" id="proposed_method">
   <h2>{{ method-title }}</h2>
 
+  <h3>Workflow of Canary</h3>
+  <ol>
+    <li>(Intra-thread) Data Dependence Analysis</li>
+    <li>
+      Interference Dependence Analysis
+      <ul>
+        <li>a.k.a. Inter-thread Data Dependence Analysis</li>
+      </ul>
+    </li>
+    <li>
+      Source-Sink Checking
+      <ul>
+        <li>check whether the execution is realizable</li>
+      </ul>
+    </li>
+  </ol>
+
   {% include_relative _vfg.html %}
   {% include_relative _reachability.html %}
 </div>

@@ -57,6 +57,10 @@ $border-left-width-h5: 8px;
 }
 
 .question {
+  padding: 1em;
+  margin: 1em;
+  background: lightgray;
+
   h5 {
     border: none;
     border-bottom: 1px solid $border-color-h5;

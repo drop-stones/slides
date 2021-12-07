@@ -2,12 +2,61 @@
   <h2>{{ goal-title }}</h2>
 
   <div class="flex-container">
-    <div class="width-half">
+    <div style="width:52%">
       {% highlight c %}{{ thread1 }}{% endhighlight %}
     </div>
 
-    <div class="width-half">
+    <div style="width:48%">
       {% highlight c %}{{ thread2 }}{% endhighlight %}
     </div>
   </div>
+
+  <details class="question">
+    <summary ><strong>Q.</strong> In this code, does use-after-free occur?</summary>
+    <strong>A.</strong> No, because of <code>if(cond) // Thread 1</code> and <code>if (!cond) // Thread 2</code>
+  </details>
+
+  To answer this question correctly, we must know two things:
+  <ul>
+    <li>
+      (Inter-thread) Data Dependencies
+      <ul>
+        <li><code>b</code> and <code>c</code></li>
+      </ul>
+    </li>
+    <li>
+      Realizable Path (control-flow)
+      <ol>
+        <li><code>free(b)</code></li>
+        <li><code>print(*c)</code></li>
+      </ol>
+    </li>
+  </ul>
+
+  <h3>Detection Target: src-sink reachability</h3>
+  Canary detect concurrency bugs via <strong>src-sink properties</strong>:
+  <div class="flex-container">
+    <ul>
+      <li>There are data-dependencies between <strong>src</strong> and <strong>sink</strong>.</li>
+      <li>There are realizable paths between <strong>src</strong> and <strong>sink</strong>.</li>
+      <li>
+        Concurrency bugs
+        <ul class="check">
+          <li>Inter-thread use-after-free</li>
+          <li>NULL pointer dereference</li>
+          <li>Double free</li>
+          <li>Information leak</li>
+          <li>Race condition (order violation)</li>
+        </ul>
+        <ul class="cross">
+          <li>Data Race</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div style="width: 43%">
+      {% highlight c %}{{ concurrency_bugs }}{% endhighlight %}
+    </div>
+  </div>
+
 </div>

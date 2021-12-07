@@ -7,9 +7,9 @@
 ul.check {
   list-style-type: none;
 
-  li::before {
-    content: '✔';
-    //left: -1.2em;
+  > li::before {
+    content: '\2713';
+    padding-right: 0.3em;
     color: green;
   }
 }
@@ -17,9 +17,9 @@ ul.check {
 ul.cross {
   list-style-type: none;
 
-  li::before {
-    content: '✗';
-    //left: -1.2em;
+  > li::before {
+    content: '\2717';
+    padding-right: 0.3em;
     color: red;
   }
 }
