@@ -3,20 +3,7 @@
 
 @import "chapter";
 @import "flex";
-
-.table {
-  display: table;
-  padding-bottom: 1em;
-
-  .table-row {
-    display: table-row;
-
-    .table-cell {
-      display: table-cell;
-      padding-left: 1em;
-    }
-  }
-}
+@import "table";
 
 .code-title {
   font-family: monospace;

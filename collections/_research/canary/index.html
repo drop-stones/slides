@@ -3,6 +3,11 @@ title: Canary
 subtitle: Practical Static Detection of Inter-thread Value-Flow Bugs
 ---
 
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js"></script>
+</head>
+
 <!-- include -->
 {% include_relative _variables.html %}
 {% include_relative _codes.html %}
@@ -15,8 +20,9 @@ subtitle: Practical Static Detection of Inter-thread Value-Flow Bugs
   <li>
     <a href="#proposed_method">{{ method-title }}</a>
     <ul>
-      <li><a href="#vfg">{{ vfg-title }}</a></li>
-      <li><a href="#reachability">{{ reachability-title }}</a></li>
+      <li><a href="#data-dependence">{{ data-dependence-title }}</a></li>
+      <li><a href="#interference">{{ interference-title }}</a></li>
+      <li><a href="#src-sink-check">{{ src-sink-check-title }}</a></li>
     </ul>
   </li>
   <li><a href="#evaluation">{{ evaluation-title }}</a></li>

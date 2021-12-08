@@ -6,6 +6,19 @@
   <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/styles.css' | relative_url }}">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        macros: {
+          bm: ["{\\boldsymbol{#1}}",1],
+        }
+      }
+    }
+  </script>
   <script src="{{ '/assets/js/load-mathjax.js' | relative_url }}" async></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({startOnLoad:true});</script>

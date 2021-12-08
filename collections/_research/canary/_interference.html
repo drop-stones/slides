@@ -1,0 +1,189 @@
+<div class="subsection" id="interference">
+  <h3>{{ interference-title }}</h3>
+  Our goal:
+  <ul>
+    <li>Resolve interference dependence edges</li>
+    <li>Compute Guard condition</li>
+    <li>&#128477; Alias relationship between different threads</li>
+  </ul>
+
+  <h4>Steps</h4>
+  <ol>
+    <li>Escaped(Shared) Object Computation</li>
+    <li>Dependence Edges Computation</li>
+    <li>Dependence Guard Computation</li>
+    <li>Update until we reach a fixed-point</li>
+  </ol>
+
+  <h4>1. Escaped Object Computation</h4>
+  <ul>
+    <li>$EspObj$: Escaped(Shared) Objects</li>
+    <li>
+      $Pted$: Pointed-by Variables
+      <ul>
+        <li>ex) $p \rightarrowtail o, Pts(p) = \{o\}, Pted(o) = \{p\} $</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <pre id="escape-analysis" style="display:hidden;">
+      \begin{algorithm}
+      \caption{Escaped Object Computation}
+      \begin{algorithmic}
+
+        \PROCEDURE{EscapeAnalysis}{VFG}
+          \STATE Initialize $EspObj$
+          \COMMENT{objects passed to the fork calls}
+
+          \FORALL{node $n$ in VFG}
+            \IF{$n : *x = q$}
+              \STATE Let $ x \rightarrowtail o$ and $ q \rightarrowtail o'$
+              \IF{$o \in EspObj$}
+                \STATE $EspObj \leftarrow EspObj \cup \{ o' \}$
+              \ENDIF
+            \ENDIF
+          \ENDFOR
+
+          \FORALL{escaped object $o$ in $EspObj$}
+            \STATE Find the set of nodes $N$ that reachable from $o$
+            \STATE Let $\sigma$ the aggregated guards of edges during traversal
+            \FORALL{node $n$ in $N$}
+              \STATE $Pted(o) \leftarrow Pted(o) \cup (n, \sigma)$
+            \ENDFOR
+          \ENDFOR
+
+          \RETURN $EspObj$ and their $Pted$
+        \ENDPROCEDURE
+
+      \end{algorithmic}
+      \end{algorithm}
+    </pre>
+
+    <div>
+      <p>Example: <code>alloc_b</code> in Thread2</p>
+      {% highlight c %}{{ escape-thread2 }}{% endhighlight %}
+    </div>
+  </div>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/escape-analysis-example.drawio.svg" style="width:50%">
+    <div>
+      <p>Results of EscapeAnalysis:</p>
+      \begin{array} \\
+        EspObj = \{ alloc\_x, alloc\_b \} \\
+        Pted(alloc\_x) = \{ (true, x), (true, y) \} \\
+        Pted(alloc\_y) = \{ (!cond, b) \}
+      \end{array}
+    </div>
+  </div>
+
+  <h4>2. Dependence Edges Computation</h4>
+  <div class="flex-container">
+    <pre id="dep-edges-computation" style="display:hidden">
+      \begin{algorithm}
+      \caption{Dependence Edges Computation}
+      \begin{algorithmic}
+
+      \FORALL{store node $l_1, \phi_1 : *x = q$ in $t \in T$}
+        \FORALL{load node $l_2, \phi_2 : p = *y$ in $t' \backslash t \in T$}
+          \IF{$(x, \alpha), (y, \beta) \in Pted(o), o \in EspObj$}
+            \STATE $\Phi_{Guard} = GuardComputation()$
+            \STATE $l_1: *x = q \longrightarrow_{\Phi_{Guard}} l_2: p = *y$ in VFG
+          \ENDIF
+        \ENDFOR
+      \ENDFOR
+
+      \end{algorithmic}
+      \end{algorithm}
+    </pre>
+    <div>
+      <p>Example:</p>
+      {% highlight c %}{{ edge-computation }}{% endhighlight %}
+    </div>
+  </div>
+
+  <img src="{{ img_path }}/edges-computation-example.drawio.svg">
+
+  <h4>3. Dependence Guard Computation</h4>
+  \( \Phi_{Guard} = \Phi_{alias} \land \Phi_{ls} \)
+  <ul>
+    <li>
+      $\Phi_{Guard}$: Dependence Guard Constraint
+      <ul>
+        <li>$\Phi_{alias}$: Alias Constraint</li>
+        <li>$\Phi_{ls}$: Load-Store Constraint</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Alias Constraint</h5>
+  $\Phi_{alias} = \phi_1 \land \phi_2 \land \alpha \land \beta$   where:
+  <ul>
+    <li>$l_1, \phi_1 : *x = q \longrightarrow l_2, \phi_2 : p = *y$</li>
+    <li>$ x \rightarrowtail (\alpha, o)$</li>
+    <li>$ y \rightarrowtail (\beta, o)$</li>
+    <li>Conditions: $\phi_1, \phi_2, \alpha, \beta$</li>
+  </ul>
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/alias-constraint.drawio.svg" style="width: 50%">
+    <div>
+      <ul>
+        <li>$cond: c = *x;$</li>
+        <li>$!cond: *y = b;$</li>
+        <li>$x \rightarrowtail (true, alloc_x)$</li>
+        <li>$y \rightarrowtail (true, alloc_x)$</li>
+      </ul>
+      <p>$ \therefore \Phi_{alias} = cond \land !cond \land true \land true$</p>
+    </div>
+  </div>
+
+  <h5>Load-Store Constraint</h5>
+  $\Phi_{ls} = \bigwedge_{s, s' \in S(l)} \left( O_s < O_l \bigwedge_{\forall s' \neq s} O_{s'} < O_s \lor O_l < O_{s'} \right)$
+  <ul>
+    <li>$s$: store at $l_1$</li>
+    <li>$l$: load at $l_2$</li>
+    <li>$O_s < O_l$: strict partial order between $s$ and $l$</li>
+    <li>$s'$: other stores</li>
+    <li>$O_{s'} < O_s \lor O_l < O_{s'}$: no other stores between $s$ and $l$</li>
+  </ul>
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/load-store-constraint.drawio.svg" style="width: 50%">
+    <div>
+      <p>$ \therefore \Phi_{ls} = O_b < O_c $</p>
+    </div>
+  </div>
+
+  <h5>Guard Constraint</h5>
+  <p>\( \Phi_{Guard} = \Phi_{alias} \land \Phi_{ls} \)</p>
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/guard-constraint.drawio.svg" style="width: 50%">
+    <div>
+      <p>$ \therefore \Phi_{Guard} = cond \land !cond \land O_b < O_c $</p>
+    </div>
+  </div>
+
+  <h4>4. Update until we reach a fixed-point</h4>
+  <p>
+    We now add new dependence edges.<br>
+    Thereby, there are new $Pts$ relations (e.g., $c \rightarrowtail alloc_b$).<br>
+    We re-compute the following steps until we reach a fixed point:
+  </p>
+  <ul>
+    <li>Intra-thread data dependence</li>
+    <li>Interference dependence</li>
+  </ul>
+
+</div>
+
+<script>
+  pseudocode.renderElement(document.getElementById("escape-analysis"), { lineNumber: true});
+</script>
+<script>
+  pseudocode.renderElement(document.getElementById("dep-edges-computation"), { lineNumber: true});
+</script>

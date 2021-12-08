@@ -1,11 +1,11 @@
 
 {% assign thread1 = '
 // Thread 1
-int main() {
+void thread1() {
   int **x = malloc(); // alloc_x
   int *a  = malloc(); // alloc_a
   *x = a;             // alloc_x -> a
-  create_thread(thread2, x);
+  fork(thread2, x);
 
   if(cond) {
     int *c = *x; // c -> {a, b}
@@ -37,7 +37,64 @@ free(x);
                     if (i < N)
 i++;
                     return arr[i];
+'%}
 
-// data race
-x++;                x++;
+{% assign thread1-pta = '
+// IN = {}
+x = malloc();
+// x -> (true, alloc_x)
+a = malloc();
+// a -> (true, alloc_a)
+*x = a;
+// OUT = {alloc_x -> (true, alloc_a)}
+if (cond) {
+  // IN = {alloc_x -> (true, alloc_a)}
+  c = *x;
+  // c -> (cond, alloc_a)
+  print(*c);
+}
+'%}
+
+{% assign thread2-pta = '
+void thread2(int **y)
+// y -> (true, alloc_x)
+b = malloc(); // alloc_b
+if (!cond)
+  *y = b;
+  free(b);
+'%}
+
+{% assign thread2-pta-answer = '
+y -> (true, alloc_x)
+b -> (true, alloc_b)
+alloc_x -> (!cond, alloc_b)
+'%}
+
+{% assign thread2-summary = '
+// y -> o1 -> o2
+void thread2(y) {
+  b = malloc();   // alloc_b
+  if (!cond) {
+    *y = b;
+    free(b);
+  }
+}
+// y -> o1 -> alloc_b
+'%}
+
+{% assign escape-thread2 = '
+void thread2(int **y)
+// EspObj = {alloc_x}
+b = malloc(); // alloc_b
+if (!cond)
+  // y -> alloc_x
+  // b -> alloc_b
+  *y = b;
+  // EspObj += alloc_b
+'%}
+
+{% assign edge-computation = '
+// Thread 1   // Thread 2
+c = *x; <---- *y = b;
+// Pted(alloc_x) = {x, y}
 '%}

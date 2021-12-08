@@ -18,6 +18,93 @@
     </li>
   </ol>
 
-  {% include_relative _vfg.html %}
-  {% include_relative _reachability.html %}
+  <div class="flex-container">
+    <img src="{{img_path}}/workflow.drawio.svg">
+  </div>
+
+  <h3>Preliminaries</h3>
+  <h4>Language, Abstract Domain</h4>
+  <p>Language:</p>
+  <div class="table">
+    <div class="table-row">
+      <div class="table-cell">Program</div>
+      <div class="table-cell">\( P := F^+ \)</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Function</div>
+      <div class="table-cell">\( F := func(v_1, v_2, ..., v_n) \)</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Statement</div>
+      <div class="table-cell">
+        \[
+        \begin{eqnarray}
+        S :=& \\
+        &|& v_1 = v_2 | v_1 = \&v_2 \\
+        &|& v_1 = *v_2 | *v_1 = v_2 \\
+        &|& v_1 = v_2 \text{ binop } v_3 | v_1 = \text{ unop } v_2 \\
+        &|& if (v) \, then \, S_1 \, else \, S_2 | return \, (x_0, ..., x_n) \\
+        &|& (x_0, ..., x_n) = call f(v_1, ..., v_n) | S_1; S_2 \\
+        &|& fork(t, f) | join(t)
+        \end{eqnarray}
+        \]
+      </div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">binop</div>
+      <div class="table-cell">\( := + | - | \land | \lor | > | = | \neq | ... \)</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">unop</div>
+      <div class="table-cell">\( := - | \lnot | ... \)</div>
+    </div>
+  </div>
+
+  <p>Abstract Domain</p>
+  <div class="table">
+    <div class="table-row">
+      <div class="table-cell">Threads</div>
+      <div class="table-cell">\( t \in T \)</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Labels</div>
+      <div class="table-cell">\( l \in L \)</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Objects (Address-taken variables)</div>
+      <div class="table-cell">\( o \in O \)</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Variables</div>
+      <div class="table-cell">\( v \in V \)</div>
+    </div>
+  </div>
+
+  Features:
+  <ul>
+    <li>
+      No Loop
+      <ul>
+        <li>Loop, Recursive Functions: Unrolling (2 times)</li>
+      </ul>
+    </li>
+    <li>
+      Side effects on the function parameters
+      <ul>
+        <li>Introduce auxiliary variables for the objects passed into the function by references.</li>
+      </ul>
+    </li>
+    <li>
+      Partial SSA-form
+      <ul>
+        <li>Direct flow about top variable \( v \) is obvious.</li>
+        <li>We focus on indirect flow about address-taken variables \( o \).</li>
+      </ul>
+    </li>
+  </ul>
+
+
+  {% include_relative _data_dependence.html %}
+  {% include_relative _interference.html %}
+  {% include_relative _src_sink_check.html %}
 </div>
