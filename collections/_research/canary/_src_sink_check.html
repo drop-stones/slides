@@ -1,3 +1,141 @@
 <div class="subsection" id="src-sink-check">
   <h3>{{ src-sink-check-title }}</h3>
+
+  Once the interference-aware VFG is built, some concurrency bugs can be reduced to solving <strong>source-sink reachability problems</strong> over VFG.
+  <ul>
+    <li>
+      ex) Inter-thread use-after-free bug
+      <ul>
+        <li>src: free statement</li>
+        <li>sink: use statement</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>In this section, we address two problems to achieve precision and efficiency:</p>
+  <ul>
+    <li>How to address the program order violation of a value-flow path?</li>
+    <li>How to efficiently solve the constraints for value-flow paths?</li>
+  </ul>
+
+  <h4>Partially-ordered Value Flows Searching</h4>
+  To check value-flow paths are realizable, we collect guard constraint $\Phi_{Guard}$ along the path.
+
+  \begin{eqnarray} \\
+    && \pi = \langle v_1@l_1, v_2@l_2, ..., v_k@l_k \rangle \\
+    && src = v_1@l_1, sink = v_k@l_k \\
+    && (v_i@l_i, v_{i+1}@l_{i+1}) \text{ via either data-dependence or interference-dependence}
+  \end{eqnarray}
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/value-flow-path-constraint.drawio.svg" style="width: 50%">
+    <div>
+      \begin{eqnarray} \\
+        && \pi = \langle free(b), b, c, print(*c) \rangle \\
+        && \Phi_{Guard}(\pi) = cond \land !cond \land O_b < O_c
+      \end{eqnarray}
+    </div>
+  </div>
+
+  <p><strong>But</strong> this orders over $\pi$ may violate the program order.</p>
+
+  <p>Bad Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/partial-order-constraint.drawio.svg" style="width: 40%">
+    <div>
+      \begin{eqnarray} \\
+        && \pi = \langle 2, 3, 4, 1 \rangle \\
+        && \Phi_{Guard}(\pi) = O_2 < O_3 \land O_3 < O_4 \land O_4 < O_1
+      \end{eqnarray}
+
+      <p>This path $\pi$ is realizable...?</p>
+    </div>
+  </div>
+
+  <h5>Partial Order Constraints: Intra-thread Program Order</h5>
+  <p>$\Phi_{po}(\pi) = O_{l_1} < O_{l_2} < O_{l_3} < ... O_{l_k}$</p>
+  <ul>
+    <li>This constraints represent intra-thread program order.</li>
+  </ul>
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/partial-order-constraint.drawio.svg" style="width: 40%">
+    <div>
+      \begin{eqnarray} \\
+        && \pi = \langle 2, 3, 4, 1 \rangle \\
+        && \Phi_{Guard}(\pi) = O_2 < O_3 \land O_3 < O_4 \land O_4 < O_1 \\
+        && \Phi_{po}(\pi) = O_1 < O_2 \land O_3 < O_4
+      \end{eqnarray}
+
+      <p>
+        This path $\pi$ is not realizable!!<br>
+        $ \because O_2 < O_3 \land O_3 < O_4 \land O_4 < O_1 \land O_1 < O_2 = false$
+      </p>
+    </div>
+  </div>
+
+  <h5>Summary: All Constraints</h5>
+  $\Phi_{all}(\pi) = \Phi_{Guard}(\pi) \land \Phi_{po}(\pi) $
+  <ul>
+    <li>$\Phi_{Guard}(\pi)$: Guard constraint via value-flow paths</li>
+    <li>$\Phi_{po}(\pi)$: Intra-thread program order constraint</li>
+  </ul>
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/value-flow-path-constraint.drawio.svg" style="width: 50%">
+    <div>
+      \begin{eqnarray} \\
+        && \pi = \langle free(b), b, c, print(*c) \rangle \\
+        && \Phi_{Guard}(\pi) = cond \land !cond \land O_b < O_c \\
+        && \Phi_{po}(\pi) = O_c < O_{print} \land O_b < O_{free} \\
+        && \Phi_{all} = \Phi_{Guard} \land \Phi_{po}
+      \end{eqnarray}
+    </div>
+  </div>
+
+  <h4>Constraint Solving using SMT Solver</h4>
+  <p>
+    Finally, we check src-sink reachability by solving $\Phi_{all}$ using <strong>SMT solver</strong>.<br>
+    To solve it effectively, we optimize by three means:
+  </p>
+  <ul>
+    <li>
+      Filter out apparent contradictions
+      <ul>
+        <li>ex) $ cond \land !cond = false$</li>
+      </ul>
+    </li>
+    <li>
+      The constraints on different src-sink paths are independent
+      <ul>
+        <li>We can solve them in parallel.</li>
+      </ul>
+    </li>
+    <li>
+      Cube-and-conquer parallel SMT solving strategy
+      <ul>
+        <li>ref) <a href="https://link.springer.com/chapter/10.1007/978-3-319-63516-3_2">Cube-and-Conquer for Satisfiability</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>Example</p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/value-flow-path-constraint.drawio.svg" style="width: 50%">
+    <div>
+      \begin{eqnarray} \\
+        && \pi = \langle free(b), b, c, print(*c) \rangle \\
+        && \Phi_{Guard}(\pi) = cond \land !cond \land O_b < O_c \\
+        && \Phi_{po}(\pi) = O_c < O_{print} \land O_b < O_{free} \\
+        && \Phi_{all} = \Phi_{Guard} \land \Phi_{po}
+      \end{eqnarray}
+
+      $Solve(\Phi_{all}) = false$<br>
+      $\therefore$ This use-after-free path $\pi$ is not realizable.
+    </div>
+  </div>
+
 </div>

@@ -1,0 +1,21 @@
+<div class="section" id="implementation">
+  <h2>{{ implementation-title }}</h2>
+  <ul>
+    <li>
+      Canary: on top of LLVM framework
+      <ul>
+        <li>Support pthread, std::thread</li>
+        <li>
+          MHP(may-happen-in-parallel) analysis in interference dependence analysis
+          <ul>
+            <li>to prune value-flow paths</li>
+          </ul>
+        </li>
+        <li>Use Steengard's analysis for first CG</li>
+      </ul>
+    </li>
+    <li>
+      SMT Solver: Z3
+    </li>
+  </ul>
+</div>

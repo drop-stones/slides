@@ -1,3 +1,128 @@
 <div class="section" id="evaluation">
   <h2>{{ evaluation-title }}</h2>
+  <ul>
+    <li>
+      Evaluation Points
+      <ul>
+        <li>Comparison in Value-flow Graph Construction</li>
+        <li>Comparison in Concurrency bug Detection</li>
+        <li>Detected Real Concurrency Bugs</li>
+      </ul>
+    </li>
+    <li>
+      Analyzed Projects
+      <ul>
+        <li>20 Real-life open-source C/C++ projects</li>
+        <li>ex) Firefox, MariaDB, MySQL, ...</li>
+      </ul>
+    </li>
+    <li>
+      Experiment Environment
+      <ul>
+        <li>two 20 core Intel(R) Xeon(R) CPU E5-2698 v4 @ 2.20GHz</li>
+        <li>256GB physical memory</li>
+        <li>Ubuntu-16.04</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Comparison in Value-flow Graph Construction</h3>
+  <div class="flex-container">
+    <div>
+      Time cost
+      <ul>
+        <li>
+          Canary
+          <ul>
+            <li>finish all projects</li>
+            <li>On average,
+              <ul>
+                <li> >15x faster than SABER</li>
+                <li> >180x faster than FSAM</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          SABER
+          <ul>
+            <li>Times out on 9 projects</li>
+          </ul>
+        </li>
+        <li>
+          FSAM
+          <ul>
+            <li>Times out on 15 projects</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex-container">
+    <div>
+      Memory cost
+      <ul>
+        <li>SABER uses 130G additional memory compared to Canary for the subjects larger than 100KLoc.</li>
+        <li>FSAM uses 200G additional memory compared to Canary for the subjects larger than 50KLoc.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>
+    Summary: Canary is much more efficient.<br />
+    ($\because$ FSAM and SABER perform an exhaustive (Andersen) points-to analysis.)
+  </p>
+  
+  <h3>Comparison in Concurrency bug Detection</h3>
+  <h4>Scalability</h4>
+  We do not compare with FSAM and SABER because they suffer from the scalability problem in VFG construction.
+  <ul>
+    <li>
+      Time/Memory
+      <ul>
+        <li>Canary's cost grow almost linearly</li>
+        <li>MySQL (3MLoc): 2.5 hours</li>
+        <li>FireFox (9MLoc): 4.67 hours</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Precision</h4>
+  <ul>
+    <li>
+      Canary
+      <ul>
+        <li>Reports: 15 bugs</li>
+        <li>False positive rates: 26.67%</li>
+      </ul>
+    </li>
+    <li>
+      SABER
+      <ul>
+        <li>Reports: 9896 bugs</li>
+        <li>True positive in 100 sampling: 5 bugs</li>
+      </ul>
+    </li>
+    <li>
+      FSAM
+      <ul>
+        <li>Reports: 586 bugs</li>
+        <li>True positive in 100 sampling: 2 bugs</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    Summary: Canary is scalable and precise.<br>
+    ($\because$ Canary builds more precise dependence relations and takes the feasible interleaving into account.)
+  </p>
+
+  <h3>Detected Real Concurrency Bugs</h3>
+  Canary have already detected 18 concurrency bugs from dozens of open-source projects.
+  <ul>
+    <li>Famous sotfware systems: Firefox, LevelDB, Transission, ...</li>
+    <li>14 bugs have been fixed in the recent release versions.</li>
+    <li>aside) The confirmation of concurrency bugs was their team effort. (It is very difficult!!)</li>
+  </ul>
 </div>
