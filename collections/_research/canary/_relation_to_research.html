@@ -1,3 +1,41 @@
 <div class="section" id="relation_to_research">
   <h2>{{ relation-title }}</h2>
+
+  <h4>Canary (再掲)</h4>
+  <ul>
+    <li>
+      Canaryは，<strong>src-sink reachability</strong>に帰着できる並行バグを検出する．
+      <ul>
+        <li>e.g., Use-after-free, NULL pointer dereference, Double free, Race condition</li>
+      </ul>
+    </li>
+  </ul>
+  {% highlight c %}{{ use-after-free }}{% endhighlight %}
+
+  <h4>自分の研究</h4>
+
+  <ul>
+    <li>
+      データフロー保護を並行プログラムに適用することで，<strong>src-sink reachability</strong>に帰着できる並行バグを検出できるのでは？
+      <ul>
+        <li>Inter-thread VFGを構築し，スレッド間のデータフローを求める．</li>
+        <li>
+          合法なデータフローを保護する．
+          <ul>
+            <li>並行バグを引き起こすデータフローを違法とする</li>
+            <li>その他のスレッド間データフローを合法とする</li>
+            <li>要考察: 並行バグを引き起こすデータフロー</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      SoundなInterference VFGを構築
+      <ul>
+        <li>Canaryは，ループを展開するなど一部unsoundな解析を行う</li>
+        <li>要考察: DFIの観点では，soundなVFGを構築したい</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>

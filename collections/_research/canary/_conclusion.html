@@ -1,3 +1,23 @@
 <div class="section" id="conclusion">
   <h2>{{ conclusion-title }}</h2>
+  <ul>
+    <li>Goal: Detect inter-thread value-flow bugs</li>
+    <li>
+      Approach: Interference-aware value-flow analysis
+      <ul>
+        <li>Canary archives both good precision and scalability.</li>
+      </ul>
+    </li>
+    <li>
+      Results: 18 previously-unknown concurrency bugs on famous projects
+    </li>
+    <li>
+      Future work
+      <ul>
+        <li>Enhancements to support more synchronization semantics (e.g., lock/unlock, signal/notify)</li>
+        <li>Relaxed memory models</li>
+        <li>Customized decision procedures to improve the efficiency of constraint solving</li>
+      </ul>
+    </li>
+  </ul>
 </div>

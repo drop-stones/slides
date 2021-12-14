@@ -98,3 +98,9 @@ if (!cond)
 c = *x; <---- *y = b;
 // Pted(alloc_x) = {x, y}
 '%}
+
+{% assign use-after-free = '
+// Thread 1   // Thread 2
+free(x);
+              use(x);
+'%}

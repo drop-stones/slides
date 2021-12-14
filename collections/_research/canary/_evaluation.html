@@ -57,6 +57,7 @@
         </li>
       </ul>
     </div>
+    <img src="{{ img_path }}/time-cost.png" style="width:50%">
   </div>
 
   <div class="flex-container">
@@ -67,6 +68,7 @@
         <li>FSAM uses 200G additional memory compared to Canary for the subjects larger than 50KLoc.</li>
       </ul>
     </div>
+    <img src="{{ img_path }}/memory-cost.png" style="width:50%">
   </div>
 
   <p>
@@ -75,43 +77,51 @@
   </p>
   
   <h3>Comparison in Concurrency bug Detection</h3>
+  <p>We choose to check inter-thread use-after-free because it has become the most exploited memory errors.</p>
+
   <h4>Scalability</h4>
   We do not compare with FSAM and SABER because they suffer from the scalability problem in VFG construction.
-  <ul>
-    <li>
-      Time/Memory
-      <ul>
-        <li>Canary's cost grow almost linearly</li>
-        <li>MySQL (3MLoc): 2.5 hours</li>
-        <li>FireFox (9MLoc): 4.67 hours</li>
-      </ul>
-    </li>
-  </ul>
+  <div class="flex-container">
+    <ul>
+      <li>
+        Time/Memory
+        <ul>
+          <li>Canary's cost grow almost linearly</li>
+          <li>MySQL (3MLoc): 2.5 hours</li>
+          <li>FireFox (9MLoc): 4.67 hours</li>
+        </ul>
+      </li>
+    </ul>
+    <img src="{{ img_path }}/scalability.png" style="width:50%">
+  </div>
 
   <h4>Precision</h4>
-  <ul>
-    <li>
-      Canary
-      <ul>
-        <li>Reports: 15 bugs</li>
-        <li>False positive rates: 26.67%</li>
-      </ul>
-    </li>
-    <li>
-      SABER
-      <ul>
-        <li>Reports: 9896 bugs</li>
-        <li>True positive in 100 sampling: 5 bugs</li>
-      </ul>
-    </li>
-    <li>
-      FSAM
-      <ul>
-        <li>Reports: 586 bugs</li>
-        <li>True positive in 100 sampling: 2 bugs</li>
-      </ul>
-    </li>
-  </ul>
+  <div class="flex-container">
+    <ul>
+      <li>
+        Canary
+        <ul>
+          <li>Reports: 15 bugs</li>
+          <li>False positive rates: 26.67%</li>
+        </ul>
+      </li>
+      <li>
+        SABER
+        <ul>
+          <li>Reports: 9896 bugs</li>
+          <li>True positive in 100 sampling: 5 bugs</li>
+        </ul>
+      </li>
+      <li>
+        FSAM
+        <ul>
+          <li>Reports: 586 bugs</li>
+          <li>True positive in 100 sampling: 2 bugs</li>
+        </ul>
+      </li>
+    </ul>
+    <img src="{{ img_path }}/bug-hunting.png" style="width:50%">
+  </div>
 
   <p>
     Summary: Canary is scalable and precise.<br>
