@@ -37,7 +37,8 @@
               \ENDIF
               \STATE $ OUT \leftarrow IN \cup \{ Pts(x) \rightarrowtail (\gamma \land \phi, o ) \}, \forall (\gamma, o) \in Pts(q)$
             \ELSEIF{$ l, \phi : p = *y $}
-              \STATE $ p \rightarrowtail (\gamma \land \phi, o), \forall (\gamma, o) \in Pts(y) \land IN$
+              \STATE Let $o \in Pts(y) \cap IN$
+              \STATE $ p \rightarrowtail (\gamma \land \phi, o'), \forall (\gamma, o') \in Pts(o)$
             \ELSEIF{$ l, \phi : (x_0, ..., x_n) = call f(v_1, ..., v_n) $}
               \STATE $ x_i \rightarrowtail (\phi, Trans(F, Pts(v_i))), \forall i \in [1, n]$
               \STATE \COMMENT{$Trans$: Summary of F}
@@ -68,7 +69,7 @@
   </div>
 
   <h4>2. Procedural Transfer Function Computation</h4>
-  Summarize F's points-to side-effects.
+  Summarize $F$'s points-to side-effects.
   <p>Example: <code>thread2()</code></p>
   <div class="flex-container">
     {% highlight c %}{{ thread2-summary }}{% endhighlight %}

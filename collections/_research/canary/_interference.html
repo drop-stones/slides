@@ -72,7 +72,7 @@
       \begin{array} \\
         EspObj = \{ alloc\_x, alloc\_b \} \\
         Pted(alloc\_x) = \{ (true, x), (true, y) \} \\
-        Pted(alloc\_y) = \{ (!cond, b) \}
+        Pted(alloc\_b) = \{ (!cond, b) \}
       \end{array}
     </div>
   </div>
@@ -171,7 +171,7 @@
   <h4>4. Update until we reach a fixed-point</h4>
   <p>
     We now add new dependence edges.<br>
-    Thereby, there are new $Pts$ relations (e.g., $c \rightarrowtail alloc_b$).<br>
+    Thereby, there are new $Pts$ relations (e.g., $c \rightarrowtail alloc\_b$).<br>
     We re-compute the following steps until we reach a fixed point:
   </p>
   <ul>
