@@ -7,7 +7,7 @@ void thread1() {
   int **x = malloc(); // alloc_x
   int *a  = malloc(); // alloc_a
   *x = a;             // alloc_x -> alloc_a
-  create_thread(thread2, x);
+  fork(thread2, x);
 
   if(cond) {
     int *c = *x; // c -> {alloc_a, alloc_b}
