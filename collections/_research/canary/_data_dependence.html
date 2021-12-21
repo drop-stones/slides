@@ -112,7 +112,12 @@
   </table>
 
   <p>Example: Value-Flow Graph</p>
-  <img src="{{ img_path }}/intra-thread-vfg.drawio.svg">
+  <div class="flex-container">
+    <img src="{{ img_path }}/intra-thread-vfg.drawio.svg" style="width: 50%">
+    <div style="width:50%">
+      {% highlight c %}{{ thread1 }}{% endhighlight %}
+    </div>
+  </div>
 </div>
 
 <script>
