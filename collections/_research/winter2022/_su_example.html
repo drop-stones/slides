@@ -1,0 +1,26 @@
+<div class="mermaid">
+graph TD
+  store_p -->|100| store_x -->|200| store_p2
+  store_p -->|100| store_p2
+  store_p2 -->|100, 200, 300| store_y
+
+  store_p2 -->|100, 200, 300| load_p
+  store_p2 -->|100, 200, 300| load_x
+  store_y -->|400| load_y
+  store_y -->|400| load_p
+
+  classDef Store stroke: blue, stroke-width: 2px;
+  class store_p,store_x,store_p2,store_y Store;
+
+  classDef Load stroke: red, stroke-width: 2px;
+  class load_p,load_x,load_y Load;
+
+  store_p["WU: *p = 100"]
+  store_x["SU: v.x = 200"]
+  store_p2["WU: *p = 300"]
+  store_y["SU: v.y = 400"]
+  
+  load_p["*p"]
+  load_x["v.x"]
+  load_y["v.y"]
+</div>

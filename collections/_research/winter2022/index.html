@@ -1,0 +1,430 @@
+---
+title: 冬ゼミ 2022
+subtitle: リアル検体解析機実装/実験進捗
+---
+
+{% include_relative _code_blocks.html %}
+{% assign img_path = '/assets/img/research/winter2022' | relative_url %}
+
+<div class="section">
+  <h2>提案手法の概要</h2>
+
+  <h5>目的: データの保護</h5>
+  <ul>
+    <li>Buffer Overflowの検知</li>
+    <li>Use After Freeの検知</li>
+    <li>etc</li>
+  </ul>
+
+  <h5>手法: Data-Flow Integrity + Field-sensitiveポインタ解析</h5>
+  <p>以下の２つを組み合わせて，構造体の要素を区別したデータフローの保護を実現する:</p>
+  <ul>
+    <li>
+      Data-Flow Integrity: データフローの保護
+      <ul>
+        <li>静的解析: 定義と使用の関係(DefUse)を求める</li>
+        <li>動的解析: 実行時に各変数の定義と使用の関係が正しいのか確認する</li>
+      </ul>
+    </li>
+    <li>
+      Field-sensitiveポインタ解析: 構造体の要素を区別したポインタ解析
+      <ul>
+        <li>構造体を区別したDefUseを求める</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Step1: 静的解析</h5>
+  <p>Field-sensitiveなDef-Useを求める．</p>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ example }}{% endhighlight %}
+    </div>
+    <div>
+      {% include_relative _example-defuse.html %}
+    </div>
+  </div>
+
+  <h5>Step2: 動的解析</h5>
+  <p>Shadow Memoryを用いて以下を行う:</p>
+  <ul>
+    <li>変数の定義場所の保存</li>
+    <li>変数の使用時，定義場所が正しいかどうかのチェック</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      <div>
+        {% highlight c linenos %}{{ example }}{% endhighlight %}
+      </div>
+      <div>
+        {% include_relative _example-defuse.html %}
+      </div>
+    </div>
+    <div>
+      <div>
+        <div>Memory</div>
+        <img src="{{img_path}}/example-memory.drawio.svg"/>
+      </div>
+      <div>
+        <div>Shadow Memory</div>
+        <img src="{{img_path}}/example-shadow-memory.drawio.svg">
+      </div>
+    </div>
+  </div>
+
+  <h5>Motivating Example</h5>
+  vs Data-Flow Integrity[OSDI'06]
+  <ul>
+    <li>DFIは，構造体の要素を区別して保護できない(Field-insensitive)</li>
+    <li>提案手法は，Field-sensitiveポインタ解析を用いることで，構造体の要素を区別して保護する</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ vs-dfi }}{% endhighlight %}
+    </div>
+    <div>
+      <div>Shadow Memory</div>
+      <img src="{{img_path}}/dfi-usedef.drawio.svg">
+    </div>
+    <div>
+      DFIによるDef-Use
+      <table>
+        <tr>
+          <th></th>
+          <th>DEF</th>
+          <th>Use</th>
+        </tr>
+        <tr>
+          <th>op</th>
+          <td>L.7, L.8</td>
+          <td>L.9</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+        提案手法によるDef-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>op.func</th>
+            <td>L.7</td>
+            <td>L.9</td>
+          </tr>
+          <tr>
+            <th>op.opd</th>
+            <td>L.8</td>
+            <td>-</td>
+          </tr>
+        </table>
+    </div>
+  </div>
+  
+  vs EffectiveSan[PLDI'18] (Type-Based Sanitizer)
+  <!--
+  <ul>
+    <li>
+      EffectiveSanは，静的解析 + 動的解析を組み合わせ，非常に正確な型(Effective Type)を求める
+      <ul>
+        <li>構造体の要素とその要素を区別できる</li>
+        <li>動的にサイズが決まる型を実行時に求められる</li>
+      </ul>
+    </li>
+    <li>提案手法も，Shadow Memoryを利用して正確に保護できる</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ example-vla }}{% endhighlight %}
+    </div>
+    <div>
+      <div>
+        Def-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>str[i]</th>
+            <td>L.3</td>
+            <td>L.4</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <div>Shadow Memory</div>
+        <img src="{{img_path}}/effectiveSan-vla-memory.drawio.svg">
+      </div>
+    </div>
+  </div>
+  -->
+
+
+  <ul>
+    <li>EffectiveSanは，Use-After-Freeを正確に検知できない</li>
+    <li>提案手法は，定義と使用の関係から，Use-After-Freeを検知する</li>
+  </ul>
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ vs-effectivesan }}{% endhighlight %}
+    </div>
+    <div>
+      <div>
+        Def-Use
+        <table>
+          <tr>
+            <th></th>
+            <th>DEF</th>
+            <th>USE</th>
+          </tr>
+          <tr>
+            <th>key</th>
+            <td>L.3</td>
+            <td>L.4</td>
+          </tr>
+          <tr>
+            <th>illegal_key</th>
+            <td>-</td>
+            <td>L.9</td>
+          </tr>
+        </table>
+      </div>
+      <div>Shadow Memory</div>
+      <img src="{{img_path}}/effectiveSan-uaf-memory.drawio.svg">
+    </div>
+  </div>
+
+  <h2>リアル検体解析機　進捗</h2>
+
+  <ul>
+    <li>
+      静的解析: Def-Use解析
+      <ul class="check">
+        <li>Value-Flow Graph構築</li>
+        <li>Reaching Definition解析 (Strong Update)</li>
+        <li>外部ライブラリへの対応を充実</li>
+      </ul>
+    </li>
+    <li>
+      動的解析: データフローの実行時チェック using Pin
+      <ul class="check">
+        <li>テストケース</li>
+      </ul>
+      <ul class="cross">
+        <li>リアル検体</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>静的解析: Def-Use解析</h3>
+  <ol>
+    <li>Value-Flow Graph構築</li>
+    <li>Reaching Definition解析 on VFG</li>
+  </ol>
+
+  <h4>Value-Flow Graph構築</h4>
+  <a href="https://github.com/SVF-tools/SVF">SVF</a>を利用してVFGを構築．
+  <ul>
+    <li>ポインタ解析: Field-sensitive Andersen</li>
+  </ul>
+
+  <h5>Example</h5>
+  <div class="flex-container">
+    {% highlight c linenos %}{{ vfg-example }}{% endhighlight %}
+    {% include_relative _vfg_example.html %}
+  </div>
+
+  <h4>Reaching Definition解析 (Strong Update)</h4>
+  VFG上でReaching Definition解析を行い，Use-Def情報を計算．
+  <ul>
+    <li>
+      Store命令: Def情報を更新
+      <ul>
+        <li>
+          Strong Updateの条件を満たす場合: 古いDef情報をkillし，新しいDef情報を追加
+          <ul>
+            <li>条件1: Singletonオブジェクトである</li>
+            <li>条件2: ヒープオブジェクトでない</li>
+            <li>条件3: 配列でない</li>
+            <li>条件4: 再帰関数内のローカル変数でない</li>
+          </ul>
+        </li>
+        <li>その他: Def情報に追加</li>
+      </ul>
+    </li>
+    <li>Load命令: Use-Def情報を求める</li>
+  </ul>
+
+  <h5>Example</h5>
+  <div class="flex-container">
+    {% include_relative _su_example.html %}
+    <div>
+      <ul>
+        <li>SUにより，v.yのUse-Defが正確に</li>
+        <li>一方で，*pのUse-Defは保守的に</li>
+        <li>Field-sensitiveなUse-Defが求まる</li>
+      </ul>
+      <table>
+        <tr>
+          <th>Use</th>
+          <th>Def Set</th>
+        </tr>
+        <tr>
+          <td>v.x</td>
+          <td>{ 100, 200, 300 }</td>
+        </tr>
+        <tr>
+          <td>v.y</td>
+          <td>{ 400 }</td>
+        </tr>
+        <tr>
+          <td>*p</td>
+          <td>{ 100, 200, 300, 400 }</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <h4>解析時間</h4>
+  <table>
+    <tr>
+      <th rowspan="2">Program</th>
+      <th rowspan="2">LoC</th>
+      <th colspan="2">Analysis Time</th>
+    </tr>
+    <tr>
+      <th>VFG</th>
+      <th>Reaching Definition</th>
+    </tr>
+    <tr>
+      <td>gravity</td>
+      <td>21k</td>
+      <td>30 s</td>
+      <td>9 min 30 s</td>
+    </tr>
+  </table>
+
+  <h3>動的解析: データフローの実行時チェック</h3>
+  <ol>
+    <li>デバッグ情報にDef(Use)-IDを埋め込む</li>
+    <li>SqliteにUse-Def情報を保存</li>
+    <li>バイナリへコンパイル</li>
+    <li>Intel Pinでデバッグ情報 + SqliteのUse-Def情報を確認</li>
+  </ol>
+  <img src="{{ img_path }}/dynamic_analysis.drawio.svg">
+
+  <h4>実行時データフローチェック</h4>
+  <ul>
+    <li>Store命令: ShadowメモリにDef-IDを書き込む</li>
+    <li>Load命令: ShadowメモリからDef-IDを読み，Use-Def Mapに含まれるデータフローかどうかを確認</li>
+  </ul>
+
+  <h5>Example</h5>
+  <div class="flex-container">
+    <div>
+      C code &rarr;
+      {% highlight c %}{{ dynamic_check_c }}{% endhighlight %}
+    </div>
+    <div>
+      LLVM IR(デバッグ情報にID埋め込み) &rarr;
+      {% highlight c %}{{ dynamic_check_llvm }}{% endhighlight %}
+    </div>
+    <div>
+      Binary 
+      {% highlight c %}{{ dynamic_check_assembly }}{% endhighlight %}
+    </div>
+    <div>
+      Use-Def Map in sqlite
+      <table>
+        <tr>
+          <th>Use</th>
+          <th>DefSet</th>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>{ 1 }</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <h5>難しいポイント</h5>
+  <ul>
+    <li>
+      <strong>LLVM IR &rarr; Binary</strong>の対応関係
+      <ul>
+        <li>対応関係を加味して，IDを埋め込む必要あり</li>
+      </ul>
+    </li>
+    <li>
+      デバッグ情報による制限
+      <ul>
+        <li>複数命令に一つのデバッグ情報</li>
+        <li>デバッグ情報の紐付いていない命令</li>
+      </ul>
+    </li>
+  </ul>
+
+  上記の問題に対して，確実に対処するには以下が必要．
+  <ul>
+    <li>コンパイラ(Backend)の情報</li>
+    <li>デバッグ情報の伝搬規則</li>
+  </ul>
+
+
+  <p>
+    上記の問題に対して，アドホックに対処してきた．<br>
+    &rarr; リアル検体解析で多くの動かないパターンが見つかる，，，
+  </p>
+
+  <h5>解決案</h5>
+  <ul>
+    <li>現状維持: 見つかったパターンを一つ一つ潰していく</li>
+    <li>
+      方向転換: 動的チェックを静的計装で済ます
+      <ul>
+        <li><strong>+</strong>: コンパイラ非依存(?)，デバッグ情報による制限なし</li>
+        <li><strong>-</strong>: 学習コスト高め</li>
+        <li>(修論は静的計装で実装する予定)</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="flex-container">
+    {% highlight c %}{{ dynamic_check_c }}{% endhighlight %}
+    {% highlight c %}{{ dynamic_check_llvm }}{% endhighlight %}
+    {% highlight c %}{{ dynamic_check_instrument }}{% endhighlight %}
+  </div>
+
+  <h2>今後の予定</h2>
+  <ul>
+    <li>
+      動的解析
+      <ul>
+        <li>Intel Pinでの実装</li>
+        <li>or 静的計装</li>
+      </ul>
+    </li>
+    <li>
+      リアル検体への対応・実験
+      <ul>
+        <li>検体の決定(gravity, GNU cflow)</li>
+        <li>実験/評価</li>
+      </ul>
+    </li>
+    <li>
+      最適化の検討・実装
+      <ul>
+        <li><a href="https://www.usenix.org/conference/osdi21/presentation/zhang">SANRAZOR[OSDI'21]</a></li>
+        <li><a href="https://ieeexplore.ieee.org/document/7163065">ASAP[S&P'15]</a></li>
+        <li><a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2006/11/dfiOSDI.pdf">DFI[OSDI'06]</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

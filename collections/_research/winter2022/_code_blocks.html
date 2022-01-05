@@ -1,0 +1,123 @@
+{% assign example = '
+struct Vec {
+  int x, y;
+};
+
+struct Vec v;
+v.x = 100;
+v.y = 200;
+return v.x + v.y;
+' %}
+
+{% assign vs-dfi = "
+struct operation{
+  char opd[8];
+  void (*func)();
+};
+
+struct operation op;
+op.func = func1;
+Input(op.opd);  // overwrite op.func
+op.func();
+"%}
+
+{% assign example-vla = '
+int n = InputLength();
+char str[n];  // VLA
+Input(str);
+return str[100];
+'%}
+
+{% assign vs-effectivesan = '
+int createKey() {
+  int key;
+  key = ...   // DEF key
+  return key; // USE key
+}
+
+void readKey() {
+  int illegal_key;
+  printf("key = %d\n", illegal_key);
+}
+
+int main() {
+  createKey();
+  readKey();
+}
+'%}
+
+{% assign def-stdlib = '
+struct operation{
+  char opd[8];
+  void (*func)();
+};
+
+struct operation op;
+op.func = func1;
+read(0, op.opd, 0x30);  // overwrite op.func
+op.func();
+'%}
+
+{% assign malloc-free = '
+char *secret = malloc(n); // 0x1000
+...
+free(secret);
+
+char *uaf = malloc(0);    // 0x1000
+printf("secret = %s\n", uaf);
+'%}
+
+{% assign code-pointer-reuse = '
+struct Vec {
+  int x[1];
+  int y[1];
+};
+
+struct Vec g = {100, 200};  // global variable
+
+int main() {
+  return v.x[Input()];
+}
+'%}
+
+{% assign vfg-example = "
+struct Vec2D {
+  int x, y;
+};
+
+struct Vec2D v;
+int *p;
+
+p   = &v.x;
+*p  = 100;
+v.x = 200;
+
+p   = &v.y;
+*p  = 300;
+v.y = 400;
+
+*p + v.x + v.y;
+"%}
+
+{% assign dynamic_check_c = "
+n = 100;
+use n;
+" %}
+
+{% assign dynamic_check_llvm = "
+store 100, n  // DEF-ID: 1
+load n        // USE-ID: 2
+"%}
+
+{% assign dynamic_check_assembly = "
+mov [rbp - 0x8], 100  // DEF-ID: 1
+mov eax, [rbp - 0x8]  // Use-ID: 2
+"%}
+
+{% assign dynamic_check_instrument = "
+store 100, n    // DEF-ID: 1
+SET_DEF(n, 1)
+
+CHECK_DEF(n, 1) // USE-ID: 2
+load n
+"%}
