@@ -32,12 +32,12 @@
               \STATE $ p \rightarrowtail (\gamma \land \phi, o) , \forall (\gamma, o) \in Pts(q) $
             \ELSEIF{$ l, \phi : *x = q $}
               \IF{$ Pts(x) $ is a singleton}
-                \STATE $ IN \leftarrow (IN \backslash Pts(x)) $ 
+                \STATE $ IN_l \leftarrow (IN_l \backslash Pts(x)) $ 
                 \COMMENT{strong update}
               \ENDIF
-              \STATE $ OUT \leftarrow IN \cup \{ Pts(x) \rightarrowtail (\gamma \land \phi, o ) \}, \forall (\gamma, o) \in Pts(q)$
+              \STATE $ OUT_l \leftarrow IN_l \cup \{ Pts(x) \rightarrowtail (\gamma \land \phi, o ) \}, \forall (\gamma, o) \in Pts(q)$
             \ELSEIF{$ l, \phi : p = *y $}
-              \STATE Let $o \in Pts(y) \cap IN$
+              \STATE Let $o \in Pts(y) \cap IN_l$
               \STATE $ p \rightarrowtail (\gamma \land \phi, o'), \forall (\gamma, o') \in Pts(o)$
             \ELSEIF{$ l, \phi : (x_0, ..., x_n) = call f(v_1, ..., v_n) $}
               \STATE $ x_i \rightarrowtail (\phi, Trans(F, Pts(v_i))), \forall i \in [1, n]$
@@ -112,7 +112,12 @@
   </table>
 
   <p>Example: Value-Flow Graph</p>
-  <img src="{{ img_path }}/intra-thread-vfg.drawio.svg">
+  <div class="flex-container">
+    <img src="{{ img_path }}/intra-thread-vfg.drawio.svg" style="width: 50%">
+    <div style="width:50%">
+      {% highlight c %}{{ thread1 }}{% endhighlight %}
+    </div>
+  </div>
 </div>
 
 <script>
