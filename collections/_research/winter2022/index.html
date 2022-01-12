@@ -292,6 +292,7 @@ subtitle: リアル検体解析機実装/実験進捗
 
   <h4>解析時間</h4>
   <table>
+    <!--
     <tr>
       <th rowspan="2">Program</th>
       <th rowspan="2">LoC</th>
@@ -301,13 +302,30 @@ subtitle: リアル検体解析機実装/実験進捗
       <th>VFG</th>
       <th>Reaching Definition</th>
     </tr>
+    -->
+    <tr>
+      <th>Program</th>
+      <th>LoC</th>
+      <th>Analysis Time</th>
+    </tr>
     <tr>
       <td>gravity</td>
-      <td>21k</td>
-      <td>30 s</td>
-      <td>9 min 30 s</td>
+      <td>16k</td>
+      <td>9 m 50 s</td>
+    </tr>
+    <tr>
+      <td>lua</td>
+      <td>18k</td>
+      <td>1 m 15 s</td>
+    </tr>
+    <tr>
+      <td>nasm</td>
+      <td>102k</td>
+      <td>70 m</td>
     </tr>
   </table>
+
+  <p>(wllvmめちゃ便利)</p>
 
   <h3>動的解析: データフローの実行時チェック</h3>
   <ol>
