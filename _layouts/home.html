@@ -45,4 +45,18 @@ layout: default
     </ul>
   </details>
 
+  <details>
+    <summary>Survey</summary>
+    <ul>
+    {%- assign sorted_survey = site.survey | reverse -%}
+    {%- for survey_article in sorted_survey -%}
+      <li>
+        <a href="{{ survey_article.url | relative_url }}">
+          {{ survey_article.title }}
+        </a>
+      </li>
+    {%- endfor -%}
+    </ul>
+  </details>
+
 </div>

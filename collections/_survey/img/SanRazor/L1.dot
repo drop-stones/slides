@@ -1,0 +1,13 @@
+digraph data_dep {
+    less1 [label = ">", shape = box];
+    i1 [label = "i"];
+    arr_size1 [label = "arr_size"];
+    less1 -> i1;
+    less1 -> arr_size1;
+
+    less2 [label = ">", shape = box];
+    i2 [label = "i"];
+    arr_size2 [label = "arr_size"];
+    less2 -> i2;
+    less2 -> arr_size2;
+  }

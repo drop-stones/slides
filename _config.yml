@@ -48,6 +48,8 @@ collections:
     output: true
   research:
     output: true
+  survey:
+    output: true
 
 defaults:
   - scope:
@@ -60,6 +62,11 @@ defaults:
       type: "research"
     values:
       layout: "research"
+#  - scope:
+#      path: ""
+#      type: "survey"
+#    values:
+#      layout: "survey"
   - scope:
       path: ""
     values:

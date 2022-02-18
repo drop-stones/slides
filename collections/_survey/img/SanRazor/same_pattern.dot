@@ -1,0 +1,19 @@
+digraph dominator {
+  node [shape = box, style = rounded];
+  n0 [label = "..."];
+  n1 [label = "..."];
+  n2 [label = "..."];
+  sc1 [label = "sanity/user check 1"];
+  sc2 [label = "sanity check 2"];
+  alert1 [label = "Alert", style = filled, color = lightcoral];
+  alert2 [label = "Alert", style = filled, color = lightcoral];
+
+  n0 -> sc1 [label = "x100"];
+  sc1 -> n1 [label = "x98"];
+  n1 -> sc2 [label = "x100"];
+  sc2 -> n2 [label = "x98"];
+  sc1 -> alert1 [label = "x2"];
+  alert1 -> n1;
+  sc2 -> alert2 [label = "x2"];
+  alert2 -> n2;
+}
