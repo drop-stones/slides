@@ -1,6 +1,7 @@
 ---
 title: Virtual Machines Ch.2
 img_path: /assets/img/lecture_materials/VirtualMachines/ch2
+date: 2021-05-20
 ---
 
 # Emulation: Interpretation and Binary Translation

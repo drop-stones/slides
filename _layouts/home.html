@@ -16,7 +16,8 @@ layout: default
   <details>
     <summary>Lecture Materials</summary>
     <ul>
-    {%- for lecture_material in site.lecture_materials -%}
+    {%- assign sorted = site.lecture_materials | reverse -%}
+    {%- for lecture_material in sorted -%}
       {% if lecture_material.url contains "index" %}
         <li>
           <a href="{{ lecture_material.url | replace: 'index.html', '' | relative_url }}">
@@ -31,7 +32,8 @@ layout: default
   <details>
     <summary>Research</summary>
     <ul>
-    {%- for research_article in site.research -%}
+    {%- assign sorted_research = site.research | reverse -%}
+    {%- for research_article in sorted_research -%}
       {% if research_article.url contains "index" %}
         <li>
           <a href="{{ research_article.url | replace: 'index.html', '' | relative_url }}">
