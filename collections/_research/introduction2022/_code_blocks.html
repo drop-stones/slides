@@ -1,0 +1,65 @@
+{% assign motivating-example-with-comment = '
+struct Student {
+  char name[32];
+  int id;
+};
+
+struct Student s;
+s.id = 100;
+
+InputName(s.name);    // Cause buffer overflow!!
+
+
+return s.id;
+'%}
+
+{% assign motivating-example = '
+struct Student {
+  char name[32];
+  int id;
+};
+
+struct Student s;
+s.id = 100;
+
+InputName(s.name);
+
+
+return s.id;
+'%}
+
+{% assign after-instrumentation = '
+struct Student {
+  char name[32];
+  int id;
+};
+
+struct Student s;
+s.id = 100;
+__set(&s.id, L.7);
+InputName(s.name);
+__set(s.name, input_count, L.9);
+__check(&s.id, L.7);
+return s.id;
+'%}
+
+{% assign use-def-result = '
+Use-Def解析の結果
+<table>
+  <tr>
+    <th></th>
+    <th>Use</th>
+    <th>Def</th>
+  </tr>
+  <tr>
+    <th>s.id</th>
+    <td>L.12</td>
+    <td>L.7</td>
+  </tr>
+  <tr>
+    <th>s.name</th>
+    <td>-</td>
+    <td>L.9</td>
+  </tr>
+</table>
+'%}

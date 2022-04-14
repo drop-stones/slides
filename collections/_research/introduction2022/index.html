@@ -1,0 +1,207 @@
+---
+title: 研究紹介 2022
+date: 2022-04-12
+---
+
+{% include_relative _code_blocks.html %}
+{% assign img_path = '/assets/img/research/introduction2022' | relative_url %}
+
+<div class="section">
+  <h2>提案手法の概要</h2>
+
+  <h4>目的：データの保護</h4>
+  <ul>
+    <li>Buffer Overflowの検知</li>
+    <li>Use After Freeの検知</li>
+    <li>Use After Returnの検知</li>
+    <li>etc..</li>
+  </ul>
+
+  <h4>保護手法：データの正しい定義・使用を保証</h4>
+  <ul>
+    <li>
+      アイデア: 以下の条件が成り立つとき，データは安全である
+      <ul>
+        <li>データが<strong>正しく</strong>書き込まれる</li>
+        <li>データが<strong>正しく</strong>読み込まれる</li>
+      </ul>
+    </li>
+    <li>方針: プログラムにチェック関数を挿入し，データが<strong>正しく</strong>読み書きされるかどうかを監視</li>
+    <li>
+      既存研究との差別化点
+      <ul>
+        <li>構造体の要素を正確に保護できる</li>
+        <li>Re-allocateされたオブジェクトのuse-after-freeを検知できる</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>保護の流れ</h2>
+
+  ステップ:
+  <ol>
+    <li>Use-Def解析 (静的解析)</li>
+    <li>チェック関数の挿入 (静的計装)</li>
+    <li>実行時チェック (動的解析)</li>
+  </ol>
+
+  <h4>Motivating Example</h4>
+  <div class="flex-container">
+    {% highlight c linenos %}{{ motivating-example-with-comment }}{% endhighlight %}
+  </div>
+  <p>
+    L.9 <code>InputName</code>にバッファオーバーフローの脆弱性あり!! <br>
+    &rarr; s.idが不正に上書きされてしまう，，，
+  </p>
+
+  <h5>Step1: Use-Def解析 (静的解析)</h5>
+  <ul>
+    <li>目的：データの使用と，そこで使用されうる定義元を求める (Use-definition Chain)</li>
+    <li>
+      手法：静的解析
+      <ul>
+        <li>ref) ISA, Dragon Book Ch.9</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ motivating-example }}{% endhighlight %}
+    </div>
+    <div>
+      {{ use-def-result }}
+    </div>
+  </div>
+
+  <h5>Step2: チェック関数の挿入 (静的計装)</h5>
+  <ul>
+    <li>
+      目的：実行時チェックのための関数呼び出しを挿入
+      <ul>
+        <li><code>__set()</code>: 変数への書き込み情報を取得</li>
+        <li><code>__check()</code>: 変数の読み込み時，定義元が正しいかどうかをチェック</li>
+      </ul>
+    </li>
+    <li>
+      手法：静的計装
+      <ul>
+        <li>ref) PBA(動的計装)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ after-instrumentation }}{% endhighlight %}
+    </div>
+    <div>
+      {{ use-def-result }}
+    </div>
+  </div>
+
+  <h5>Step3: 実行時チェック (動的解析)</h5>
+  <ul>
+    <li>
+      目的：データの使用時，そのデータが正しい定義元であるかを確認
+      <ul>
+        <li>L.12 <code>return s.id;</code>で使用される<code>s.id</code>の正しい定義元は L.7</li>
+      </ul>
+    </li>
+    <li>
+      手法：動的解析
+      <ul>
+        <li>ref) PBA</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ after-instrumentation }}{% endhighlight %}
+    </div>
+    <div>
+      {{ use-def-result }}
+    </div>
+  </div>
+  <div class="flex-container">
+    <div>
+      <div>L.8 <code>__set(&s.id, L.7)</code></div>
+      <img src="{{img_path}}/L-8.drawio.svg">
+    </div>
+    <div>
+      <div>L.10 <code>__set(s.name, input_count, L.9)</code></div>
+      <img src="{{img_path}}/L-10.drawio.svg">
+    </div>
+  </div>
+
+  <p>
+    L.11 <code>__check(&s.id, L.7)</code>にて，s.idはL.7で定義された値が使用されることをチェック <br>
+    &rarr; L.9であるため，<strong>攻撃</strong>として検知!!
+  </p>
+
+  <h4>まとめ</h4>
+  <ul>
+    <li>アイデア：データが正しく読み書きされているかをチェック</li>
+    <li>
+      保護の流れ
+      <ol>
+        <li>
+          Use-Def解析
+          <ul>
+            <li>正しいデータの読み書き(データの使用場所 + 使われうる定義元)を近似的に求める</li>
+            <li>
+              &#128477; 解析の精度がデータ保護の精度に直結
+              <ul>
+                <li>解析精度を高める &rarr; データ保護の精度が高まる</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>チェック関数の挿入</li>
+        <li>
+          実行時チェック
+          <ul>
+            <li>実行中のデータの読み書きが正しいかどうかをStep.1の結果と比較し，チェックする</li>
+          </ul>
+        </li>
+      </ol>
+    </li>
+  </ul>
+  
+  <h4>既存研究との比較</h4>
+  <ul>
+    <li>
+      構造体の要素を正確に保護できる
+      <ul>
+        <li>理由：構造体の要素を区別したUse-Def解析 (Field-sensitiveな解析)</li>
+        <li>保護できない関連研究：AddressSanitizer[Usenix ATC'12], Data-Flow Integrity[OSDI'06]</li>
+      </ul>
+    </li>
+  </ul>
+  <img src="{{img_path}}/field-sensitive.drawio.svg">
+
+  <ul>
+    <li>
+      Re-allocateされたオブジェクトのuse-after-freeを検知できる
+      <ul>
+        <li>理由：データの定義元を確認する</li>
+        <li>保護できない関連研究：EffectiveSan[PLDI'18]</li>
+      </ul>
+    </li>
+  </ul>
+  <img src="{{img_path}}/reallocate-uaf.drawio.svg">
+
+  <h4>今後の展望</h4>
+  <ul>
+    <li>
+      検知できるバグの種類を増やす
+      <ul>
+        <li>Data Race</li>
+        <li>Atomicity Violation</li>
+        <li>Interrupt Error</li>
+      </ul>
+    </li>
+    <li>カーネル空間も保護できるように拡張</li>
+  </ul>
+</div>
