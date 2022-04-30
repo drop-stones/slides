@@ -1,48 +1,67 @@
 <div id="mc-4-overview">
   <h2>Overview</h2>
 
-  <p>In Ch.3, we models systems as <em>Kripke structures</em>.</p>
-
-  {% include_relative {{ mermaid_dir }}/kripke-model.html %}
+  <div class="flex-container">
+    <div>
+      <p>1. Modeling (Ch.3)</p>
+      {% include_relative {{ mermaid_dir }}/kripke-model.html %}
+      <p style="text-align: center">Kripke structure</p>
+    </div>
+    <div style="padding: 5px; border: 3px solid #000">
+      <p><strong>2. Specification (Ch.4)</strong></p>
+      <p style="text-align: center">\( \bm{EF}c, \bm{AG}b \)</p>
+      <p style="text-align: center">Temporal Logic</p>
+    </div>
+    <div>
+      <p>3. Verification</p>
+    </div>
+  </div>
  
-  <p>In Ch.4, we discuss <em>temporal logic</em> that specify the dynamic behavior of systems.</p>
-
-  <em>Temporal Logic</em> can specify the following properties:
-  <ul>
+  <ul style="margin-top:30px">
     <li>
-      <em>next</em> : a property holds in next time, after the one computation.
+      <strong>Goal</strong>: Understanding specification
       <ul>
-        <li>ex) If \( a \) holds, \( c \) will hold in next time.</li>
+        <li>Specify properties of the model</li>
       </ul>
     </li>
-
     <li>
-      <em>eventually</em> : a property holds in the future.
+      <strong>Means</strong>: <em>Temporal Logic</em>
       <ul>
-        <li>ex) The program will eventually finish.</li>
+        <li>Describe properties <em>along time</em> (dynamically)</li>
       </ul>
     </li>
-
     <li>
-      <em>never</em> : a property never holds.
+      Flow of this chapter:
       <ul>
-        <li>ex) An error state is never reached.</li>
+        <li>Introduction to Temporal Logic</li>
+        <li>
+          Types of Temporal Logic
+          <ul>
+            <li>CTL*</li>
+            <li>CTL</li>
+            <li>ACTL*</li>
+            <li>ACTL</li>
+            <li>LTL</li>
+          </ul>
+        </li>
+        <li>
+          Important Topics
+          <ul>
+            <li>Temporal Logic with Set</li>
+            <li>Fairness</li>
+            <li>Counterexamples</li>
+            <li>Safety and Liveness Properties</li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  In this chapter, we focus on the following logics in temporal logics:
-  <ul>
-    <li>CTL* (Computation Tree Logic)</li>
-    <li>CTL</li>
-    <li>ACTL* (Universal CTL)</li>
-    <li>LTL (Linear Temporal Logic)</li>
   </ul>
 
   <div id="mc-4-contents">
     <h3>Contents</h3>
 
     <ul>
+      <li><a href="#mc-4-introduction">{{ introduction-title }}</a></li>
       <li><a href="#mc-4-1-the-computation-tree-logic-ctl*">{{ 4-1-title }}</a></li>
       <li>
         <a href="#mc-4-2-syntax-and-semantics-of-ctl*">{{ 4-2-title }}</a>

@@ -1,17 +1,22 @@
 <div id="mc-4-1-the-computation-tree-logic-ctl*">
   <h2>{{ 4-1-title }}</h2>
 
-  <p>In this section, we introduce <em>CTL*</em>, a type of temporal logic.</p>
+  <p><strong>CTL*</strong>: Temporal Logic describing properties of <em>computation tree</em></p>
 
-  <em>CTL* (computation tree logic)</em> defines properties of <em>computation tree</em>:
+  <h4>Computation Tree</h4>
+
   <ul>
     <li>
-      <em>Computation tree</em> shows all possible executions from the initial state.
-      <ul><li>One branch represents a possible execution.</li></ul>
+      Computation Tree \( \Leftrightarrow \) Kripke structure
+      <ul>
+        <li>Computation Tree is formed by unwinding the Kripke structure from initial state.</li>
+      </ul>
     </li>
     <li>
-      <em>Computation tree</em> is formed by unwinding the Kripke structure \( M \) from the initial state.
-      <ul><li>Computation tree represents all paths of \( M \).</li></ul>
+      All branches are infinite
+      <ul>
+        <li>\( \because \) Transition relations in Kripke structure is left-total (each state has a successor).</li>
+      </ul>
     </li>
   </ul>
 
@@ -20,18 +25,18 @@
       Kripke structure \( M \)
       {% include_relative {{ mermaid_dir }}/kripke-model.html %}
     </div>
+    <p>\( \Longleftrightarrow \)</p>
     <div>
       Computation Tree of \( M \)
       {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
     </div>
   </div>
 
-  In Ch.3, we define that the transition relation of \( M \) is <em>left-total</em>:
-  <ul>
-    <li>Each state has a successor.</li>
-    <li>All branches are infinite.</li>
-  </ul>
+  <h4>CTL*</h4>
+  
+  <p><strong>CTL*</strong>: Temporal Logic describing properties of <em>computation tree</em> (\( \Leftrightarrow \) Kripke structure)</p>
 
+  <h5>CTL* Formulas</h5>
   CTL* formulas are composed of <em>path quantifiers</em> and <em>temporal operators</em>:
   <ul>
     <li>
@@ -39,11 +44,11 @@
       <ul>
         <li>
           \( \bm{A} \varphi \) : "all computation paths"
-          <ul><li>This means that all paths from a given state have property \( \varphi \)</li></ul>
+          <ul><li>All paths from a given state have property \( \varphi \)</li></ul>
         </li>
         <li>
           \( \bm{E} \varphi \) : "there exists a computation path"
-          <ul><li>This means that at least one path from a given state has property \( \varphi \)</li></ul>
+          <ul><li>At least one path from a given state has property \( \varphi \)</li></ul>
         </li>
       </ul>
     </li>
@@ -57,16 +62,46 @@
       <ul>
         <li>
           \( \bm{X} p \) : "next time \( p \)"
-          <ul><li>Intuitively, this requires that proposition \( p \) holds on the second state of the path</li></ul>
+          <ul><li>Proposition \( p \) holds on the second state of the path</li></ul>
         </li>
+        <div class="flex-container mermaid">
+          graph LR
+            x0 --> x1 --> x2 --> x3 --> x4
+
+            x0(( ))
+            x1((p))
+            x2(( ))
+            x3(( ))
+            x4(( ))
+        </div>
         <li>
           \( \bm{F} p \) : "eventually \( p \)" or "in the future \( p \)"
-          <ul><li>This is used to assert that property \( p \) holds at some state on the path</li></ul>
+          <ul><li>Property \( p \) holds at some state on the path</li></ul>
         </li>
+        <div class="flex-container mermaid">
+          graph LR
+            f0 --> f1 --> f2 --> f3 --> f4
+
+            f0(( ))
+            f1(( ))
+            f2(( )) 
+            f3((p))
+            f4(( ))
+        </div>
         <li>
           \( \bm{G} p \) : "always \( p \)" or "globally \( p \)"
-          <ul><li>This specifies that proposition \( p \) holds at every state on the path</li></ul>
+          <ul><li>Proposition \( p \) holds at every state on the path</li></ul>
         </li>
+        <div class="flex-container mermaid">
+          graph LR
+            g0 --> g1 --> g2 --> g3 --> g4
+
+            g0((p))
+            g1((p))
+            g2((p))
+            g3((p))
+            g4((p))
+        </div>
         <li>
           \( p \bm{U} q \) : "\( p \) until \( q \)"
           <ul>
@@ -79,27 +114,47 @@
             </li>
           </ul>
         </li>
+        <div class="flex-container mermaid">
+          graph LR
+            u0 --> u1 --> u2 --> u3 --> u4
+      
+            u0((p))
+            u1((p))
+            u2((p)) 
+            u3[q]
+            u4(( ))
+        </div>
         <li>
           \( p \bm{R} q \) : "\( p \) release \( q \)"
           <ul>
-            <li>It holds if \( q \) holds along the path up to and including the first state where \( p \) holds.</li>
-            <li>\( p \) is not required to eventually hold.</li>
+            <li>
+              It holds if \( q \) holds along the path up to and including the first state where \( p \) holds.
+              <ul>
+                <li>\( p \) is not required to eventually hold.</li>
+              </ul>
+            </li>
             <li>Logical dual of the \( \bm{U} \)</li>
           </ul>
         </li>
+        <div class="flex-container mermaid">
+          graph LR
+            r0 --> r1 --> r2 --> r3 --> r4
+
+            r0[q]
+            r1[q]
+            r2[q] 
+            r3(p,q)
+            r4(( ))
+        </div>
       </ul>
     </li>
   </ul>
-
-  <div class="flex-container">
-    {% include_relative {{ mermaid_dir }}/temporal-operator.html %}
-  </div>
 
   <div class="example">
     <h5>Example</h5>
   
     <div class="flex-container">
-      <div style="width: 60%;" class="flex-center">
+      <div style="width: 50%;" class="flex-center">
         <ul>
           <li>
             \( \pi_0 \models \bm{G} b \)
@@ -120,14 +175,7 @@
         </ul>
       </div>
       <div>
-        {% include_relative {{ mermaid_dir }}/unwind-kripke-structure.html %}
-        <div class="flex-container">
-          <p>
-            \( s_0 \) = root state<br>
-            \( \pi_0 \) = leftmost path<br>
-            \( \pi_1 \) = rightmost path
-          </p>
-        </div>
+        {% include_relative {{ mermaid_dir }}/ctl-example.html %}
       </div>
     </div>
 
@@ -143,6 +191,8 @@
       </li>
     </ul>
   </div>
+
+  {% include_relative {{ mermaid_dir }}/path-quantifier-vs-temporal-operator.html %}
 
 </div>
 <!-- mc-4-1-the-computation-tree-logic-ctl* -->
