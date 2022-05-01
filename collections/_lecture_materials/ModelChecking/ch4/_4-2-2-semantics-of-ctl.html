@@ -21,21 +21,25 @@
           <div class="table-cell">the transition relation, left total</div>
         </div>
         <div class="table-row">
-          <div class="table-cell">\( AP \)</div>
+          <div class="table-cell">\( \bm{AP} \)</div>
           <div class="table-cell">the set of atomic propositions</div>
         </div>
         <div class="table-row">
-          <div class="table-cell">\( L : S \rightarrow 2^{AP} \)</div>
+          <div class="table-cell">\( \bm{L} : S \rightarrow 2^{AP} \)</div>
           <div class="table-cell">a function that labels each state with a set of atomic propositions</div>
         </div>
-        Path \( \pi \) in \( M \)
+      </div>
+      <h5>Path \( \pi \) in \( M \)</h5>
+      <div class="table" style="padding-bottom: 1em">
         <div class="table-row">
-          <div class="table-cell">\( \pi = s_0, s_1, ..., \)</div>
+          <div class="table-cell">\( \pi = s_0, s_1, ... \)</div>
           <div class="table-cell">\( s_k \in S \), and \( (s_i, s_{i+1}) \in R \)</div>
         </div>
+        <div class="table-row">
+          <div class="table-cell">\( \pi^i = s_i, s_{i+1}, ... \)</div>
+          <div class="table-cell">the suffix of \( \pi \) starting at \( s_i \)</div>
+        </div>
       </div>
-
-      <p>We use \( \pi^i \) to denote the suffix of \( \pi \) starting at \( s_i \).</p>
     </div>
     <!-- mc-review-kripke-structure -->
 
@@ -67,11 +71,14 @@
   <div id="mc-ctl-state-formulas">
     <h4>Definition: Semantics of CTL*</h4>
 
-    <p>
-      Let \( f_1, f_2 \) be <em>state formulas</em>, and let \( g_1, g_2 \) be <em>path formulas</em>.<br />
-      We further assume that all atomic propositions are included in AP.
-    </p>
+    Assumptions:
+    <ul>
+      <li>\( f_1, f_2 \): <em>State formulas</em></li>
+      <li>\( g_1, g_2 \): <em>Path formulas</em></li>
+      <li>\( p \in AP \): Atomic propositions</li>
+    </ul>
 
+    Semantics of CTL*:
     <div class="table">
       <div class="table-row">
         <div class="table-cell">1.</div>
@@ -137,19 +144,28 @@
         <div class="table-cell">11.</div>
         <div class="table-cell">\( M, \pi \models \bm{X} g_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">\( M, \pi^{1} \models g_1 \)</div>
+        <div class="table-cell">
+          \( M, \pi^{1} \models g_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-11.html %}
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">12.</div>
         <div class="table-cell">\( M, \pi \models \bm{F} g_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">there exists a \( k \geq 0 \) such that \( M, \pi^{k} \models g_1 \)</div>
+        <div class="table-cell">
+          there exists a \( k \geq 0 \) such that \( M, \pi^{k} \models g_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-12.html %}
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">13.</div>
         <div class="table-cell">\( M, \pi \models \bm{G} g_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">for all \( i \geq 0 \), \( M, \pi^{i} \models g_1 \)</div>
+        <div class="table-cell">
+          for all \( i \geq 0 \), \( M, \pi^{i} \models g_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-13.html %}
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">14.</div>
@@ -158,6 +174,7 @@
         <div class="table-cell">
           there exists a \( k \geq 0 \) such that \( M, \pi^{k} \models g_2 \) and<br />
           for all \( 0 \leq j < k, M, \pi^{i} \models g_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-14.html %}
         </div>
       </div>
       <div class="table-row">
@@ -167,6 +184,7 @@
         <div class="table-cell">
           for all \( j \geq 0 \), if for every \( i < j, M, \pi^{i} \not\models g_1 \), then <br />
           \( M, \pi^{j} \models g_2 \)
+          {% include_relative {{ mermaid_dir }}/semantics-15.html %}
         </div>
       </div>
       <div class="table-row">
@@ -198,7 +216,7 @@
         \]
       </li>
       <li>
-        Clause 16 of definition has a unexpected effect when formulas are interpreted over \( M \) with multiple initial states.
+        Clause 16 has a unexpected effect if \( M \) has multiple initial states:
         <ul>
           <li>\( S_0 = \{ s_0, s_1 \} \)</li>
           <li>\( M, s_0 \models \bm{EX} p \) and \( M, s_1 \not\models \bm{EX} p \)</li>

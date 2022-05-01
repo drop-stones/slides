@@ -4,7 +4,16 @@
   <em>ACTL*</em> have some restriction compared to CTL*:
   <ul>
     <li>Only the universal path quantification \( \bm{A} \) is allowed (\( \bm{E} \) is not allowed).</li>
-    <li>NNF (Negation Normal Form): negation are applied only to atomic propositions.</li>
+    <li>
+      NNF (Negation Normal Form): negation are applied only to atomic propositions.
+      <ul>
+        <li>\( \because \) We can express \( \bm{E} \) using \( \lnot \bm{A} \)
+          <ul>
+            <li>ex) \( \lnot \bm{A}p = \bm{E} \lnot p \)</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
     <li>ex) \( \bm{AX} \lnot p, \bm{AXAF} (p \lor \lnot q) \)</li>
   </ul>
 
@@ -14,7 +23,7 @@
     State formulas:
     <div class="table">
       <div class="table-row">
-        <div class="table-cell">C1</div>
+        <div class="table-cell"><strong>C1</strong></div>
         <div class="table-cell">If \( p \in AP \), then \( p \) and \( \lnot p \) are ACTL* state formulas.</div>
       </div>
       <div class="table-row">
@@ -22,7 +31,7 @@
         <div class="table-cell">If \( f \) and \( g \) are ACTL* state formulas, then \( f \lor g \) and \( f \land g \) are ACTL* state formulas.</div>
       </div>
       <div class="table-row">
-        <div class="table-cell">C3</div>
+        <div class="table-cell"><strong>C3</strong></div>
         <div class="table-cell">If \( f \) is an ACTL* path formula, then \( \bm{A} f \) is an ACTL* state formula.</div>
       </div>
     </div>
@@ -40,10 +49,11 @@
     </div>
   </div>
 
-  <p>
-    The logic <em>ECTL*</em> is defined analogously with \( \bm{E} \) instead of \( \bm{A} \).<br>
-    Note that for both ACTL* and ECTL*, \( \bm{X}, \bm{U} \) and \( \bm{R} \) are sufficient in order to represent other temporal operators.
-  </p>
+  <h5>Some topics</h5>
+  <ul>
+    <li><em>ECTL*</em> is defined analogously with \( \bm{E} \) instead of \( \bm{A} \).</li>
+    <li>\( \bm{X}, \bm{U}, \bm{R} \) are sufficient to express ACTL* and ECTL*.</li>
+  </ul>
 
   <div id="mc-actl-syntax">
     <h4>Syntax of ACTL</h4>
@@ -68,7 +78,10 @@
       </div>
     </div>
 
-    <p>Note that \( \bm{AX}, \bm{AU} \) and \( \bm{AR} \) are sufficient to represent other operators.</p>
+    <h5>Some topics</h5>
+    <ul>
+      <li>\( \bm{AX}, \bm{AU}, \bm{AR} \) are sufficient to express ACTL.</li>
+    </ul>
   </div>
 </div>
 <!-- mc-4-3-2-the-universal-computation-tree-logics-actl*-and-actl -->

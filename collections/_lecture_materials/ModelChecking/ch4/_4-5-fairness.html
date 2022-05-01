@@ -35,11 +35,13 @@
       <li>\( \pi \) visit \( s_1 \) many times.</li>
     </ul>
 
+<!--
     \( \pi_0 \text{ and } \pi_1 \) are not <em>fair</em> because:
     <ul>
       <li>\( \pi_0 \) does not visit \( s_1 \) many times (visit 0 time)</li>
       <li>\( \pi_1 \) does not visit \( s_0 \) many times (visit 1 time)</li>
     </ul>
+-->
 
     <h5>Formal Definition</h5>
     \[ \textit{inf}(\pi) = \{ s \mid s = s_i \text{ for infinitely many } i \} \]
@@ -62,17 +64,17 @@
       <li>
         \( \bm{E} ( fpath \land \phi ) \)
         <ul>
-          <li>there exists a path that is fair and satisfies \( \phi \).</li>
+          <li>There exists a path that is fair and satisfies \( \phi \).</li>
         </ul>
       </li>
       <li>
         \( \bm{A} ( fpath \rightarrow \phi ) \)
         <ul>
-          <li>for every path, if it is fair, then it must satisfies \( \phi \).</li>
+          <li>For every path, if it is fair, then it must satisfies \( \phi \).</li>
           <li>We can ignore no-fair paths. (e.g, \( \pi_0, \pi_1 \) )</li>
           <li>
             If we define \( \bm{A} ( fpath \land \phi ) \), we cannot check the properties of \( s_0 \).
-            <ul><li>\( \bm{A} (fpath \land \phi) = \bm{A} (fpath) \land \bm{A} \phi \)</li></ul>
+            <ul><li>\( \bm{A} (fpath \land \phi) = \bm{A} (fpath) \land \bm{A} \phi = false\)</li></ul>
           </li>
         </ul>
       </li>

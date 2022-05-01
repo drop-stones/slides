@@ -2,12 +2,12 @@
   <h2>{{ 4-4-title }}</h2>
 
   <p>
-    In logics, it is common to associate a formula with the set of assignments that satisfy it.<br>
+    In logics, a formula can be expressed by sets.<br>
     \[ 0 < \phi < 3 = \{ \phi = 1, \phi = 2 \} \]
   </p>
   
   <p>
-    In temporal logics, we associate a formula with the set of states in which the formula is true.<br>
+    In temporal logics, a formula can be express by sets of states.<br>
     \[ [\![ \bm{EX} (b \land c) ]\!]_{M} = \{ s_0, s_3 \} \]
   </p>
 
@@ -24,20 +24,13 @@
   <div>
     <h4>Set Atomic Proposition</h4>
 
-    We can think \( \{ s_0, ..., s_n \} \) as an atomic proposition because:
-    <ul>
-      <li>\( M, s_0 \models a \)</li>
-      <li>\( M, s_0 \models \{ s_0, s_3, ... \} \)</li>
-    </ul>
-
-    This formal syntax is:
+    <h5>Syntax</h5>
+    Extension of CTL* with <em>set atomic proposition</em>
     <div class="flex-container">
       <p>If \( \{ s_0, ..., s_n \} \in S \), then \( \{ s_0, ..., s_n \} \) is a CTL* state formula called <em>set atomic proposition</em>.</p>
     </div>
-  </div>
 
-  <div>
-    <h4>Extending CTL* semantics</h4>
+    <h5>Semantics</h5>
     
     <div class="table">
       <div class="table-row">
@@ -48,7 +41,24 @@
       </div>
     </div>
 
+    <div class="example">
+      <h5>Example</h5>
+      
+      <div class="flex-container">
+        <ul>
+          <li>\( M,s_1 \models \bm{EX} \{ s_3, s_5 \} \)</li>
+          <li>\( M,s_2 \models \bm{EX} \{ s_3, s_5 \} \)</li>
+        </ul>
+        {% include_relative {{ mermaid_dir }}/set-atomic-proposition-example.html %}
+      </div>
+    </div>
+  </div>
+
+<!--
+  <div>
     <p>In fact, I had already used this semantics in <a href="ctl-complex-semantics">CTL* Complex Semantics</a>.</p>
   </div>
+-->
+
 </div>
 <!-- mc-4-4-temporal-logic-with-set-atomic-propositions-and-set-semantics -->

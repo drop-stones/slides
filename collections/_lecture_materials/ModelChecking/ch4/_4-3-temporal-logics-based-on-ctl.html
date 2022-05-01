@@ -10,17 +10,27 @@
   We can divide the sublogics into two groups:
   <ul>
     <li>
-      <em>Branching-time logics</em> : multiple \( \bm{A}, \bm{E} \) repeatedly quantifies over the paths.
+      <em>Branching-time logics</em> (CTL, ACTL*, ACTL)
       <ul>
-        <li>CTL</li>
-        <li>ACTL*</li>
-        <li>ACTL</li>
+        <li>Describe properties about <strong>sub-trees</strong></li>
+        <li>
+          Multiple \( \bm{A}, \bm{E} \)
+          <ul>
+            <li>ex) \( \bm{AGEF} p \)</li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li>
-      <em>Linear-time logics</em> : a single path quantifier \( \bm{A} \) quantifies over all paths.
+      <em>Linear-time logics</em> (LTL)
       <ul>
-        <li>LTL</li>
+        <li>Describe properties about <strong>a single path</strong></li>
+        <li>
+          Single \( \bm{A} \)
+          <ul>
+            <li>ex) \( \bm{AFG} p \)</li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>

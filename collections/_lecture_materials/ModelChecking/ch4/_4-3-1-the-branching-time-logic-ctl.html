@@ -1,9 +1,14 @@
 <div id="mc-4-3-1-the-branching-time-logic-ctl">
   <h3>{{ 4-3-1-title }}</h3>
 
-  <em>CTL</em> have a restriction that the path quantifier and the temporal operators always occur in pairs.
+  <em>CTL</em> is CTL* with one restriction:
   <ul>
-    <li>ex) \( \bm{AX} \phi, \bm{EG} \phi, \bm{AXEG} \phi \)</li>
+    <li>
+      Path quantifier and temporal operator always occur in pairs.
+      <ul>
+        <li>ex) \( \bm{AX} \phi, \bm{EG} \phi, \bm{AXEG} \phi \)</li>
+      </ul>
+    </li>
     <li>
       We can assume that <em>CTL</em> have ten temporal operators:
       <ul>
@@ -51,10 +56,18 @@
       \]
     </p>
 
-    <div class="note">
-      Complement: \( \bm{A} (f \bm{U} g) = \bm{AF} g \land \bm{A} (g \bm{R} (f \lor g)) \)
-      {% include_relative {{ mermaid_dir }}/all-f-until-g.html %}
-    </div>
+    \( \bm{A} (f \bm{U} g) = \bm{AF} g \land \bm{A} (g \bm{R} (f \lor g)) \)
+    <ul>
+      <li>
+        \( f \bm{U} g \)
+        <ul>
+          <li>\( \bm{F} g \): \( g \) will hold</li>
+          <li>\( g \bm{R} ( f \lor g ) \): \( f \) hold at every preceding state</li>
+        </ul>
+      </li>
+    </ul>
+    {% include_relative {{ mermaid_dir }}/all-f-until-g.html %}
+
   </div>
 
   <div>

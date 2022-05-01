@@ -1,6 +1,7 @@
 <div id="mc-4-6-counterexamples">
   <h2>{{ 4-6-title }}</h2>
 
+<!--
   <p>
     In model checking, we check that the system holds some properties.<br>
     If the check failed, we want to know the reasons.<br>
@@ -13,6 +14,27 @@
     <li>a finite representation</li>
   </ul>
   <p class="note">NOTE: We will discuss the structure of counterexamples more in Chapter 13</p>
+-->
+
+  <em>Counterexamples</em> are paths that demonstrate the violation of specifications.
+  <ul>
+    <li>
+      How to get:
+      <ol>
+        <li>Modeling programs</li>
+        <li>Specification of some properties</li>
+        <li>Model Checking!</li>
+        <li>Get counterexamples if the programs don't satisfy the properties.</li>
+      </ol>
+    </li>
+    <li>
+      Requirement:
+      <ul>
+        <li>Easy-to-understand description</li>
+        <li>A finite representation</li>
+      </ul>
+    </li>
+  </ul>
 
   <div class="example" id="axp-counter-example">
     <h5>Simple Specification \( \bm{AX} p \)</h5>
@@ -45,11 +67,21 @@
 
   <div>
     <h4>Prove the existence of a lasso-shape counterexample</h4>
+
+  <!--
     <p>
       We prove the existence of a lasso-shape counterexample for finite Kripke structures \( M \).<br>
       This proof procedure is similar to the proof procedure of the pumping lemma.
     </p>
+  -->
 
+    Assumptions:
+    <ol>
+      <li>The number of states are finite. (from Kripke structure)</li>
+      <li>Paths are infinite. (from left-total)</li>
+    </ol>
+
+    Proof:
     <ul>
       <li>
         Let the path \( \pi = s_0, s_1, ... \) be a counterexample for \( \bm{AF} p \).
@@ -57,7 +89,9 @@
       </li>
       <li>
         There must be two indices \( 1 \leq n < m \) such that \( s_n = s_m \)
-        <ul><li>because \( M \) has only a finite number of states</li></ul>
+        <ul>
+          <li>because of Assumption-1 and 2.</li>
+        </ul>
       </li>
       <li>We can form \( \pi = \pi_0 (\pi_1^{\omega}) \) such that: 
         <ul>

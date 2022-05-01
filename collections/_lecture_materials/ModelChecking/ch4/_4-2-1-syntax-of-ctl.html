@@ -1,9 +1,7 @@
 <div id="mc-4-2-1-syntax-of-ctl*">
   <h3>{{ 4-2-1-title }}</h3>
 
-  <p>The syntax of CTL* is the extension of propositional logic.</p>
-
-  There are two types of formulas:
+  Two types of formulas:
   <ul>
     <li><em>State formulas</em> specify the properties of a specific state</li>
     <li><em>Path formulas</em> specify the properties of a specific path</li>
@@ -42,16 +40,15 @@
   </div>
   <!-- mc-ctl-state-formulas -->
 
-  CTL* is the set of <em>state formulas</em> permitted by the above rules.<br>
-  <em>State formulas</em> are:
+  CTL* is the set of <em>state formulas</em> permitted by the above rules:<br>
   <ul>
     <li>
-      Boolean propositions
+      Boolean propositions (labels)
       <ul><li>ex) \( p \)</li></ul>
     </li>
     <li>
-      Temporal formulas with path quantifier
-      <ul><li>ex) \( \bm{AX} q \)</li></ul>
+      Path formulas with path quantifier
+      <ul><li>ex) \( \bm{AX} p , \bm{EAG} q\)</li></ul>
     </li>
     <li>
       Boolean combinations
@@ -91,7 +88,7 @@
           </div>
         </div>
 
-        <details>
+        <details class="question">
           <summary>Q. Is \( \pi_0 \models \bm{EG} b \) correct?</summary>
           Correct because of:
           <ul>

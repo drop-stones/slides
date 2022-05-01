@@ -3,6 +3,7 @@
     \( s_0 \models \bm{EF} ( \bm{AX} p ) \)
     <div class="mermaid">
     graph TB
+      subgraph all ["EF(AXp)"]
       s0 --> s1
       s0 --> s2
       s1 --> s3
@@ -17,11 +18,12 @@
       s5 --> s12
       s6 --> s13
       s6 --> s14
+      end
     
       style s0 fill:#bbb
-      style s4 fill:#bbb
-      style s9 fill:#bbb
-      style s10 fill:#bbb
+      style s3 fill:#bbb
+      style s7 fill:#bbb
+      style s8 fill:#bbb
       s0(( ))
       s1(( ))
       s2(( ))
@@ -29,10 +31,10 @@
       s4(( ))
       s5(( ))
       s6(( ))
-      s7(( ))
-      s8(( ))
-      s9((p))
-      s10((p))
+      s7((p))
+      s8((p))
+      s9(( ))
+      s10(( ))
       s11(( ))
       s12(( ))
       s13(( ))
@@ -51,12 +53,17 @@
       s2 --> s6
       s3 --> s7
       s3 --> s8
+
+      subgraph subtree ["AXp"]
       s4 --> s9
       s4 --> s10
+      end
+
       s5 --> s11
       s5 --> s12
       s6 --> s13
       s6 --> s14
+
     
       style s4 fill:#bbb
       style s9 fill:#bbb

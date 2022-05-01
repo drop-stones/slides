@@ -1,15 +1,16 @@
 <div id="mc-4-3-3-linear-temporal-logic-ltl">
   <h3>{{ 4-3-3-title }}</h3>
 
-  <em>LTL</em> formulas are of the form \( \bm{A} f \):
+  <em>LTL</em> formulas describe properties of a single path.
   <ul>
-    <li>Only \( \bm{A} \) is allowed.</li>
     <li>
-      \( f \) is a CTL* path formula that does not include path quantifiers.
+      Syntax: \( \bm{A} f \)
       <ul>
-        <li>\( f \) specifies only a single path.</li>
-        <li>\( \bm{A} f \) specifies that all paths from state \( s \) holds \( f \).</li>
+        <li>\( f \): path formula</li>
       </ul>
+    </li>
+    <li>
+      Semantics: Satisfies \( f \) for all paths
     </li>
     <li>ex) \( \bm{AFGX} p, \bm{AG} (p \bm{R} q) \)</li>
   </ul>
@@ -22,7 +23,7 @@
     LTL formulas:
     <div class="table">
       <div class="table-row">
-        <div class="table-cell">E0</div>
+        <div class="table-cell"><strong>E0</strong></div>
         <div class="table-cell">If \( f \) is an LTL path formula, then \( \bm{A} f \) is a LTL formula.</div>
       </div>
     </div>
@@ -43,12 +44,19 @@
       </div>
     </div>
 
-    <p>Note that \( \bm{X} \) and \( \bm{U} \) are sufficient to represent other operators. (See <a href="#mc-ctl*-properties">Some properties</a>)</p>
-    
-    We can omit \( \bm{A} \) because LTL formulas must have \( \bm{A} \).
+    <h5>Some topics</h5>
     <ul>
-      <li>\( M \models f \) means \( M \models \bm{A} f \).</li>
+      <li>
+        \( \bm{X} \) and \( \bm{U} \) are sufficient to express other operators. (See <a href="#mc-ctl*-properties">Some properties</a>)
+      </li>
+      <li>
+        We can omit \( \bm{A} \) because LTL formulas must have \( \bm{A} \).
+        <ul>
+          <li>\( M \models f \) means \( M \models \bm{A} f \).</li>
+        </ul>
+      </li>
     </ul>
+    
   </div>
 </div>
 <!-- mc-4-3-3-linear-temporal-logic-ltl -->

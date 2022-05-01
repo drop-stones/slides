@@ -3,16 +3,16 @@
 
   <em>Negation normal form (NNF)</em>:
   <ul>
-    <li>a syntactic form of logical formulas</li>
+    <li>A syntactic form of logical formulas</li>
     <li>
-      Negations are applied only to atomic propositions in NNF
+      Negations are applied only to atomic propositions
       <ul><li>ex) \( \bm{AG} ( \lnot p \bm{R} \lnot q ) \)</li></ul>
     </li>
     <li>NNF of CTL* is useful for model checking.</li>
   </ul>
 
   <p>
-    We show that CTL* is equivalent to NNF of CTL* because:
+    CTL* \( \Leftrightarrow \) NNF of CTL*:
     \[
       \begin{array} \\
         \lnot \bm{A} \phi &\equiv& \bm{E} \lnot \phi \\
@@ -28,14 +28,31 @@
     \]
   </p>
 
-  <div class="note">
-    Complement: \( \lnot ( p \bm{U} q ) \) means:
-    <ul>
-      <li>\( \bm{G} \lnot q \) or</li>
-      <li>If \( q \) occurs, \( \lnot p \) will occur before it.</li>
-    </ul>
-    {% include_relative {{ mermaid_dir }}/negation-normal-form.html %}
-  </div>
+  \( \lnot ( p \bm{U} q ) \equiv ( \lnot p \bm{R} \lnot q ) \):
+  <ul>
+    <li>
+      \( p \bm{U} q \)
+      <ul>
+        <li>\( q \) will hold and</li>
+        <li>\( p \) hold at every preceding state</li>
+      </ul>
+    </li>
+    <li>
+      \( \lnot ( p \bm{U} q ) \)
+      <ul>
+        <li>\( q \) won't hold or</li>
+        <li>\( \lnot p \) hold at a preceding state</li>
+      </ul>
+    </li>
+    <li>
+      \( \lnot p \bm{R} \lnot q \)
+      <ul>
+        <li>\( \lnot q \) will hold globally or</li>
+        <li>\( \lnot p \) release \( \lnot q \)</li>
+      </ul>
+    </li>
+  </ul>
+  {% include_relative {{ mermaid_dir }}/negation-normal-form.html %}
 
   <div class="example">
     <h5>Example</h5>
@@ -43,18 +60,19 @@
     \[
       \lnot(( A \bm{U} B) \lor \bm{F} C) \equiv ( \lnot (A \bm{U} B) \land \lnot \bm{F} C) \equiv (\lnot A \bm{R} \lnot B) \land \bm{G} \lnot C
     \]
-
-    <ul>
-      <li>
-        The conversion of a CTL* formula to NNF is linear in the size of the formula.
-        <ul><li>This is true for many fragments of CTL*.</li></ul>
-      </li>
-      <li>
-        For NNF of CTL*, we need to have \( \land, \lor, \bm{E}, \bm{A}, \bm{X}, \bm{U}\), and \( \bm{R} \).
-        <ul><li>A reduction to \( \bm{E}, \bm{X}, \bm{U} \) is not possible.</li></ul>
-      </li>
-    </ul>
   </div>
+
+  <h4>Some properties</h4>
+  <ul>
+    <li>
+      The conversion of a CTL* formula to NNF is linear in the size of the formula.
+      <ul><li>This is true for many fragments of CTL*.</li></ul>
+    </li>
+    <li>
+      \( \land, \lor, \bm{E}, \bm{A}, \bm{X}, \bm{U}, \bm {R} \) are sufficient to express any NNF of CTL* formula:
+      <ul><li>A reduction to \( \bm{E}, \bm{X}, \bm{U} \) is not possible.</li></ul>
+    </li>
+  </ul>
 
 </div>
 <!-- mc-4-2-3-negation-normal-form -->
