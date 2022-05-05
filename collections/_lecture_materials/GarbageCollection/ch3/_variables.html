@@ -1,0 +1,32 @@
+{% assign 3-overview-title = "Overview" %}
+{% assign 3-5-title = "3.5 Cyclic Reference Counting" %}
+{% assign 3-5-1-title = "3.5.1 Functional Programming Language" %}
+{% assign 3-5-2-title = "3.5.2 Bobrow's Technique" %}
+{% assign 3-5-3-title = "3.5.3 Weak-pointer Algorithms" %}
+{% assign 3-5-4-title = "3.5.4 Partial Mark-Sweep Algorithms" %}
+{% assign 3-6-title = "3.6 Issues to consider" %}
+
+{% assign 3-overview-id = "gc-3-overview" %}
+{% assign 3-5-id = "gc-3-5-cyclic-reference-counting" %}
+{% assign 3-5-1-id = "gc-3-5-1-functional-programming-language" %}
+{% assign 3-5-2-id = "gc-3-5-2-bobrow-technique" %}
+{% assign 3-5-3-id = "gc-3-5-3-weak-pointer-algorithms" %}
+{% assign 3-5-4-id = "gc-3-5-4-partial-mark-sweep-algorithms" %}
+{% assign 3-6-id = "gc-3-6-issues-to-consider" %}
+
+{% assign recursion = "
+fun loop() = loop()
+"%}
+
+{% assign bobrow-algorithm = "
+Update(R, S) =
+  T = *R
+  gr = group_no(R)
+  if gr != group_no(S)
+    increment_groupRC(S)
+  if gr != group_no(T)
+    decrement_groupRC(T)
+    if groupRC(T) == 0
+      reclaim_group(T)
+  *R = S
+"%}

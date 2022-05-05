@@ -1,0 +1,46 @@
+<div id={{ 3-5-id }}>
+  <h2>{{ 3-5-title }}</h2>
+
+  <ul>
+    <li>
+      Reference counting cannot reclaim <em>cyclic data structures</em>
+      <ul>
+        <li>Cyclic data structures are common</li>
+        <li>ex) back-pointer, recursion in functional programming languages</li>
+      </ul>
+    </li>
+    <li>
+      Approach:
+      <ul>
+        <li>
+          Manpower
+          <ul>
+            <li>Burdensome, unsafe</li>
+          </ul>
+        </li>
+        <li>
+          <em>Hybrid memory manager</em>
+          <ul>
+            <li>Reference counting + mark-sweep</li>
+          </ul>
+        </li>
+        <li>
+          <em>Utilization of domain features</em>
+          <ul>
+            <li>Functional programming languages</li>
+            <li>Certain programming idioms</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    &#8251; None of the approaches have been adopted for use by significant systems.
+  </p>
+
+  {% include_relative _3-5-1-functional-programming-language.html %}
+  {% include_relative _3-5-2-bobrow-technique.html %}
+  {% include_relative _3-5-3-weak-pointer-algorithms.html %}
+  {% include_relative _3-5-4-partial-mark-sweep-algorithms.html %}
+</div>

@@ -1,0 +1,60 @@
+<div id={{ 3-5-2-id }}>
+  <h3>{{ 3-5-2-title }}</h3>
+
+  <h4>General Idea</h4>
+  Distinguish <em>internal references</em> in cycle and <em>external references</em>.
+  <ul>
+    <li><em>Internal references</em> are not be counted.</li>
+    <li><em>External references</em> are counted as references to the cycle as a whole.</li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/cycle-as-a-whole.drawio.svg">
+  </div>
+
+  <h4>Bobrow's Idea</h4>
+  Programmer assign all cells to a <em>group</em>.
+  <ul>
+    <li>Each group is reference counted.</li>
+    <li>Each group is reclaimed as a whole.</li>
+  </ul>
+
+  <h4>Algorithm</h4>
+
+  {% highlight c %}{{ bobrow-algorithm }}{% endhighlight %}
+  <div class="flex-container">
+    <img src="{{ img_path }}/bobrow-algorithm.drawio.svg">
+  </div>
+
+  <h4>Drawbacks</h4>
+  <ul>
+    <li>
+      Cannot reclaim sub-groups
+      <div class="flex-container">
+        <img src="{{ img_path }}/subgroup-garbage.drawio.svg">
+      </div>
+    </li>
+    <li>
+      Cannot reclaim intra-group cycles
+      <div class="flex-container">
+        <img src="{{ img_path }}/inter-group-cycle.drawio.svg">
+      </div>
+    </li>
+  </ul>
+
+  <h4>Best practice</h4>
+  Each group comprise a single <em>strongly connected component</em>.
+  <ul>
+    <li>Minimal size of groups</li>
+    <li>No inter-group cycles</li>
+  </ul>
+
+  <h5>Strongly Connected Component (SCC)</h5>
+  <p>
+    Minimal set of nodes each of which is reachable from every other node.
+  </p>
+
+  ex)
+  {% include_relative {{ mermaid_dir }}/scc.html %}
+
+</div>

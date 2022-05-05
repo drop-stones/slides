@@ -1,0 +1,16 @@
+<div class="mermaid">
+graph LR
+  subgraph scc0
+    a --> b --> e --> a
+  end
+  subgraph scc1
+    f --> g --> f
+  end
+  subgraph scc2
+    c --> d --> h
+    h --> d --> c
+  end
+  b --> c
+  c --> g
+  e --> f
+</div>

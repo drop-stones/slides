@@ -1,0 +1,43 @@
+<div id={{ 3-5-1-id }}>
+  <h3>{{ 3-5-1-title }}</h3>
+
+  <ul>
+    <li>
+      Functional programming languages have recursions.
+      {% highlight sml %}{{ recursion }}{% endhighlight %}
+    </li>
+    <li>
+      Features of cyclic data structures in functional programming languages:
+      <ul>
+        <li>
+          The circular structure is created all at once;
+          <div class="flex-container">
+            <img src="{{ img_path }}/create-cycle.drawio.svg">
+          </div>
+        </li>
+        <li>
+          Any use of a subset of the cycle without root is copied;
+          <div class="flex-container">
+            <img src="{{ img_path }}/use-cycle.drawio.svg">
+          </div>
+        </li>
+        <li>
+          Cycle-closing pointers to the head are tagged as such;
+          <div class="flex-container">
+            <img src="{{ img_path }}/tag-cycle.drawio.svg">
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      These features ensure that:
+      <ul>
+        <li>The cycle is treated as a single entity.</li>
+        <li>If the head is deleted, the entire cycle can be reclaimed.</li>
+      </ul>
+      <div class="flex-container">
+        <img src="{{ img_path }}/delete-cycle.drawio.svg">
+      </div>
+    </li>
+  </ul>
+</div>
