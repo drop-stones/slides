@@ -90,4 +90,41 @@
     </div>
     <img src="{{ img_path }}/delete-strong-loop.drawio.svg" style="width: 60%">
   </div>
+
+  <h5>Failure Example of Brownbridge's delete</h5>
+  <code>delete</code> discard cyclic structures incorrectly in the following example.
+  <div class="flex-container">
+    <img src="{{ img_path }}/delete-failure.drawio.svg" style="width: 60%">
+  </div>
+
+  <p>
+    Solution: Salkild's suicide
+  </p>
+
+  <h4>Salkild's suicide</h4>
+  <code>suicide</code> should restart if it discovers may-loop nodes.
+  <ul>
+    <li>
+      If <code>suicide</code> discover a cell with weak pointers but only one strong pointer;
+      <ul>
+        <li>Flip all pointers</li>
+        <li>Restart <code>suicide</code> from the cell</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/success-delete-loop.drawio.svg" style="width: 60%">
+  </div>
+
+  <h5>Failure Example</h5>
+  Salkild's suicide fails to terminate in the following example.
+  <div class="flex-container">
+    <img src="{{ img_path }}/suicide-failure.drawio.svg">
+  </div>
+
+  <p>
+    Solution: Marking scheme<br>
+    Drawbacks: Poor efficiency, High space overhead(2 ref counts, mark-flag)
+  </p>
+
 </div>
