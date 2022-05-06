@@ -30,3 +30,73 @@ Update(R, S) =
       reclaim_group(T)
   *R = S
 "%}
+
+{% assign brownbridge-new = "
+New() = 
+  newcell = allocate()
+  SRC(R) = 1
+  return strong(newcell)    // return strong pointer
+"%}
+
+{% assign salkild-update = "
+Update(R, S) = 
+  WRC(S) = WRC(S) + 1
+  delete(*R)
+  *R = S
+  weaken(*R)  // weaken pointer R
+"%}
+
+{% assign weak-pointer-delete = "
+delete(T) = 
+  if is_weak(T)                         // (i)
+    WRC(T) -= 1
+  else
+    SRC(T) -= 1
+    if SRC(T) == 0 and WRC(T) == 0      // (ii)
+      for U in Children(T)
+        delete(*U)
+      free(T)
+    else if SRC(T) == 0 and WRC(T) > 0  // (iii)
+      invert_strength(T)
+      for U in Children(T)
+        suicide(T, *U)
+      if SRC(T) == 0
+        for U in Sons(T)
+          delete(*U)
+        free(T)
+"%}
+
+{% assign delete-1 = "
+WRC(T) -= 1
+"%}
+
+{% assign delete-2 ="
+SRC(T) -= 1
+if SRC(T) == 0 and WRC(T) == 0
+  for U in Children(T)
+    delete(*U)
+  free(T)
+"%}
+
+{% assign delete-3 = "
+SRC(T) -= 1
+if SRC(T) == 0 and WRC(T) > 0
+  invert_strength(T)
+  for U in Children(T)
+    suicide(T, *U)
+  if SRC(T) == 0
+    for U in Sons(T)
+      delete(*U)
+    free(T)
+"%}
+
+{% assign suicide = "
+suicide(Start_node, S) = 
+  if is_strong(S)
+    if S == Start_node
+      weaken(S)
+    else if SRC(S) > 1
+      weaken(S)
+    else for T in Children(S)
+      suicide(Start_node, *T)
+"%}

@@ -2,7 +2,7 @@
   <h3>{{ 3-5-2-title }}</h3>
 
   <h4>General Idea</h4>
-  Distinguish <em>internal references</em> in cycle and <em>external references</em>.
+  Distinguish <em>internal references</em> in cycle from <em>external references</em>.
   <ul>
     <li><em>Internal references</em> are not be counted.</li>
     <li><em>External references</em> are counted as references to the cycle as a whole.</li>
@@ -21,8 +21,8 @@
 
   <h4>Algorithm</h4>
 
-  {% highlight c %}{{ bobrow-algorithm }}{% endhighlight %}
   <div class="flex-container">
+    {% highlight c %}{{ bobrow-algorithm }}{% endhighlight %}
     <img src="{{ img_path }}/bobrow-algorithm.drawio.svg">
   </div>
 

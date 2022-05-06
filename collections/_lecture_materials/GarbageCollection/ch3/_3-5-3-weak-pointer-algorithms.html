@@ -1,3 +1,93 @@
 <div id={{ 3-5-3-id }}>
   <h3>{{ 3-5-3-title }}</h3>
+
+  <h4>General Idea</h4>
+  Distinguish closing pointer(<em>weak</em> pointer) from other references.
+  <ul>
+    <li>
+      Two invariants:
+      <ul>
+        <li>Active nodes are reachable from root via a chain of strong pointers;</li>
+        <li>Strong pointers do not form cycles;</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/weak-pointer.drawio.svg">
+  </div>
+
+  <h4>Brownbridge's Idea</h4>
+  Each cells have two reference counters.
+  <ul>
+    <li><em>Strong</em> reference counters (<strong>SRC</strong>)</li>
+    <li><em>Weak</em> reference counters (<strong>WRC</strong>)</li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/brownbridge.drawio.svg">
+  </div>
+
+  <h4>Algorithms</h4>
+
+  <h5>New</h5>
+  Allocate a new cell and return <em>strong pointer</em>.
+  <ul>
+    <li>Because allocating new cells cannot create cycles.</li>
+  </ul>
+
+  <div class="flex-container">
+    {% highlight c %}{{ brownbridge-new }}{% endhighlight %}
+    <img src="{{ img_path }}/brownbridge-new.drawio.svg">
+  </div>
+
+  <h5>Update</h5>
+  All copies of pointers are weak.
+  <ul>
+    <li>Because copying pointers may create cycles.</li>
+    <li>Conservative approach</li>
+  </ul>
+
+  <div class="flex-container">
+    {% highlight c %}{{ salkild-update }}{% endhighlight %}
+    <img src="{{ img_path }}/salkild-update.drawio.svg">
+  </div>
+
+  <h5>Delete</h5>
+  Decrement reference counts according to the following rules:
+  <ul>
+    <li>
+      Delete weak reference: decrement weak reference counts
+    </li>
+    <li>
+      Delete strong reference
+      <ul>
+        <li>If SRC == 0 and WRC == 0: delete cells</li>
+        <li>If SRC == 0 and WRC > 0: correct pointer type</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    {% highlight c %}{{ weak-pointer-delete }}{% endhighlight %}
+  </div>
+
+  Rule (i): Delete weak reference
+  <div class="flex-container">
+    {% highlight c %}{{ delete-1 }}{% endhighlight %}
+    <img src="{{ img_path }}/delete-weak.drawio.svg">
+  </div>
+
+  Rule (ii): Delete cells
+  <div class="flex-container">
+    {% highlight c %}{{ delete-2 }}{% endhighlight %}
+    <img src="{{ img_path }}/delete-strong-cells.drawio.svg" style="width: 60%">
+  </div>
+
+  Rule (iii): Correct pointer type
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ delete-3 }}{% endhighlight %}
+      {% highlight c %}{{ suicide }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/delete-strong-loop.drawio.svg" style="width: 60%">
+  </div>
 </div>
