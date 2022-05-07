@@ -4,8 +4,8 @@
   <h4>General Idea</h4>
   Hybrid method of <em>reference counting</em> and <em>mark-sweep</em>.
   <ul>
-    <li>Mark-sweep reclaim cycles.</li>
-    <li>Reference counting reclaim other cells.</li>
+    <li>Mark-sweep reclaims cycles.</li>
+    <li>Reference counting reclaims other cells.</li>
   </ul>
 
   <h4>Lins's Algorithm</h4>
@@ -13,9 +13,9 @@
     <li>
       Hybrid method
       <ul>
-        <li>Reference counting reclaim <em>uniquely referenced cells</em>.</li>
+        <li>Reference counting reclaims <em>uniquely referenced cells</em>.</li>
         <li>
-          Mark-sweep reclaim <em>shared cells</em>.
+          Mark-sweep reclaims <em>shared cells</em>.
           <ul>
             <li>Shared cells include cycles.</li>
           </ul>
@@ -54,14 +54,14 @@
   Decrement reference counts and Paint cells:
   <ul>
     <li>
-      If reference count is zero
+      If the reference count is zero
       <ul>
         <li>Paint <em>white</em></li>
         <li>Free cells</li>
       </ul>
     </li>
     <li>
-      If reference count is not zero (shared)
+      If the reference count is not zero (shared)
       <ul>
         <li>Paint <em>purple</em></li>
         <li>
