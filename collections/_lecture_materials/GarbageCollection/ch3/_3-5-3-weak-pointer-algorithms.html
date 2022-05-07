@@ -84,7 +84,7 @@
 
   Rule (iii): Correct pointer type
   <div class="flex-container">
-    <div>
+    <div class="sticky">
       {% highlight c %}{{ delete-3 }}{% endhighlight %}
       {% highlight c %}{{ suicide }}{% endhighlight %}
     </div>
@@ -126,5 +126,33 @@
     Solution: Marking scheme<br>
     Drawbacks: Poor efficiency, High space overhead(2 ref counts, mark-flag)
   </p>
+
+  <h4>Weak pointer implementation</h4>
+  <em>Strength-bit</em> represents strong and weak pointer.
+  <ul>
+    <li>
+      Each pointer and object have an <em>strength-bit</em>.
+      <div class="flex-container">
+        <img src="{{ img_path }}/strength-bit.drawio.svg">
+      </div>
+    </li>
+    <li>If pointer's bit == object's bit, the pointer is strong.</li>
+    <li>If pointer's bit != object's bit, the pointer is weak.</li>
+    <div class="flex-container">
+      <img src="{{ img_path }}/strong-pointer-with-bit.drawio.svg">
+    </div>
+    <li>
+      Strengthening or Weakening is done by flip pointer's <em>strength bit</em>.
+      <div class="flex-container">
+        <img src="{{ img_path }}/flip-pointer-bit.drawio.svg">
+      </div>
+    </li>
+    <li>
+      Strengthening all weak pointers is done by flip object's <em>strength bit</em>.
+      <div class="flex-container">
+        <img src="{{ img_path }}/flip-object-bit.drawio.svg">
+      </div>
+    </li>
+  </ul>
 
 </div>

@@ -6,6 +6,12 @@
   .width-half {
     width: 50%;
   }
+
+  .sticky {
+    position: sticky;
+    align-self: flex-start;
+    top: 15px;
+  }
 }
 
 .flex-center {

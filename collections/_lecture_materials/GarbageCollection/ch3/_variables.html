@@ -61,7 +61,7 @@ delete(T) =
       for U in Children(T)
         suicide(T, *U)
       if SRC(T) == 0
-        for U in Sons(T)
+        for U in Children(T)
           delete(*U)
         free(T)
 "%}
@@ -99,4 +99,85 @@ suicide(Start_node, S) =
       weaken(S)
     else for T in Children(S)
       suicide(Start_node, *T)
+"%}
+
+{% assign lins-delete = "
+delete(T) =
+  RC(T) -= 1
+  if RC(T) == 0
+    color(T) = white          // not black
+    for U in Children(T)
+      delete(*U)
+    free(T)
+  else if color(T) != purple  // shared
+    if control_set is full
+      gc_control_set()        // mark-sweep
+    color(T) = purple
+    push(T, control_set)
+"%}
+
+{% assign lins-new = "
+New() = 
+  newcell = allocate()
+  RC(newcell) = 1
+  color(newcell) = black
+  return newcell
+"%}
+
+{% assign lins-update = "
+Update(R, S) = 
+  RC(S) += 1
+  color(R) = black
+  color(S) = black
+  delete(*R)
+  *R = S
+"%}
+
+{% assign lins-mark-sweep = "
+gc_control_set() =
+  S = pop(control_set)
+  if color(S) == purple
+    mark_gray(S)        // (i)
+    scan(S)             // (ii)
+    collect_white(S)    // (iii)
+  else if control_set != empty
+    gc_control_set()
+"%}
+
+{% assign mark-grey = "
+mark_grey(S) = 
+  if color(S) != grey
+    color = grey
+    for T in Children(S)
+      RC(*T) -= 1
+      mark_grey(*T)
+"%}
+
+{% assign scan = "
+scan(S) = 
+  if color(S) == grey
+    if RC(S) > 0
+      scan_black(S)
+    else
+      color(S) = white
+      for T in Children(S)
+        scan(*T)
+"%}
+
+{% assign scan-black = "
+scan_black(S) = 
+  color(S) = black
+  for T in Children(S)
+    RC(*T) += 1
+    if color(*T) != black
+      scan_black(*T)
+"%}
+
+{% assign collect-white = "
+collect_white(S) = 
+  if color(S) == white
+    color(S) = black
+    for T in Children(S)
+      collect_white(*T)
+    free(S)
 "%}

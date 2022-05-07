@@ -1,3 +1,219 @@
 <div id={{ 3-5-4-id }}>
   <h3>{{ 3-5-4-title }}</h3>
+
+  <h4>General Idea</h4>
+  Hybrid method of <em>reference counting</em> and <em>mark-sweep</em>.
+  <ul>
+    <li>Mark-sweep reclaim cycles.</li>
+    <li>Reference counting reclaim other cells.</li>
+  </ul>
+
+  <h4>Lin's Algorithm</h4>
+  <ul>
+    <li>
+      Hybrid method
+      <ul>
+        <li>Reference counting reclaim <em>uniquely referenced cells</em>.</li>
+        <li>
+          Mark-sweep reclaim <em>shared cells</em>.
+          <ul>
+            <li>Shared cells include cycles.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Reclaim cycles <em>lazily</em>
+      <ul>
+        <li>Same as mark-sweep</li>
+      </ul>
+    </li>
+    <li>
+      Traverse only cyclic garbage
+      <ul>
+        <li>Mark-sweep traverses all active cells</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Colors</h5>
+  Lin's algorithm colors cells with 4 color.
+  <ul>
+    <li><em>Black</em>: active, liveness</li>
+    <li><em>Grey</em>: marked (in mark-sweep)</li>
+    <li><em>White</em>: garbage or free cells</li>
+    <li>
+      <em>Purple</em>: may-be-members of isolated cycles
+      <ul>
+        <li>Mark-sweep collector needs to traverse them.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Deletion</h5>
+  Decrement reference counts and Paint cells:
+  <ul>
+    <li>
+      If reference count is zero
+      <ul>
+        <li>Paint <em>white</em></li>
+        <li>Free cells</li>
+      </ul>
+    </li>
+    <li>
+      If reference count is not zero (shared)
+      <ul>
+        <li>Paint <em>purple</em></li>
+        <li>
+          Add the cell into <em>control set</em>
+          <ul>
+            <li><em>Control set</em> holds purple cells.</li>
+            <li>Reclaimed by mark-sweep</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    {% highlight c %}{{ lins-delete }}{% endhighlight %}
+    <img src="{{ img_path }}/lins-delete.drawio.svg">
+  </div>
+
+  <h5>New</h5>
+  Allocate new cells painted with <em>black</em>.
+  <div class="flex-container">
+    {% highlight c %}{{ lins-new }}{% endhighlight %}
+  </div>
+
+  <h5>Update</h5>
+  Both arguments must be <em>black</em> (active).
+  <ul>
+    <li>
+      If these cells are placed in control set, remove them from it.
+      <ul>
+        <li>These cells are not garbages.</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    {% highlight c %}{{ lins-update }}{% endhighlight %}
+  </div>
+   
+  <h5>Three-phase Mark-Sweep</h5>
+  Mark-sweep reclaims garbage from <em>control set</em>:
+  <ol start="0">
+    <li>Get a purple cell from <em>control set</em></li>
+    <li>
+      Mark: remove internal reference counts in subgraph
+      <ul>
+        <li>Garbages have no external references.</li>
+        <div class="flex-container">
+          <img style="width: 80%" src="{{ img_path }}/no-external-reference.drawio.svg">
+        </div>
+      </ul>
+    </li>
+    <li>Scan: determine whether cells are active or garbages</li>
+    <li>Sweep: reclaim garbages</li>
+  </ol>
+
+  Algorithm:
+  <div class="flex-container">
+    {% highlight c %}{{ lins-mark-sweep }}{% endhighlight %}
+  </div>
+
+  Step-1: Mark
+  <div class="flex-container">
+    {% highlight c %}{{ mark-grey }}{% endhighlight %}
+  </div>
+
+  Step-2: Scan
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ scan }}{% endhighlight %}
+      {% highlight c %}{{ scan-black }}{% endhighlight %}
+    </div>
+  </div>
+
+  Step-3: Sweep
+  <div class="flex-container">
+    {% highlight c %}{{ collect-white }}{% endhighlight %}
+  </div>
+
+  <h5>Control set strategies</h5>
+  <ul>
+    <li>
+      Timing
+      <ul>
+        <li>When control set is full (Lins)</li>
+        <li>When free-list is empty</li>
+        <li>When the size of free-list drops below a certain size</li>
+        <li>Or some heuristics</li>
+      </ul>
+    </li>
+    <li>
+      Data structure
+      <ul>
+        <li>Stack</li>
+        <li>Queue</li>
+        <li>Heap-allocated list</li>
+        <li>Bitmap</li>
+      </ul>
+    </li>
+    <li>
+      Lin's approach works best when side-effects are rare.
+      <ul>
+        <li>Many nodes are uniquely referenced.</li>
+        <li>Sub-graphs (cycles) are small.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Christopher's Algorithm</h4>
+  Christopher's algorithm is a special case of Lin's algorithm.
+  <ul>
+    <li>
+      <em>Control set</em> is the entire heap
+      <ul>
+        <li>Perform mark-sweep for the entire heap</li>
+      </ul>
+    </li>
+    <li>
+      Features
+      <ul>
+        <li>
+          Automatic memory management without any support from compilers
+        </li>
+        <li>
+          No extra space required
+          <ul>
+            <li>Because this algorithm don't manage <em>control set</em></li>
+          </ul>
+        </li>
+        <li>
+          Linear sweeping in the entire heap
+          <ul>
+            <li>Linear sweeping is faster than tracing graph.</li>
+            <li>
+              Whether Christopher's or Lins's is better depends on:
+              <ul>
+                <li>Data structures in question</li>
+                <li>Virtual memory management</li>
+                <li>Heap size</li>
+                <li>etc</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Three-phase Mark-sweep (Almost same as Lins's)
+      <ol>
+        <li>Mark: remove internal reference counts</li>
+        <li>Scan: determine active cells using external reference counts</li>
+        <li>Sweep: reclaim any cells whose reference count is zero</li>
+      </ol>
+    </li>
+  </ul>
 </div>
