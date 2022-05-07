@@ -5,6 +5,8 @@
 {% assign 3-5-3-title = "3.5.3 Weak-pointer Algorithms" %}
 {% assign 3-5-4-title = "3.5.4 Partial Mark-Sweep Algorithms" %}
 {% assign 3-6-title = "3.6 Issues to consider" %}
+{% assign 3-7-title = "3.7 Notes" %}
+{% assign 3-summary-title = "Summary" %}
 
 {% assign 3-overview-id = "gc-3-overview" %}
 {% assign 3-5-id = "gc-3-5-cyclic-reference-counting" %}
@@ -13,6 +15,8 @@
 {% assign 3-5-3-id = "gc-3-5-3-weak-pointer-algorithms" %}
 {% assign 3-5-4-id = "gc-3-5-4-partial-mark-sweep-algorithms" %}
 {% assign 3-6-id = "gc-3-6-issues-to-consider" %}
+{% assign 3-7-id = "gc-3-7-notes" %}
+{% assign 3-summary-id = "gc-3-summary" %}
 
 {% assign recursion = "
 fun loop() = loop()
@@ -81,21 +85,25 @@ if SRC(T) == 0 and WRC(T) == 0
 {% assign delete-3 = "
 SRC(T) -= 1
 if SRC(T) == 0 and WRC(T) > 0
+  // T is active
+  // or cyclic garbage
   invert_strength(T)
   for U in Children(T)
     suicide(T, *U)
   if SRC(T) == 0
-    for U in Sons(T)
+    for U in Children(T)
       delete(*U)
     free(T)
 "%}
 
 {% assign suicide = "
+// Adjust pointer's strength
 suicide(Start_node, S) = 
   if is_strong(S)
     if S == Start_node
       weaken(S)
     else if SRC(S) > 1
+      // loop header candidate
       weaken(S)
     else for T in Children(S)
       suicide(Start_node, *T)
@@ -105,7 +113,7 @@ suicide(Start_node, S) =
 delete(T) =
   RC(T) -= 1
   if RC(T) == 0
-    color(T) = white          // not black
+    color(T) = black          // for reuse (?)
     for U in Children(T)
       delete(*U)
     free(T)

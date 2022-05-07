@@ -18,12 +18,39 @@
     <li>Each group is reference counted.</li>
     <li>Each group is reclaimed as a whole.</li>
   </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/bobrow-idea.drawio.svg">
+  </div>
 
   <h4>Algorithm</h4>
+  <p>
+    Reference count manipulations by <code>Update</code>.
+  </p>
 
   <div class="flex-container">
     {% highlight c %}{{ bobrow-algorithm }}{% endhighlight %}
     <img src="{{ img_path }}/bobrow-algorithm.drawio.svg">
+  </div>
+
+  <div class="question">
+    <h4>Question</h4>
+    <details>
+      <summary>Q1: <code>Update(A, B)</code></summary>
+      RC(group 1) = 1, RC(group 2) = 0
+      <div class="flex-container">
+        <img src="{{ img_path }}/bobrow-algorithm-answer1.drawio.svg" style="width: 40%">
+      </div>
+    </details>
+    <details>
+      <summary>Q2: <code>Update(B, C)</code></summary>
+      RC(group 1) = 1, RC(group 2) = 2
+      <div class="flex-container">
+        <img src="{{ img_path }}/bobrow-algorithm-answer2.drawio.svg" style="width: 40%">
+      </div>
+    </details>
+    <div class="flex-container">
+      <img src="{{ img_path }}/bobrow-algorithm-example.drawio.svg">
+    </div>
   </div>
 
   <h4>Drawbacks</h4>
@@ -51,7 +78,7 @@
 
   <h5>Strongly Connected Component (SCC)</h5>
   <p>
-    Minimal set of nodes each of which is reachable from every other node.
+    Definition: Minimal set of nodes each of which is reachable from every other node.
   </p>
 
   ex)

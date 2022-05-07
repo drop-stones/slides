@@ -1,3 +1,116 @@
 <div id={{ 3-6-id }}>
   <h2>{{ 3-6-title }}</h2>
+
+  Reference counting have four weak points:
+  <ol>
+    <li>The delay to free garbages recursively</li>
+    <li>The high overhead imposed on pointer operations</li>
+    <li>The space required for the reference counts</li>
+    <li>The inability to reclaim garbage cycles</li>
+  </ol>
+
+  <p>
+    Nevertheless, many programmers often choose to use reference counting.<br>
+    There may be four reasons for this choice. 
+  </p>
+
+  <h4>Ease of implementation</h4>
+  Reference counting is easier to implement than tracing collectors because:
+  <ul>
+    <li>
+      Pointer operations can be replaced by macros
+      <ul>
+        <li>e.g, <em>smart pointer</em> in object-oriented languages</li>
+      </ul>
+    </li>
+    <li>
+      We don't need to know all the roots of computation
+      <ul>
+        <li>The roots are important in tracing collectors</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Control, optimization and correctness</h4>
+  Reference counting can provide programmers with total control.
+  <ul>
+    <li>
+      Optimization
+      <ul>
+        <li>Programmer can apply reference counting only to the objects which manual deallocation is difficult</li>
+      </ul>
+    </li>
+    <li>
+      Trade-off between performance and correctness
+      <ul>
+        <li>Better performance if we optimize code</li>
+        <li>
+          Worse correctness if we optimize code
+          <ul>
+            <li>More difficult maintenance</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Garbage collection delay</h4>
+  The overheads of reference count are distributed throughout the computation.
+  <table>
+    <tr>
+      <th></th>
+      <th>reference count</th>
+      <th>tracing</th>
+    </tr>
+    <tr>
+      <th>Pointer operation</th>
+      <td class="background-red">Slow</td>
+      <td class="background-green">Fast</td>
+    </tr>
+    <tr>
+      <th>Pause</th>
+      <td class="background-green">No</td>
+      <td class="background-red">Yes</td>
+    </tr>
+    <tr>
+      <th>
+        Immediate reuse optimization<br>
+        (e.g., destructive re-assignment)
+      </th>
+      <td class="background-green">Yes</td>
+      <td class="background-red">No</td>
+    </tr>
+  </table>
+
+  <h4>Space overhead</h4>
+  <p>
+    Space for a reference count is required in each heap object's header.<br>
+    The relative space advantage is application dependent:
+  </p>
+  <ul>
+    <li>
+      Reference count
+      <ul>
+        <li>
+          High overhead for small cells
+        </li>
+        <li>Low overhead for large cells</li>
+      </ul>
+    </li>
+    <li>
+      Mark-sweep
+      <ul>
+        <li>
+          Some headroom for efficiency (to avoid thrashing)
+        </li>
+      </ul>
+    </li>
+    <li>
+      Copying
+      <ul>
+        <li>Double address space of mark-sweep</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>

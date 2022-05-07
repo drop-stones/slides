@@ -1,0 +1,49 @@
+<div id="{{ 3-7-id }}">
+  <h2>{{ 3-7-title }}</h2>
+  <ul>
+    <li>Reference count was originally developed for Lisp by Gorge Collins[1960]</li>
+    <li>
+      Many studies
+      <ul>
+        <li>Reduction of run-time cost</li>
+        <li>Limited size reference counts</li>
+        <li>Hardware reference count</li>
+        <li>Reclaiming cycles</li>
+      </ul>
+    </li>
+    <li>
+      Studies in parallel systems
+      <ul>
+        <li>
+          Advantages
+          <ul>
+            <li>Synchronization between user program and garbage collection threads is not required.</li>
+          </ul>
+        </li>
+        <li>
+          Disadvantages
+          <ul>
+            <li>Locks on each object's reference count are required.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Studies in distributed systems
+      <ul>
+        <li>
+          Advantages
+          <ul>
+            <li>Short pause time</li>
+          </ul>
+        </li>
+        <li>
+          Difficulties
+          <ul>
+            <li>Ensuring that count manipulation messages arrive in the right order.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

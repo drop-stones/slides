@@ -8,7 +8,7 @@
     <li>Reference counting reclaim other cells.</li>
   </ul>
 
-  <h4>Lin's Algorithm</h4>
+  <h4>Lins's Algorithm</h4>
   <ul>
     <li>
       Hybrid method
@@ -37,7 +37,7 @@
   </ul>
 
   <h5>Colors</h5>
-  Lin's algorithm colors cells with 4 color.
+  Lins's algorithm colors cells with 4 color.
   <ul>
     <li><em>Black</em>: active, liveness</li>
     <li><em>Grey</em>: marked (in mark-sweep)</li>
@@ -81,9 +81,10 @@
   </div>
 
   <h5>New</h5>
-  Allocate new cells painted with <em>black</em>.
+  Allocate new cells painted with <em>black</em> (active).
   <div class="flex-container">
     {% highlight c %}{{ lins-new }}{% endhighlight %}
+    <img src="{{ img_path }}/lins-new.drawio.svg">
   </div>
 
   <h5>Update</h5>
@@ -98,6 +99,7 @@
   </ul>
   <div class="flex-container">
     {% highlight c %}{{ lins-update }}{% endhighlight %}
+    <img src="{{ img_path }}/lins-update.drawio.svg">
   </div>
    
   <h5>Three-phase Mark-Sweep</h5>
@@ -120,33 +122,66 @@
   Algorithm:
   <div class="flex-container">
     {% highlight c %}{{ lins-mark-sweep }}{% endhighlight %}
+    <img style="width: 56%" src="{{ img_path }}/lins-algorithm-example.drawio.svg">
   </div>
 
   Step-1: Mark
   <div class="flex-container">
-    {% highlight c %}{{ mark-grey }}{% endhighlight %}
+    <div class="sticky">
+      {% highlight c %}{{ mark-grey }}{% endhighlight %}
+    </div>
+    <img style="width: 56%" src="{{ img_path }}/lins-mark-grey.drawio.svg">
   </div>
 
   Step-2: Scan
   <div class="flex-container">
-    <div>
+    <div class="sticky">
       {% highlight c %}{{ scan }}{% endhighlight %}
       {% highlight c %}{{ scan-black }}{% endhighlight %}
     </div>
+    <img style="width: 56%" src="{{ img_path }}/lins-scan.drawio.svg">
   </div>
 
   Step-3: Sweep
   <div class="flex-container">
     {% highlight c %}{{ collect-white }}{% endhighlight %}
+    <img style="width: 56%" src="{{ img_path }}/lins-sweep.drawio.svg">
+  </div>
+
+  <div class="question">
+    <h4>Question</h4>
+
+    <div class="flex-container">
+      <img style="width: 60%" src="{{ img_path }}/lins-question.drawio.svg">
+    </div>
+
+    <details>
+      <summary><code>mark_grey(A)</code></summary>
+      <div class="flex-container">
+        <img style="width: 50%" src="{{ img_path }}/lins-answer-mark-grey.drawio.svg">
+      </div>
+    </details>
+    <details>
+      <summary><code>scan(A)</code></summary>
+      <div class="flex-container">
+        <img style="width: 50%" src="{{ img_path }}/lins-answer-scan.drawio.svg">
+      </div>
+    </details>
+    <details>
+      <summary><code>collect_white(A)</code></summary>
+      <div class="flex-container">
+        <img src="{{ img_path }}/lins-answer-collect-white.drawio.svg">
+      </div>
+    </details>
   </div>
 
   <h5>Control set strategies</h5>
   <ul>
     <li>
-      Timing
+      Timing of mark-sweep
       <ul>
         <li>When control set is full (Lins)</li>
-        <li>When free-list is empty</li>
+        <li>When free-list is empty (same as mark-sweep)</li>
         <li>When the size of free-list drops below a certain size</li>
         <li>Or some heuristics</li>
       </ul>
@@ -161,10 +196,20 @@
       </ul>
     </li>
     <li>
-      Lin's approach works best when side-effects are rare.
+      Lins's approach works best when side-effects are rare.
       <ul>
-        <li>Many nodes are uniquely referenced.</li>
-        <li>Sub-graphs (cycles) are small.</li>
+        <li>
+          Many nodes are uniquely referenced.
+          <ul>
+            <li>Reference count reclaims them.</li>
+          </ul>
+        </li>
+        <li>
+          Sub-graphs (cycles) are small.
+          <ul>
+            <li>Mark-sweep finishes quickly.</li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -176,6 +221,13 @@
       <em>Control set</em> is the entire heap
       <ul>
         <li>Perform mark-sweep for the entire heap</li>
+        <li>
+          Compared with Lins's, the following are not required:
+          <ul>
+            <li><em>Control set</em></li>
+            <li>Coloring</li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li>

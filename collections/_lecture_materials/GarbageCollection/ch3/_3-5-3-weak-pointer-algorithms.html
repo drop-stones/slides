@@ -91,14 +91,29 @@
     <img src="{{ img_path }}/delete-strong-loop.drawio.svg" style="width: 60%">
   </div>
 
+  <div class="question">
+    <h4>Question</h4>
+
+    <details>
+    <summary>Answer pointer's strengths after <code>suicide(T, S)</code></summary>
+      <img src="{{ img_path }}/brownbridge-answer.drawio.svg"> 
+    </details>
+    <div class="flex-container">
+      <img src="{{ img_path }}/brownbridge-question.drawio.svg">
+    </div>
+  </div>
+
   <h5>Failure Example of Brownbridge's delete</h5>
   <code>delete</code> discard cyclic structures incorrectly in the following example.
+  <ul>
+    <li>Because this algorithm does not take <em>weak external reference</em> into consideration.</li>
+  </ul>
   <div class="flex-container">
     <img src="{{ img_path }}/delete-failure.drawio.svg" style="width: 60%">
   </div>
 
   <p>
-    Solution: Salkild's suicide
+    <strong>Solution</strong>: Salkild's suicide
   </p>
 
   <h4>Salkild's suicide</h4>
