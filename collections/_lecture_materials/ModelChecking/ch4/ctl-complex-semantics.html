@@ -10,7 +10,7 @@ title: CTL* Complex Semantics
 
   <div class="flex-container fix-right">
     <div>
-    {% include_relative mermaid/ctl-example.html %}
+    {% include_relative mermaid/ctl-complex-example.html %}
     \[
     \begin{array}[]\\
       \pi_0 = \{ s_0, s_1, s_3, ... \} \\
@@ -51,6 +51,35 @@ title: CTL* Complex Semantics
     </p>
   </div>
 
+  <div style="padding-bottom: 3em">
+    <h4>\( M, s_0 \models \bm{EXEF} (b \land c) \)</h4>
+
+    <h5>Step.1: \( \bm{EF} (b \land c) \)</h5>
+    <p>
+      \( \bm{EF} (b \land c) = \{ s_0, s_1 \} \)
+    </p>
+
+    <h5>Step.2: \( \bm{EX} \{ s_1 \} \)</h5>
+    <p>
+      \( \bm {EX} \{ s_1 \} = \{ s_0 \} \)
+    </p>
+  </div>
+
+  <div style="padding-bottom: 3em">
+    <h4>\( M, s_0 \models \bm{AXA} (b \bm{U} c) \)</h4>
+
+    <h5>Step.1: \( \bm{A} (b \bm{U} c) \)</h5>
+    <p>
+      \( \bm{A} (b \bm{U} c) = \{ s_0, s_1, s_2 \} \)
+    </p>
+
+    <h5>Step.2: \( \bm{AX} \{ s_1, s_2 \} \)</h5>
+    <p>
+      \( \bm{AX} \{ s_1, s_2 \} = \{ s_0 \} \)
+    </p>
+  </div>
+
+<!--
   <div style="padding-bottom: 3em;">
     <h4>\( M, s_0 \models \bm{EGX} b \)</h4>
 
@@ -96,6 +125,7 @@ title: CTL* Complex Semantics
       </ul>
     </p>
   </div>
+-->
 
   <div class="question">
     <h4>Question: \( s_0 \, ? \, \bm{EXAX} (a \land b) \)</h4>
