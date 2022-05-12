@@ -8,6 +8,18 @@
     <li>Reference counting reclaims other cells.</li>
   </ul>
 
+  <div class="flex-container" style="justify-content: space-between">
+    <div>
+      How-to reclaim cycles (<em>Trial Deletion</em>):
+      <ol>
+        <li>Find cells that may be cycle garbage</li>
+        <li>Traverse these cells and decrement the reference counts</li>
+        <li>If the reference counts are zero, these cells must be cycle garbage!!</li>
+      </ol>
+    </div>
+    <img style="width:25%" src="{{ img_path }}/trial-deletion.drawio.svg">
+  </div>
+
   <h4>Lins's Algorithm</h4>
   <ul>
     <li>
