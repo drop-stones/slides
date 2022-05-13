@@ -48,16 +48,17 @@
     </li>
   </ul>
 
-  <h5>Colors</h5>
+  <h5>Colors (States)</h5>
   Lins's algorithm colors cells with 4 color.
   <ul>
     <li><em>Black</em>: active, liveness</li>
     <li><em>Grey</em>: marked (in mark-sweep)</li>
-    <li><em>White</em>: garbage or free cells</li>
+    <li><em>White</em>: garbages</li>
     <li>
-      <em>Purple</em>: may-be-members of isolated cycles
+      <em>Purple</em>: may-be-members of cyclic garbages
       <ul>
         <li>Mark-sweep collector needs to traverse them.</li>
+        <li><em>Control set</em> holds purple cells.</li>
       </ul>
     </li>
   </ul>
@@ -68,7 +69,6 @@
     <li>
       If the reference count is zero
       <ul>
-        <li>Paint <em>white</em></li>
         <li>Free cells</li>
       </ul>
     </li>
@@ -137,7 +137,7 @@
     <img style="width: 56%" src="{{ img_path }}/lins-algorithm-example.drawio.svg">
   </div>
 
-  Step-1: Mark
+  Step-1: Mark (remove <em>internal reference counts</em>)
   <div class="flex-container">
     <div class="sticky">
       {% highlight c %}{{ mark-grey }}{% endhighlight %}
@@ -145,7 +145,7 @@
     <img style="width: 56%" src="{{ img_path }}/lins-mark-grey.drawio.svg">
   </div>
 
-  Step-2: Scan
+  Step-2: Scan (determine whether cells are active or garbages)
   <div class="flex-container">
     <div class="sticky">
       {% highlight c %}{{ scan }}{% endhighlight %}
@@ -187,7 +187,7 @@
     </details>
   </div>
 
-  <h5>Control set strategies</h5>
+  <h5><em>Control set</em> strategies</h5>
   <ul>
     <li>
       Timing of mark-sweep
@@ -199,7 +199,7 @@
       </ul>
     </li>
     <li>
-      Data structure
+      Data structure of control set
       <ul>
         <li>Stack</li>
         <li>Queue</li>
@@ -247,11 +247,14 @@
       <ul>
         <li>
           Automatic memory management without any support from compilers
+          <ul>
+            <li>Because this algorithm doesn't use coloring.</li>
+          </ul>
         </li>
         <li>
           No extra space required
           <ul>
-            <li>Because this algorithm don't manage <em>control set</em></li>
+            <li>Because this algorithm doesn't manage <em>control set</em></li>
           </ul>
         </li>
         <li>

@@ -42,8 +42,21 @@
   <h5>Update</h5>
   All copies of pointers are weak.
   <ul>
-    <li>Because copying pointers may create cycles.</li>
-    <li>Conservative approach</li>
+    <li>
+      Because copying pointers may create cycles.
+      <ul>
+        <li>Conservative approach</li>
+        <li>
+          This may break the following invariant:
+          <ul>
+            <li>Active nodes are reachable from root via a chain of strong pointers;</li>
+          </ul>
+        </li>
+        <li>
+          <code>delete</code> corrects pointer strengths (See below)
+        </li>
+      </ul>
+    </li>
   </ul>
 
   <div class="flex-container">
@@ -61,7 +74,7 @@
       Delete strong reference
       <ul>
         <li>If SRC == 0 and WRC == 0: delete cells</li>
-        <li>If SRC == 0 and WRC > 0: correct pointer type</li>
+        <li>If SRC == 0 and WRC > 0: <strong>correct pointer type</strong></li>
       </ul>
     </li>
   </ul>
@@ -70,7 +83,12 @@
     {% highlight c %}{{ weak-pointer-delete }}{% endhighlight %}
   </div>
 
-  Rule (i): Delete weak reference
+  Rule (i): Delete weak reference<br>
+  <ul>
+    <li>
+      Do not delete the cell because of the invariant "Active nodes are pointed by strong pointers".
+    </li>
+  </ul>
   <div class="flex-container">
     {% highlight c %}{{ delete-1 }}{% endhighlight %}
     <img src="{{ img_path }}/delete-weak.drawio.svg">
@@ -117,7 +135,7 @@
   </p>
 
   <h4>Salkild's suicide</h4>
-  <code>suicide</code> should restart if it discovers may-loop nodes.
+  <code>suicide</code> should restart if it discovers may-active-loop nodes.
   <ul>
     <li>
       If <code>suicide</code> discover a cell with weak pointers but only one strong pointer;

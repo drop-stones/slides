@@ -26,9 +26,9 @@ fun loop() = loop()
 Update(R, S) =
   T = *R
   gr = group_no(R)
-  if gr != group_no(S)
+  if gr != group_no(S)    // R and S are in different groups
     increment_groupRC(S)
-  if gr != group_no(T)
+  if gr != group_no(T)    // R and T are in different groups
     decrement_groupRC(T)
     if groupRC(T) == 0
       reclaim_group(T)
@@ -166,13 +166,15 @@ scan(S) =
   if color(S) == grey
     if RC(S) > 0
       scan_black(S)
-    else
+    else  // RC(S) == 0
+      // garbage
       color(S) = white
       for T in Children(S)
         scan(*T)
 "%}
 
 {% assign scan-black = "
+// Activate S and Children(S)
 scan_black(S) = 
   color(S) = black
   for T in Children(S)
