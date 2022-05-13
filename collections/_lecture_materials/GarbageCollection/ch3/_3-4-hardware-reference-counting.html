@@ -1,0 +1,52 @@
+<div id={{ 3-4-id }}>
+  <h2>{{ 3-4-title }}</h2>
+
+  <ul>
+    <li>
+      Goal: Reduction of overhead by reference counting
+    </li>
+    <li>
+      Means: Using two memory
+      <ul>
+        <li>Main Memory</li>
+        <li>
+          <em>Reference counting memory (RCM)</em>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  ex) <code>Update(R, S)</code>
+  <ol>
+    <li>The CPU executes <code>*R = S;</code></li>
+    <li>Memory is updated.</li>
+    <li><em>RCM</em> manages reference counts.</li>
+  </ol>
+  <div class="flex-container">
+    <img src="{{ img_path }}/hardware-rc.drawio.svg">
+  </div>
+
+  <ul>
+    <li>
+      Merits:
+      <ul>
+        <li>The CPU doesn't have to manage reference counts.</li>
+        <li>
+          No synchronization required.
+          <ul>
+            <li>Synchronization between client programs and tracing garbage collectors</li>
+            <li>Locks on reference counts</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      But hardware reference counting has not been realized...
+      <ul>
+        <li>Because of high development costs</li>
+        <li>And mark-sweep is also required to reclaim cyclic garbages.</li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
