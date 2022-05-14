@@ -1,10 +1,16 @@
 <div class="table-cell">
   <div class="mermaid">
   graph LR
-    subgraph g2 ["g2 (&#172;g1)"]
-      r0 --> r1 --> r2 --> r3
-      subgraph g1 [g1]
-        r3 --> r4
+    subgraph g2-0 ["g2 (&#172;g1)"]
+      r0 --> r1 
+      subgraph g2-1 ["g2 (&#172; g1)"]
+        r1 --> r2
+        subgraph g2-2 ["g2 (&#172; g1)"]
+          r2 --> r3
+          subgraph g1 ["g1 &and; g2"]
+            r3 --> r4
+          end
+        end
       end
     end
 
@@ -13,19 +19,30 @@
     r2[ ] 
     r3( )
     r4(( ))
+
+    style g1 fill:#ccff99
   </div>
 
   <div class="mermaid">
   graph LR
-    subgraph g2-2 ["g2 (&#172;g1)"]
-      r0_2 --> r1_2 --> r2_2 --> r3_2 --> r4_2
+    subgraph g2-0 ["g2 (&#172;g1)"]
+      r0 --> r1 
+      subgraph g2-1 ["g2 (&#172; g1)"]
+        r1 --> r2
+        subgraph g2-2 ["g2 (&#172; g1)"]
+          r2 --> r3
+          subgraph g1 ["g2 (&#172; g1)"]
+            r3 --> r4
+          end
+        end
+      end
     end
 
-    style r4_2 fill:#FFFFFF, stroke:#FFFFFF
-    r0_2[ ]
-    r1_2[ ]
-    r2_2[ ] 
-    r3_2[ ]
-    r4_2[...]
+    style r4 fill:#FFFFFF, stroke:#FFFFFF
+    r0[ ]
+    r1[ ]
+    r2[ ] 
+    r3[ ]
+    r4[...]
   </div>
 </div>

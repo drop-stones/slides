@@ -10,14 +10,7 @@ title: CTL* Complex Semantics
 
   <div class="flex-container fix-right">
     <div>
-    {% include_relative mermaid/ctl-complex-example.html %}
-    \[
-    \begin{array}[]\\
-      \pi_0 = \{ s_0, s_1, s_3, ... \} \\
-      \pi_1 = \{ s_0, s_1, s_4, ... \} \\
-      \pi_2 = \{ s_0, s_2, s_5, ... \} \\
-    \end{array}
-    \]
+      {% include_relative mermaid/ctl-complex-example.html %}
     </div>
   </div>
 
@@ -26,14 +19,14 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{F} (b \land c) \)</h5>
     <p>
-      \( \bm{F} (b \land c) = \{ \pi_0, \pi_1 \} \)<br>
+      \( \bm{F} (b \land c) \supseteq \{ \pi_0, \pi_1 \} \)<br>
       ( This means \( \pi_0, \pi_1 \models \bm{F} (b \land c) \))
     </p>
 
     <h5>Step.2: \( \bm{E} \{ \pi_0, \pi_1 \} \)</h5>
     <p>
-      \( \bm{E} \{ \pi_0, \pi_1 \} = \{ s_0, s_1 \} \)<br>
-      ( This means \( s_0, s_1 \models \bm{E} \{ \pi_0, \pi_1 \} = \bm{EF} (b \land c) \))
+      \( \bm{E} \{ \pi_0, \pi_1 \} \supseteq \{ s_0, s_1 \} \)<br>
+      ( This means \( s_0, s_1 \models \bm{E} \{ \pi_0, \pi_1 \} \subseteq \bm{EF} (b \land c) \))
     </p>
   </div>
 
@@ -42,12 +35,12 @@ title: CTL* Complex Semantics
     
     <h5>Step.1: \( b \bm{U} c \)</h5>
     <p>
-      \( b \bm{U} c = \{ \pi_0, \pi_1, \pi_2 \} \)
+      \( b \bm{U} c \supseteq \{ \pi_0, \pi_1, \pi_2 \} \)
     </p>
     
     <h5>Step.2: \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \} \)</h5>
     <p>
-      \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \}  = \{ s_0, s_1, s_2 \} \)
+      \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \}  \supseteq \{ s_0, s_1, s_2 \} \)
     </p>
   </div>
 
@@ -56,12 +49,12 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{EF} (b \land c) \)</h5>
     <p>
-      \( \bm{EF} (b \land c) = \{ s_0, s_1 \} \)
+      \( \bm{EF} (b \land c) \supseteq \{ s_0, s_1 \} \)
     </p>
 
     <h5>Step.2: \( \bm{EX} \{ s_1 \} \)</h5>
     <p>
-      \( \bm {EX} \{ s_1 \} = \{ s_0 \} \)
+      \( \bm {EX} \{ s_1 \} \supseteq \{ s_0 \} \)
     </p>
   </div>
 
@@ -70,12 +63,12 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{A} (b \bm{U} c) \)</h5>
     <p>
-      \( \bm{A} (b \bm{U} c) = \{ s_0, s_1, s_2 \} \)
+      \( \bm{A} (b \bm{U} c) \supseteq \{ s_0, s_1, s_2 \} \)
     </p>
 
     <h5>Step.2: \( \bm{AX} \{ s_1, s_2 \} \)</h5>
     <p>
-      \( \bm{AX} \{ s_1, s_2 \} = \{ s_0 \} \)
+      \( \bm{AX} \{ s_1, s_2 \} \supseteq \{ s_0 \} \)
     </p>
   </div>
 
@@ -131,20 +124,20 @@ title: CTL* Complex Semantics
     <h4>Question: \( s_0 \, ? \, \bm{EXAX} (a \land b) \)</h4>
 
     <details>
-      <summary>Step.1</summary>
-      \( \bm{X} (a \land b) = \{ \pi_0^1 \} \)
+      <summary>Step.1: \( \bm{X} ( a \land b ) \)</summary>
+      \( \bm{X} (a \land b) \supseteq \{ \pi_0^1 \} \)
     </details>
     <details>
-      <summary>Step.2</summary>
-      \( \bm{A} \{ \pi_0^1 \} = \{ \} \)
+      <summary>Step.2: \( \bm{AX} (a \land b) \)</summary>
+      \( \bm{A} \{ \pi_0^1 \} \supseteq \{ \} \)
     </details>
     <details>
-      <summary>Step.3</summary>
-      \( \bm{X} \{ \} = \{ \} \)
+      <summary>Step.3: \( \bm{XAX} (a \land b) \)</summary>
+      \( \bm{X} \{ \} \supseteq \{ \} \)
     </details>
     <details>
-      <summary>Step.4</summary>
-      \( \bm{E} \{ \} = \{ \} \)<br>
+      <summary>Step.4: \( \bm{EXAX} (a \land b) \)</summary>
+      \( \bm{E} \{ \} \supseteq \{ \} \)<br>
       So, \( s_0 \not\models \bm{EXAX} (a \land b) \)
     </details>
   </div>

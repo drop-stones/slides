@@ -108,31 +108,44 @@
         <div class="table-cell">5.</div>
         <div class="table-cell">\( M, s \models \bm{E} g_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">there is an infinite path \( \pi \) starting from \( s \) such that \( M, \pi \models g_1 \)</div>
+        <div class="table-cell">
+          there is an infinite path \( \pi \) starting from \( s \) such that \( M, \pi \models g_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-5.html %}
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">6.</div>
         <div class="table-cell">\( M, s \models \bm{A} g_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">for every infinite path \( \pi \) starting from \( s \) we have \( M, \pi \models g_1 \)</div>
+        <div class="table-cell">
+          for every infinite path \( \pi \) starting from \( s \) we have \( M, \pi \models g_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-6.html %}
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">7.</div>
         <div class="table-cell">\( M, \pi \models f_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">\( s \) is the first state of \( \pi \), and \( M, s \models f_1 \)</div>
+        <div class="table-cell">
+          \( s \) is the first state of \( \pi \), and \( M, s \models f_1 \)
+          {% include_relative {{ mermaid_dir }}/semantics-7.html %}
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">8.</div>
         <div class="table-cell">\( M, \pi \models \lnot g_1 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">\( M, \pi \not\models g_1 \)</div>
+        <div class="table-cell">
+          \( M, \pi \not\models g_1 \)
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">9.</div>
         <div class="table-cell">\( M, \pi \models g_1 \lor g_2 \)</div>
         <div class="table-cell">\( \Leftrightarrow \)</div>
-        <div class="table-cell">\( M, \pi \models g_1 \) or \( M, \pi \models g_2 \)</div>
+        <div class="table-cell">
+          \( M, \pi \models g_1 \) or \( M, \pi \models g_2 \)
+        </div>
       </div>
       <div class="table-row">
         <div class="table-cell">10.</div>

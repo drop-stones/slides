@@ -1,9 +1,15 @@
 <div class="table-cell mermaid">
   graph LR
-    subgraph g1
-      u0 --> u1 --> u2 --> u3
-      subgraph g2
-        u3 --> u4
+    subgraph g1-0 [g1]
+      u0 --> u1
+      subgraph g1-1 [g1]
+        u1 --> u2
+        subgraph g1-2 [g1]
+          u2 --> u3
+          subgraph g2
+            u3 --> u4
+          end
+        end
       end
     end
 
@@ -12,4 +18,6 @@
     u2(( )) 
     u3[ ]
     u4(( ))
+
+    style g2 fill:#ccff99
 </div>
