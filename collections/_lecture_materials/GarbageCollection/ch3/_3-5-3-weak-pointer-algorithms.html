@@ -29,7 +29,7 @@
   <h4>Algorithms</h4>
 
   <h5>New</h5>
-  Allocate a new cell and return <em>strong pointer</em>.
+  Allocate a new cell and return a <em>strong pointer</em>.
   <ul>
     <li>Because allocating new cells cannot create cycles.</li>
   </ul>
@@ -124,7 +124,8 @@
   <h5>Failure Example of Brownbridge's delete</h5>
   <code>delete</code> discards cyclic structures incorrectly in the following example.
   <ul>
-    <li>Because this algorithm does not take <em>weak external reference</em> into consideration.</li>
+    <li>Because this algorithm does not take <em>weak external references</em> into consideration.</li>
+    <li><code>SRC(S) > 1</code></li>
   </ul>
   <div class="flex-container">
     <img src="{{ img_path }}/delete-failure.drawio.svg" style="width: 60%">

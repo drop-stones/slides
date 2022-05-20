@@ -25,7 +25,7 @@ fun loop() = loop()
 "%}
 
 {% assign bobrow-algorithm = "
-Update(R, S) =
+Update(R: ptr, S: obj) =
   T = *R
   gr = group_no(R)
   if gr != group_no(S)    // R and S are in different groups
@@ -45,7 +45,7 @@ New() =
 "%}
 
 {% assign salkild-update = "
-Update(R, S) = 
+Update(R: ptr, S: obj) = 
   WRC(S) = WRC(S) + 1
   delete(*R)
   *R = S
@@ -135,7 +135,7 @@ New() =
 "%}
 
 {% assign lins-update = "
-Update(R, S) = 
+Update(R: ptr, S: obj) = 
   RC(S) += 1
   color(R) = black
   color(S) = black
