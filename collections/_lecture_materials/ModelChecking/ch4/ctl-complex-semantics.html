@@ -19,14 +19,14 @@ title: CTL* Complex Semantics
 
     <h5>Step.1: \( \bm{F} (b \land c) \)</h5>
     <p>
-      \( \bm{F} (b \land c) \supseteq \{ \pi_0, \pi_1, \pi_0^1, \pi_1^1, ... \} \)<br>
+      \( \bm{F} (b \land c) \supseteq \{ \pi_0, \pi_1, \pi_2, \pi_0^1, \pi_1^1, \pi_2^1 ... \} \)<br>
       ( This means \( \pi_0, \pi_1 \models \bm{F} (b \land c) \))
     </p>
 
     <h5>Step.2: \( \bm{E} \{ \pi_0, \pi_1 \} \)</h5>
     <p>
-      \( \bm{E} \{ \pi_0, \pi_1 \} \supseteq \{ s_0 \} \)<br>
-      ( This means \( s_0 \models \bm{E} \{ \pi_0, \pi_1 \} \subseteq \bm{EF} (b \land c) \))
+      \( \bm{E} \{ \pi_0, \pi_1, \pi_2 \} \supseteq \{ s_0 \} \)<br>
+      ( This means \( s_0 \models \bm{E} \{ \pi_0, \pi_1, \pi_2 \} \subseteq \bm{EF} (b \land c) \))
     </p>
   </div>
 
@@ -35,12 +35,12 @@ title: CTL* Complex Semantics
     
     <h5>Step.1: \( b \bm{U} c \)</h5>
     <p>
-      \( b \bm{U} c \supseteq \{ \pi_0, \pi_1, \pi_2, \pi_0^1, \pi_1^1, \pi_2^1, ... \} \)
+      \( b \bm{U} c \supseteq \{ \pi_0, \pi_1, \pi_2, \pi_3, \pi_0^1, \pi_1^1, \pi_2^1, \pi_3^1, ... \} \)
     </p>
     
-    <h5>Step.2: \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \} \)</h5>
+    <h5>Step.2: \( \bm{A} \{ \pi_0, \pi_1, \pi_2, \pi_3 \} \)</h5>
     <p>
-      \( \bm{A} \{ \pi_0, \pi_1, \pi_2 \}  \supseteq \{ s_0 \} \)
+      \( \bm{A} \{ \pi_0, \pi_1, \pi_2, \pi_3 \}  \supseteq \{ s_0 \} \)
     </p>
   </div>
 
@@ -125,11 +125,11 @@ title: CTL* Complex Semantics
 
     <details>
       <summary>Step.1: \( \bm{X} ( a \land b ) \)</summary>
-      \( \bm{X} (a \land b) \supseteq \{ \pi_0^1 \} \)
+      \( \bm{X} (a \land b) \supseteq \{ \pi_0^1, \pi_1^1 \} \)
     </details>
     <details>
       <summary>Step.2: \( \bm{AX} (a \land b) \)</summary>
-      \( \bm{A} \{ \pi_0^1 \} \supseteq \{ \} \)
+      \( \bm{A} \{ \pi_0^1, \pi_1^1 \} \supseteq \{ \} \)
     </details>
     <details>
       <summary>Step.3: \( \bm{XAX} (a \land b) \)</summary>
