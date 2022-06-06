@@ -47,6 +47,56 @@
     \[ \textit{inf}(\pi) = \{ s \mid s = s_i \text{ for infinitely many } i \} \]
     We define that \( \pi \) is <em>fair</em> if and only if
     \[ \text{for every } P \in F, \textit{inf}(\pi) \cap P \neq \{\} \]
+
+    <div class="example">
+      <h5>Example</h5>
+
+      <p>Fairness Constraints: \( F = \{ \{ s_0 \}, \{ s_1 \} \} \)</p>
+      <div class="flex-container">
+        {% include_relative {{ mermaid_dir }}/fairness.html %}
+      </div>
+
+      <div>
+        Check whether \( \pi_0 = \{ s_0, s_0, ..., s_0, ... \} \) is fair:
+        <ul>
+          <li>
+            \( \textit{inf} (\pi_0) = \{ s_0 \} \)
+          </li>
+          <li>
+            \( \text{for every } P \in F, \textit{inf}(\pi) \cap P \neq \{\} \)
+            <ul>
+              <li>
+                \( \textit{inf}(\pi_0) \cap P_1 = \{ s_0 \} \cap \{ s_0 \} = \{ s_0 \} \neq \{\} \)
+              </li>
+              <li>
+                \( \textit{inf}(\pi_0) \cap P_2 = \{ s_0 \} \cap \{ s_1 \} = \{\} \)
+              </li>
+            </ul>
+          </li>
+        &rarr; Not fair...<br>
+        </ul>
+
+        Check whether \( \pi_2 = \{ s_0, s_1, s_0, s_1, ..., s_0, s_1, ... \} \) is fair:
+        <ul>
+          <li>
+            \( \textit{inf} (\pi_2) = \{ s_0, s_1 \} \)
+          </li>
+          <li>
+            \( \text{for every } P \in F, \textit{inf}(\pi) \cap P \neq \{\} \)
+            <ul>
+              <li>
+                \( \textit{inf}(\pi_2) \cap P_1 = \{ s_0, s_1 \} \cap \{ s_0 \} = \{ s_0 \} \neq \{\} \)
+              </li>
+              <li>
+                \( \textit{inf}(\pi_2) \cap P_2 = \{ s_0, s_1 \} \cap \{ s_1 \} = \{ s_1 \} \neq \{\} \)
+              </li>
+            </ul>
+          </li>
+        &rarr; Fair!!
+        </ul>
+      </div>
+
+    </div>
   </div>
 
   <div>
@@ -70,11 +120,16 @@
       <li>
         \( \bm{A} ( fpath \rightarrow \phi ) \)
         <ul>
-          <li>For every path, if it is fair, then it must satisfies \( \phi \).</li>
-          <li>We can ignore no-fair paths. (e.g, \( \pi_0, \pi_1 \) )</li>
+          <li>
+            For every path, if it is fair, then it must satisfies \( \phi \).
+            <ul>
+              <li>We focus on fair paths.</li>
+              <li>We can ignore no-fair paths. (e.g, \( \pi_0, \pi_1 \) )</li>
+            </ul>
+          </li>
           <li>
             If we define \( \bm{A} ( fpath \land \phi ) \), we cannot check the properties of \( s_0 \).
-            <ul><li>\( \bm{A} (fpath \land \phi) = \bm{A} (fpath) \land \bm{A} \phi = false\)</li></ul>
+            <ul><li>\( \bm{A} (fpath \land \phi) = \bm{A} (fpath) \land \bm{A} \phi = \{\} \)</li></ul>
           </li>
         </ul>
       </li>
@@ -87,10 +142,16 @@
   <div>
     <h4>Fairness in CTL</h4>
 
-    <p>
       In CTL, we cannot express \( \bm{GF} \) because of its syntax rules.<br>
-      In order to deal with fairness in CTL, we modify its semantics.
-    </p>
+      In order to deal with fairness in CTL, we use <em>a fair Kripke structure</em> \( M \) and modify its semantics.
+      <ul>
+        <li>
+          <em>Fair Kripke structure</em> \( M = \{ S, S_0, R, AP, L, F \} \)
+          <ul>
+            <li>\( \pi \models_{F} \phi \) : \( \pi \) is fair and satisfies \( \phi \).</li>
+          </ul>
+        </li>
+      </ul>
 
     <div class="table">
       <div class="table-row">

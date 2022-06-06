@@ -1,7 +1,8 @@
 <div id="mc-4-3-2-the-universal-computation-tree-logics-actl*-and-actl">
   <h3>{{ 4-3-2-title }}</h3>
 
-  <em>ACTL*</em> have some restriction compared to CTL*:
+  <h4>ACTL*</h4>
+  <em>ACTL*</em> have two restrictions compared to CTL*:
   <ul>
     <li>Only the universal path quantification \( \bm{A} \) is allowed (\( \bm{E} \) is not allowed).</li>
     <li>
@@ -14,7 +15,7 @@
         </li>
       </ul>
     </li>
-    <li>ex) \( \bm{AX} \lnot p, \bm{AXAF} (p \lor \lnot q) \)</li>
+    <li>ex) \( \bm{AX} \lnot p, \bm{AXAFG} (p \lor \lnot q) \)</li>
   </ul>
 
   <div id="mc-actl*-syntax">
@@ -52,16 +53,27 @@
   <h5>Some topics</h5>
   <ul>
     <li><em>ECTL*</em> is defined analogously with \( \bm{E} \) instead of \( \bm{A} \).</li>
-    <li>\( \bm{X}, \bm{U}, \bm{R} \) are sufficient to express ACTL* and ECTL*.</li>
+    <li>
+      \( \bm{X}, \bm{U}, \bm{R} \) are sufficient to express ACTL* and ECTL*.
+      <ul>
+        <li>See <a href="#mc-ctl*-properties">Some properties</a> of CTL*</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>ACTL</h4>
+  <em>ACTL</em> have one more restriction of ACTL*:
+  <ul>
+    <li>
+      Path quantifier and Temporal operators always occur in pairs.
+      <ul>
+        <li>\( \{ \bm{A} \} \times \{ \bm{X}, \bm{F}, \bm{G}, \bm{U}, \bm{R} \} \)</li>
+      </ul>
+    </li>
   </ul>
 
   <div id="mc-actl-syntax">
     <h4>Syntax of ACTL</h4>
-
-    <em>ACTL</em> have one more restriction of ACTL*:
-    <ul>
-      <li>Path quantifier and Temporal operators always occur in pairs.</li>
-    </ul>
 
     <div class="table">
       <div class="table-row">
@@ -69,18 +81,23 @@
         <div class="table-cell">If \( p \in AP \), then \( p \) and \( \lnot p \) are ACTL formulas.</div>
       </div>
       <div class="table-row">
-        <div class="table-cell">D2</div>
+        <div class="table-cell"><strong>D2</strong></div>
         <div class="table-cell">If \( f \) is an ACTL formula, then \( \bm{AX} f, \bm{AF} f \), and \( \bm{AG} f \) are ACTL formulas.</div>
       </div>
       <div class="table-row">
-        <div class="table-cell">D3</div>
+        <div class="table-cell"><strong>D3</strong></div>
         <div class="table-cell">If \( f \) and \( g \) are ACTL formulas, then \( f \land g, f \lor g, \bm{A} (f \bm{U} g), \bm{A} (f \bm{R} g) \) are ACTL formulas.</div>
       </div>
     </div>
 
     <h5>Some topics</h5>
     <ul>
-      <li>\( \bm{AX}, \bm{AU}, \bm{AR} \) are sufficient to express ACTL.</li>
+      <li>
+        \( \bm{AX}, \bm{AU}, \bm{AR} \) are sufficient to express ACTL.
+        <ul>
+          <li>See <a href="#mc-ctl-properties">Some properties</a> of CTL</li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>
