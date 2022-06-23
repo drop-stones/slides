@@ -1,0 +1,21 @@
+---
+title: Garbage Collection Ch.7-b
+subtitle: Generational Garbage Collection
+date: 2022-06-23
+---
+
+{% include_relative _names.html %}
+{% include_relative _codes.html %}
+{% assign img_path = '/assets/img/lecture_materials/GarbageCollection/ch7' | relative_url %}
+{% assign mermaid_dir = 'mermaid' %}
+
+
+<div class="chapter" id="{{ gc-7-id }}">
+  {% include_relative _7-contents.html %}
+  {% include_relative _7-overview.html %}
+  {% include_relative _7-5-inter-generational-pointers.html %}
+  {% include_relative _7-6-non-copying-generational-garbage-collection.html %}
+  {% include_relative _7-7-scheduling-garbage-collections.html %}
+  {% include_relative _7-8-issues-to-consider.html %}
+  {% include_relative _7-summary.html %}
+</div>
