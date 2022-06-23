@@ -1,3 +1,106 @@
 <div id="{{ 7-5-1-id }}">
   <h3>{{ 7-5-1-title }}</h3>
+
+  <h4>Inter-generational pointers patterns</h4>
+  Two patterns of inter-generational pointers:
+  <ul>
+    <li>
+      Promotion to next generation of objects that contain pointers
+      <ul>
+        <li>Minor scavenger can easily detect them.</li>
+        <img src="{{ img_path }}/promotion_of_pointer.drawio.svg">
+      </ul>
+    </li>
+    <li>
+      Pointer stores in older generation
+      <ul>
+        <li>Pointer stores must be trapped and recorded.</li>
+        <li>&rarr; <em>Write-barrier</em></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Write-barrier implementation</h4>
+  Write-barrier can be implemented by several ways:
+  <ul>
+    <li>
+      Software approaches:
+      <ul>
+        <li>
+          Compiler supports
+          <ul>
+            <li>Record instructions before each pointer read or write</li>
+            <li>Compile-time analysis to reduce the number of pointer operation to be instrumented</li>
+          </ul>
+        </li>
+        <li>
+          Virtual memory protection mechanisms:
+          <ul>
+            <li>Trap by accessing protected pages</li>
+            <li>Page modification dirty bits</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Hardware approaches:
+      <ul>
+        <li>Special purpose hardware</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Evaluation factors</h4>
+  Three factors to be considered in software approaches:
+  <ul>
+    <li>How the cost to the mutator can be minimized</li>
+    <li>The space overhead of recording pointer store</li>
+    <li>How efficiently old-young pointers can be identified at scavenge time</li>
+  </ul>
+
+  <h4>Percentage of pointer stores</h4>
+  In Lisp:
+  <ul>
+    <li>
+      Static frequency
+      <ul>
+        <li>Pointer Load: 13~15 %</li>
+        <li>Pointer Store: 4 %</li>
+        <li>Inlining barrier may explode the size of codes.</li>
+      </ul>
+    </li>
+    <li>
+      Dynamic frequency
+      <ul>
+        <li>
+          Store that need trap: 5 ~ 10 %
+          <ul>
+            <li>Non-initializing pointer store</li>
+            <li>
+              2/3 are stores to objects in the youngest generation
+            </li>
+          </ul>
+        </li>
+        <li>
+          Other memory references: 90 ~ 95 %
+          <ul>
+            <li>Pointer store to the root set</li>
+            <li>Alloc-and-Initializing store</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    Even though the percentage of pointer stores is small, optimizing the write barrier is critical.<br>
+    Ex) 1 % pointer store &times; 10 additional instructions = 10 % overhead
+  </p>
+
+<!--
+  <p>
+    <strong>Goal for the rest of this section</strong>: More precise methods of trapping and recording inter-generational pointers.
+  </p>
+-->
+
 </div>

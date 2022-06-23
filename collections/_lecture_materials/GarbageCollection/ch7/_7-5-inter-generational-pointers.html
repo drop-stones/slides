@@ -1,6 +1,42 @@
 <div id="{{ 7-5-id }}">
   <h2>{{ 7-5-title }}</h2>
 
+  Generational garbage collector must identify <em>inter-generational pointers</em> because:
+  <ul>
+    <li>Minor garbage collection search only the youngest generation.</li>
+    <li>&rarr; Minor garbage collection may scavenge cells that should be alive by mistake.</li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/scavenge_by_mistake.drawio.svg">
+  </div>
+
+  The simplest approach: Scan all older generations
+  <ul>
+    <li>
+      Advantage
+      <ul>
+        <li>No costs to the mutator (user program)</li>
+        <li>Linear scanning</li>
+      </ul>
+    </li>
+    <li>
+      Disadvantages:
+      <ul>
+        <li>More scanning</li>
+        <li>Worse locality</li>
+      </ul>
+    </li>
+  </ul>
+
+  Shaw and Swanson suggest that:
+  <ul>
+    <li>The simplest approach reduce overheads by 1/3 compared with a non-generational two-space copying collector.</li>
+  </ul>
+
+  <p>
+    <strong>Goal of this section</strong>: Understand more precise methods of recording <em>inter-generational pointers</em>.
+  </p>
+
   {% include_relative _7-5-1-the-write-barrier.html %}
   {% include_relative _7-5-2-entry-tables.html %}
   {% include_relative _7-5-3-remembered-sets.html %}
