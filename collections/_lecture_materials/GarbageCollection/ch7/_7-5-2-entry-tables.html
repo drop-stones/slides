@@ -1,4 +1,55 @@
 <div id="{{ 7-5-2-id }}">
   <h3>{{ 7-5-2-title }}</h3>
 
+  <em>Entry Table</em> records inter-generational pointers:
+  <ul>
+    <li>
+      Each entry records pointers from older to younger generation.
+      <ul>
+        <li>A new entry is added when inter-generational pointers are stored.</li>
+        <li>&rarr; The number of entries is the number of store operations.</li>
+      </ul>
+    </li>
+    <img src="{{ img_path }}/introduce-entry-table.drawio.svg">
+  </ul>
+
+  <h5>Properties</h5>
+  <ul>
+    <li>
+      Advantage
+      <ul>
+        <li>
+          No need to search all older generations
+          <ul>
+            <li>Only need to search its entry table</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Disadvantage
+      <ul>
+        <li>
+          Duplicate references to a single object
+          <ul>
+            <li>&rarr; The scanning cost becomes high</li>
+          </ul>
+        </li>
+        <img src="{{ img_path }}/duplicate-entry.drawio.svg">
+        <li>
+          The cost of trapping pointer stores and following indirections is very high
+          <ul>
+            <li>Trap a pointer store.</li>
+            <li>The pointer is over-written to a new entry.</li>
+            <li>The new entry points to the original target.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    Result: Most modern generational garbage collection schemes don't use <em>Entry Table</em>.
+  </p>
+
 </div>

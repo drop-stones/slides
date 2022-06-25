@@ -1,3 +1,69 @@
 <div id="{{ 7-5-3-id }}">
   <h3>{{ 7-5-3-title }}</h3>
+
+  <em>Remembered set</em> records inter-generational pointers:
+  <ul>
+    <li>
+      Each entry records the address of the old object which has inter-generational pointers.
+      <ul>
+        <li>
+          A new entry is added if:
+          <ul>
+            <li>whether a pointer was being stored, and</li>
+            <li>whether the pointer is from a old to a young object.</li>
+            <!-- <li>whether a reference to a young object was being stored into an old object.</li> -->
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <!--Each object in memory has a bit in its header indicating whether the object is a member of remembered set.-->
+      A bit in each object header represents whether the object is a member of remembered set.
+      <ul>
+        <li>&rarr; No duplicate entries</li>
+      </ul>
+    </li>
+  </ul>
+  <img src="{{ img_path }}/remembered-set.drawio.svg">
+
+  <h4>Properties</h4>
+  <ul>
+    <li>
+      Costs:
+      <ul>
+        <li>&plus; No indirection of pointers</li>
+        <li>
+          &plus; No duplicate entries
+          <ul>
+            <li>&rarr; Better than <em>entry table</em></li>
+          </ul>
+        </li>
+        <li>
+          &minus; High overhead of store checking
+        </li>
+        <li>
+          &minus; High overhead of scanning large objects
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Slot recording</h5>
+  Remembered sets records the address of the slot rather than the object:
+  <ul>
+    <li>Purpose: To avoid the high overhead of scanning large objects</li>
+    <li>
+      Two problems:
+      <ul>
+        <li>"Allow duplicate entries" or "A bit in each pointers"</li>
+        <li>
+          Multiple entries if the object has multiple pointers
+          <ul>
+            <li>&rarr; Increase remembered sets size</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
 </div>
