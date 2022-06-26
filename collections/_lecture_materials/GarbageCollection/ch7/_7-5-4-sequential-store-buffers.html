@@ -1,3 +1,66 @@
 <div id="{{ 7-5-4-id }}">
   <h3>{{ 7-5-4-title }}</h3>
+
+  <em>Sequential Store Buffer (SSB)</em> temporarily store may-be-inter-generational pointers.
+  <ul>
+    <li>
+      Each entry records pointer stores
+      <ul>
+        <li>
+          No check
+          <ul>
+            <li>&plus; Low overhead of the write-barrier</li>
+            <li>&minus; Duplicate entries</li>
+          </ul>
+        </li>
+        <li>
+          Slot recording
+          <ul>
+            <li>&plus; High-precision recording</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      At SSB overflow or Collection-time:
+      <ul>
+        <li>Construct <em>the remembered set</em> from SSB.</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/ssb.drawio.svg">
+  </div>
+
+  <em>Remembered set</em> records unique inter-generational pointers.
+  <ul>
+    <li>
+      Circular Hash Table using linear hashing
+      <ul>
+        <li>&plus; No duplicate entries</li>
+        <li>&plus; Dynamically sized</li>
+        <li>&minus; High overhead of constructing <em>remembered sets</em></li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/remembered_set_from_ssb.drawio.svg">
+  </div>
+
+  <h4>Costs</h4>
+  <ul>
+    <li>
+      Write-barrier costs: Low
+      <ul>
+        <li>&because; Only push to SSB</li>
+      </ul>
+    </li>
+    <li>
+      Collection-time costs: High
+      <ul>
+        <li>&because; Construction of <em>remembered set</em> from SSB</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>

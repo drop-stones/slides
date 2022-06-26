@@ -1,3 +1,94 @@
 <div id="{{ 7-5-5-id }}">
   <h3>{{ 7-5-5-title }}</h3>
+
+  <p>
+    Symbolics 3600 provides the following functions with hardware support.
+  </p>
+
+  <h4>Garbage Collector Page Table (GCPT)</h4>
+  <em>GCPT</em> records the physical pages where the pointer write was performed.
+  <ul>
+    <li>
+      Each entry has a bit of the corresponding physical pages
+      <ul>
+        <li>
+          The bit is set when a inter-generational pointer was stored in the page.
+        </li>
+        <li>
+          The bit is set whether a young-old pointer or a old-young pointer
+        </li>
+      </ul>
+    </li>
+    <li>
+      Handling of swapped-out pages
+      <ul>
+        <li><em>Ephemeral Space Reference Table (ESRT)</em></li>
+      </ul>
+    </li>
+    <li>
+      Collection-time:
+      <ul>
+        <li>Scan the entire physical pages with bit set.</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/GCPT.drawio.svg">
+  </div>
+
+  <h4>Ephemeral Space Reference Table (ESRT)</h4>
+  <em>ESRT</em> records swapped-out pages and generations referenced by the page.
+  <ul>
+    <li>
+      Each entry has a bit-mask with a bit for each generation referenced by the swapped-out page
+      <ul>
+        <li>
+          When a page was swapped out,
+          <ol>
+            <li>its GCPT bit was cleared</li>
+            <li>its ESRT entry was updated</li>
+          </ol>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div class="flex-container">
+    <img src="{{ img_path }}/ESRT.drawio.svg">
+  </div>
+
+  <h4>Properties</h4>
+  <ul>
+    <li>
+      Advantages:
+      <ul>
+        <li>
+          Low overhead
+          <ul>
+            <li>&because; Hardware support</li>
+          </ul>
+        </li>
+        <li>
+          One generation can be scavenged independently
+          <ul>
+            <li>
+              If one generation is scavenged,
+              <ol>
+                <li>Scan the physical pages with bit set in GCPT</li>
+                <li>Scan the swapped-out pages with corresponding bit set in ESRT</li>
+              </ol>
+            </li>
+            <li>&because; GCPT and ESRT records young-old pointers.</li>
+            <li>Most other approaches must collect all younger generations when they collect an older one.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Disadvantages:
+      <ul>
+        <li>Need specialized hardware</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>
