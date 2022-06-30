@@ -1,3 +1,105 @@
 <div id="{{ 7-6-id }}">
   <h2>{{ 7-6-title }}</h2>
+
+  <h4>Zorn's Generational Mark-sweep Collector</h4>
+
+  <ul>
+    <li>
+      Memory Layout
+      <ul>
+        <li>Four generations</li>
+        <li>
+          Each generation contains:
+          <ul>
+            <li>A mark bitmap</li>
+            <li>
+              A fixed-size-object region
+              <ul>
+                <li>Contains objects of a single size</li>
+              </ul>
+            </li>
+            <li>
+              A variable-sized-object region
+              <ul>
+                <li>Contains objects that don't fit in the fixed-size-object area</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Collection Methods
+      <ul>
+        <li>
+          A fixed-size-object region
+          <ul>
+            <li>3 times: Mark-and-deferred-sweep garbage collection</li>
+            <li>1 time: Copying with <em>em masse</em> promotion</li>
+          </ul>
+        </li>
+        <li>
+          A variable-sized-object region
+          <ul>
+            <li>Two space copying collector</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Copying vs. Mark-Sweep generational garbage collection</h5>
+
+  <table>
+    <tr>
+      <th></th>
+      <th>Copying</th>
+      <th>Mark-sweep</th>
+    </tr>
+    <tr>
+      <th>Total CPU overhead</th>
+      <td>Low</td>
+      <td>Middle</td>
+    </tr>
+    <tr>
+      <th>Memory overhead</th>
+      <td>High</td>
+      <td>Low<br>(- 30~40%)</td>
+    </tr>
+    <tr>
+      <th>Cache miss rate</th>
+      <td>Middle<br>(Compaction may give no advantage)</td>
+      <td>Low<br>(&because; Mark bitmap)</td>
+    </tr>
+    <tr>
+      <th>Promotion rate</th>
+      <td>Low</td>
+      <td>High<br>(&because; <em>em masse</em> promotion)</td>
+    </tr>
+  </table>
+
+  <h4>The oldest generation handling</h4>
+
+  The oldest generations have to be treated differently in a copying collector:
+  <ul>
+    <li>Younger generation: Copy from younger to the next generation.</li>
+    <li>The oldest generation: Two-space copying</li>
+  </ul>
+
+  If the cost of two semi-spaces is too high, other methods are required:
+  <ul>
+    <li>
+      Mark-sweep
+      <ul>
+        <li>&plus; No semi-space required</li>
+        <li>
+          &minus; Memory fragmentation
+          <ul>
+            <li>&rarr; High cost of moving tenured objects to the oldest generation</li>
+            <li>If tenured objects are rare, the cost may be acceptable.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
