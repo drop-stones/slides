@@ -1,3 +1,121 @@
 <div id="{{ 7-5-6-id }}">
   <h3>{{ 7-5-6-title }}</h3>
+
+  <ul>
+    <li>3600's hardware support: Not available on many machine</li>
+    <li>
+      Virtual memory machinery + <em>Dirty bit</em>: Available on many machine
+      <ul>
+        <li>&rarr; <em>Dirty bit</em> can be used as pointer write marker !?</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Dirty bit in page marking GC</h4>
+
+  The purpose of the dirty bit in virtual memory and in GC are different:
+  <ul>
+    <li>Virtual memory: Dirty bit determine whether a page needs to be written back to disk</li>
+    <li>
+      Page marking GC: Dirty bit determine whether there has been a pointer write in <strong>interval</strong>
+      <ul>
+        <li>Garbage collection interval: Period from the last GC to next GC.</li>
+      </ul>
+    </li>
+  </ul>
+
+  Page marking GC uses three dirty bits to archive the purpose:
+  <ul>
+    <li>
+      <code>Dirty</code> bit:
+      <ul>
+        <li>Role: To track page modifications in interval</li>
+        <li>
+          How to set:
+          <ul>
+            <li>At start of interval: Clear all <code>Dirty</code> bits</li>
+            <li>At modification: Set by hardware</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <code>Old_Dirty</code> bit:
+      <ul>
+        <li>
+          Role: To save past <code>Dirty</code> bits 
+          <ul>
+            <li>To archive virtual memory purpose</li>
+          </ul>
+        </li>
+        <li>
+          How to set:
+          <ul>
+            <li>Before <code>Dirty</code> bits are cleared: Save them to <code>Old_Dirty</code> bits</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <code>Dirty_on_Disk</code> bit:
+      <ul>
+        <li>Role: To track modifications of swapped-out pages</li>
+        <li>
+          How to set:
+          <ul>
+            <li>Before page swapping: Set by interception</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/dirty-bit-0.drawio.svg">
+    <img src="{{ img_path }}/dirty-bit-1.drawio.svg">
+    <img src="{{ img_path }}/dirty-bit-2.drawio.svg">
+    <img src="{{ img_path }}/dirty-bit-3.drawio.svg">
+  </div>
+
+  <h4>Problems</h4>
+
+  <ul>
+    <li>
+      Dirty bits handling
+      <ul>
+        <li>This system requires a way to get and clear dirty bits.</li>
+        <li>
+          Approaches
+          <ul>
+            <li>
+              Kernel modification: Add the new system calls
+            </li>
+            <li>
+              Write-protection of pages:
+              <ol>
+                <li>Write-protect all pages</li>
+                <li>Write-fault handler set a dirty bit for the page</li>
+                <li>Clear all dirty bits after garbage collection</li>
+              </ol>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      A coarse write-barrier
+      <ul>
+        <li>
+          Large page size in modern systems
+        </li>
+        <li>
+          Dirty bits records any modification of the page
+          <ul>
+            <li>Not only generational-pointer stores</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
 </div>

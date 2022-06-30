@@ -77,7 +77,7 @@
                 <li>Scan the swapped-out pages with corresponding bit set in ESRT</li>
               </ol>
             </li>
-            <li>&because; GCPT and ESRT records young-old pointers.</li>
+            <li>&because; GCPT and ESRT records young-old pointers too.</li>
             <li>Most other approaches must collect all younger generations when they collect an older one.</li>
           </ul>
         </li>
@@ -87,6 +87,12 @@
       Disadvantages:
       <ul>
         <li>Need specialized hardware</li>
+        <li>
+          Small page size required
+          <ul>
+            <li>&because; Scan the entire page with bit set</li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>

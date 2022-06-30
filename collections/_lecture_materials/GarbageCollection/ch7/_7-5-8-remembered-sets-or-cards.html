@@ -1,3 +1,66 @@
 <div id="{{ 7-5-8-id }}">
   <h3>{{ 7-5-8-title }}</h3>
+
+  <h4>Remembered Set vs. Card Marking</h4>
+  <table>
+    <tr>
+      <th></th>
+      <th>Remembered Set + SSB</th>
+      <th>Card marking</th>
+    </tr>
+    <tr>
+      <th>Write-barrier cost</th>
+      <td>2 instructions<br>(SSB may overflow)</td>
+      <td>2 instructions</td>
+    </tr>
+    <tr>
+      <th>Granularity of recording</th>
+      <td>Pointer<br>(Duplicate entries in SSB)</td>
+      <td>Card</td>
+    </tr>
+    <tr>
+      <th>Factors of collection-time cost</th>
+      <td>The number of stores performed between scavenges</td>
+      <td>The number of dirty pages<br>(Dirty pages must be scanned at every scavenge)</td>
+    </tr>
+  </table>
+
+  <h4>Hybrid approach</h4>
+
+  <ul>
+    <li>
+      Write-barrier: Card marking
+      <ul>
+        <li>&plus; No overflow</li>
+        <li>&plus; No duplicate entry</li>
+      </ul>
+    </li>
+    <li>
+      Collection time: Construct remembered set from card table
+      <ul>
+        <li>
+          &plus; Unchanged dirty pages are not scanned each time.
+          <ul>
+            <li>&because; Inter-generational pointers are stored in remembered set, and Card table are cleared.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/hybrid-remset-card.drawio.svg">
+  </div>
+
+  <ul>
+    <li>
+      Result: A significant improvement over:
+      <ul>
+        <li>Pure remembered sets</li>
+        <li>Pure card marking with optimal card size</li>
+        <li>Virtual memory techniques</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>

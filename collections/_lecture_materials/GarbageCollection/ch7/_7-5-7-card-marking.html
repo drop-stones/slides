@@ -1,3 +1,180 @@
 <div id="{{ 7-5-7-id }}">
   <h3>{{ 7-5-7-title }}</h3>
+
+  <p>
+    Page markings are too coarse.<br>
+    &rarr; More fine-grained markings are desireable.
+  </p>
+
+  <h4>Word marking</h4>
+
+  <p>
+    <em>Word marking</em> records pointer writes at word granularity.
+  </p>
+
+  <h5>Naive approach</h5>
+
+  <p>
+    Prepare a very very big bitmap!!<br>
+    &rarr; High memory overhead
+  </p>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/naive-word-marking.drawio.svg">
+  </div>
+
+  <h5>Sobalvarro's approach</h5>
+
+  Prepare a bitmap per <em>segment</em>:
+  <ul>
+    <li><em>Segment</em>: 64 kilobytes address space</li>
+    <li>
+      <em>Modification Bit Table (MBT)</em>:
+      <ul>
+        <li>A bitmap per <em>segment</em></li>
+        <li>
+          A single MBT is shared by segments which need not be recorded:
+          <ul>
+            <li>The youngest generation</li>
+            <li>Unscanned segments (No data)</li>
+            <li>Only non-pointer data</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <em>Segment modification cache</em>:
+      <ul>
+        <li>A cache which records modified segments</li>
+        <li>Garbage collectors only need to scan the segments in the cache.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/word-marking.drawio.svg">
+  </div>
+
+  <h5>Costs</h5>
+  <ul>
+    <li>
+      Write-barrier
+      <ul>
+        <li>10 instructions</li>
+        <li>3 registers</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    Word marking's write-barrier is too fine-grained and has high overhead.<br>
+    Page marking's write-barrier is too coarse-grained and has to scan the entire page.<br>
+    &rarr; The compromise between word and page marking is <em>card marking</em>.
+  </p>
+
+  <h4>Card marking</h4>
+
+  <ul>
+    <li>
+      <em>Card</em>: Unit of division of heap
+      <ul>
+        <li>
+          Card size is flexible.
+          <ul>
+            <li>Smaller size: Reduce collection-time scanning</li>
+            <li>Bigger size: Reduce <em>card table</em> size</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <em>Card table</em>: A byte map
+      <ul>
+        <li>Byte map can reduce the cost of write-barrier</li>
+        <li>&because; Bit manipulations require several instructions (e.g., shift)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/card-marking.drawio.svg">
+  </div>
+
+  <h5>Costs</h5>
+
+  <ul>
+    <li>
+      Write-barrier
+      <ul>
+        <li>3 instructions or</li>
+        <li>
+          2 instructions by optimization
+          <ul>
+            <li>Mark the object's address instead of the pointer address.</li>
+            <li>Collection-time costs are increased.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Collection-time
+      <ul>
+        <li>
+          Proportional to the number and size of cards marked
+          <ul>
+            <li>&plus; No duplicate entry</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Memory overhead: Small
+      <ul>
+        <li>e.g., 128-byte card &rarr; + 1/128 overhead</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Problem: Objects across multiple cards</h5>
+
+  Small card size or/and Big objects cause cards that cannot be scanned from the beginning.
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/crossing-map.drawio.svg">
+  </div>
+
+  <ul>
+    <li>
+      <em>Crossing Map</em>: A byte map which indicates the cards that cannot be scanned from the beginning
+      <ul>
+        <li>Same size as the card table</li>
+        <li>
+          At garbage collection time:
+          <ol>
+            <li>Check whether the page is dirty from card table.</li>
+            <li>Check whether the page is scannable from crossing map.</li>
+            <li>If not, garbage collector skip back until it finds a scannable page.</li>
+          </ol>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  Some considerations:
+  <ul>
+    <li>
+      Card size
+      <ul>
+        <li>Larger card size: Increase page faults by skipping back</li>
+        <li>Smaller card size: Increase the size of the card table</li>
+      </ul>
+    </li>
+    <li>
+      Large objects handling
+      <ul>
+        <li>Large unscannable objects can be stored separately in a large object area</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>
