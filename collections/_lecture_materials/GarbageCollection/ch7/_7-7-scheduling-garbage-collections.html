@@ -1,6 +1,74 @@
 <div id="{{ 7-7-id }}">
   <h2>{{ 7-7-title }}</h2>
 
+  The aims of generational garbage collection:
+  <ul>
+    <li><strong>Fewer pause time</strong></li>
+    <li>Fewer collection time</li>
+    <li>
+      Good locality
+      <ul>
+        <li>&because; Collect only small part</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    &rarr; Scheduling garbage collection
+  </p>
+
+  <h3>Good GC Timing</h3>
+
+  Two possible strategies:
+  <ul>
+    <li>
+      <em>Hide</em> collections
+      <ul>
+        <li>At midnight</li>
+        <li>When the machine is idle</li>
+        <li>
+          When the program is not busy
+          <ul>
+            <li>During compute-bound periods</li>
+            <li>
+              When the user is presented to interact but does not do so
+              <ul>
+                <li>e.g., Emacs text editor</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <em>Efficient</em> collections
+      <ul>
+        <li>The volume of live data is low</li>
+        <li>The ends of compute-bound periods</li>
+        <li>The ends of user interaction</li>
+        <li>
+          At the local minima of stack height
+          <ul>
+            <li>Approximate approach: Trigger a collection when the stack height drops below a certain point</li>
+            <li>
+              Wilson's approach[1991]:
+              <ol>
+                <li>Rewrite return address to specific routine address</li>
+                <li>
+                  The routine determine whether to call the collector based on:
+                  <ul>
+                    <li>The amount of memory currently available</li>
+                    <li>The height of the stack</li>
+                  </ul>
+                </li>
+              </ol>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
   {% include_relative _7-7-1-key-objects.html %}
   {% include_relative _7-7-2-mature-object-spaces.html %}
 </div>
