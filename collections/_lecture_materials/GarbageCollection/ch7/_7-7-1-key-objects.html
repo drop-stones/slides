@@ -19,10 +19,32 @@
     <li>
       Other objects: Out of generational scheme
       <ul>
-        <li><em>Keyed area</em>: No collection area</li>
+        <li><em>Keyed area</em></li>
       </ul>
     </li>
   </ul>
 
+  <div class="flex-container">
+    <img src="{{ img_path }}/key-object-before-promotion.drawio.svg">
+    <img src="{{ img_path }}/key-object-after-promotion.drawio.svg">
+  </div>
+
+  <h4>Problems</h4>
+
+  <ul>
+    <li>
+      How key objects are to be identified
+      <ul>
+        <li>Hints from programmer</li>
+        <li>Direct references from stack</li>
+      </ul>
+    </li>
+    <li>
+      Dangling pointers by collecting clusters
+      <ul>
+        <li>&rarr; <em>Mature object spaces</em></li>
+      </ul>
+    </li>
+  </ul>
 
 </div>

@@ -1,3 +1,56 @@
 <div id="{{ 7-summary-id }}">
   <h2>{{ 7-summary-title }}</h2>
+
+  Contents of this slide:
+  <ul>
+    <li>
+      Handling of inter-generational pointers
+      <ul>
+        <li>
+          Remembered set: Record inter-generational pointers
+        </li>
+        <li>
+          Card marking: Mark cards where writes were made
+        </li>
+      </ul>
+    </li>
+    <li>
+      Generational mark-sweep GC
+      <ul>
+        <li>Mark-seep may be better in some cases</li>
+        <li>The oldest generation may be handled by mark-sweep</li>
+      </ul>
+    </li>
+    <li>
+      Scheduling GC
+      <ul>
+        <li><em>Hide</em> collection</li>
+        <li><em>Efficient</em> collection</li>
+      </ul>
+    </li>
+    <li>
+      Special handling of tree or list
+      <ul>
+        <li>
+          Key objects: Root node of tree, Head of list
+          <ul>
+            <li>Handled in generational scheme</li>
+          </ul>
+        </li>
+        <li>
+          Other objects
+          <ul>
+            <li>Handled out of generational scheme</li>
+            <li>Remembered set: To scavenge safely</li>
+            <li>Train &plus; Carriage: To handle large clusters</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    Generational techniques have been very successful and are now in widespread in use.
+  </p>
+
 </div>

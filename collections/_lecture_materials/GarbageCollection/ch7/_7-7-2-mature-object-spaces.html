@@ -1,4 +1,108 @@
 <div id="{{ 7-7-2-id }}">
   <h3>{{ 7-7-2-title }}</h3>
 
+  <h4>Mature object space</h4>
+
+  <p>
+    Mature object space: <em>Keyed area</em> &plus; <em>Remembered set</em>
+  </p>
+  <ul>
+    <li>
+      Memory Layout
+      <ul>
+        <li>
+          Multiple areas:
+          <ul>
+            <li>Store one cluster</li>
+          </ul>
+        </li>
+        <li>
+          A remembered set per area
+          <ul>
+            <li>Record references from outside the area</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Collection
+      <ul>
+        <li>
+          Timing: When the remembered set is empty
+          <ul>
+            <li>When there are no references to objects in the area from outside</li>
+          </ul>
+        </li>
+        <li>
+          Target: All objects in the area
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/mature-object-space.drawio.svg">
+  </div>
+
+  <p>
+    Problem: Too large clusters to fit in an area<br>
+    Solution: A dynamic sized approach using <em>trains</em> and <em>carriages</em>
+  </p>
+
+  <h4>Train &plus; Carriage approach</h4>
+
+  Change fixed size areas to dynamic sized <em>trains</em>:
+  <ul>
+    <li>
+      <em>Train</em>: A linked list of <em>carriages</em>
+    </li>
+    <li>
+      <em>Carriage</em>: A fixed size area 
+      <ul>
+        <li>Space to store a cluster</li>
+        <li>Remembered set to record references from outside the carriage</li>
+      </ul>
+    </li>
+    <li>
+      Collection of <em>carriage</em>
+      <ul>
+        <li>
+          Timing: When the remembered set is empty
+          <ul>
+            <li>When there are no references to objects in the carriage from outside</li>
+          </ul>
+        </li>
+        <li>
+          Target: All objects in the carriage
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Four-step process</h5>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/train-0.drawio.svg">
+    <img src="{{ img_path }}/train-1.drawio.svg">
+    <img src="{{ img_path }}/train-2.drawio.svg">
+    <img src="{{ img_path }}/train-3.drawio.svg">
+    <img src="{{ img_path }}/train-4.drawio.svg">
+    <img src="{{ img_path }}/train-5.drawio.svg">
+  </div>
+
+  <h5>Good Features</h5>
+
+  <ul>
+    <li>
+      Incremental collection: The number of bytes moved at each collection is bounded
+    </li>
+    <li>
+      Clustering and Compaction:
+      <ul>
+        <li>Nodes of the same data structure are copied into the same train</li>
+      </ul>
+    </li>
+    <li>Less dependence: No support of hardware or virtual memory mechanism</li>
+  </ul>
+
 </div>

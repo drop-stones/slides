@@ -1,4 +1,123 @@
 <div id="{{ 7-8-id }}">
   <h2>{{ 7-8-title }}</h2>
 
+  Generational garbage collection has been successful because of:
+  <ul>
+    <li>
+      Short pause time for minor collection
+    </li>
+    <li>
+      Good locality
+      <ul>
+        <li>&because; By concentrating allocation and collection effort on the youngest gen.</li>
+      </ul>
+    </li>
+    <li>
+      Small overall cost of garbage collection
+      <ul>
+        <li>&because; By delaying collection of long-lived objects</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    However, generational garbage collection is not a universal <strong>panacea</strong>.
+  </p>
+
+  <h4>Bad cases</h4>
+
+  <ul>
+    <li>
+      Large root sets
+      <ul>
+        <li>
+          Bad effect: Long pause time
+        </li>
+        <li>
+          Causes
+          <ul>
+            <li>Very large programs</li>
+            <li>Very large number of global variables pointing into the heap</li>
+            <li>Very deep stacks</li>
+          </ul>
+        </li>
+        <li>
+          Solutions of deep stacks:
+          <ul>
+            <li>
+              The write-barrier to local variables
+              <ul>
+                <li>&plus; The stack of root sets are reduced to pointers pointing into the heap</li>
+                <li>&minus; Increase the cost of the barrier</li>
+              </ul>
+            </li>
+            <li>
+              'High water mark' of stacks (in <em>en masse</em> promotion)
+              <ul>
+                <li>&plus; The stack of root sets are reduced to an area above the 'mark'</li>
+                <li>&minus; Need to replace some return address with the address of a 'mark-shifting' procedure</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Long object lifetimes
+      <ul>
+        <li>
+          Bad effects
+          <ul>
+            <li>
+              Increase promotion rates
+              <ul>
+                <li>More frequent major collections</li>
+              </ul>
+            </li>
+            <li>
+              Worse spatial locality
+              <ul>
+                <li>Poorer paging behavior</li>
+                <li>Increase cache misses</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Frequent pointer writes into older generations
+      <ul>
+        <li>
+          Bad effects
+          <ul>
+            <li>Increase the cost of the write-barrier</li>
+          </ul>
+        </li>
+        <li>
+          Causes
+          <ul>
+            <li>
+              Large arrays of heap
+              <ul>
+                <li>
+                  Long lifetimes
+                  <ul>
+                    <li>Promoted to older generations</li>
+                  </ul>
+                </li>
+                <li>
+                  All slot updates must be trapped by the write-barrier
+                  <ul>
+                    <li>Considered as root sets of the next minor collection</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
 </div>
