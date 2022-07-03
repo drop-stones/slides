@@ -19,14 +19,24 @@
     <li>
       Other objects: Out of generational scheme
       <ul>
-        <li><em>Keyed area</em></li>
+        <li>Placed in <em>Keyed area</em></li>
+        <li>The collector does not scan them.</li>
       </ul>
     </li>
   </ul>
 
-  <div class="flex-container">
-    <img src="{{ img_path }}/key-object-before-promotion.drawio.svg">
-    <img src="{{ img_path }}/key-object-after-promotion.drawio.svg">
+  <div class="tab key-object-tab">
+    <button class="tablinks defaultTab" onclick="openTab(event, 'key-object-before-promotion')">Before promotion</button>
+    <button class="tablinks" onclick="openTab(event, 'key-object-after-promotion')">After promotion</button>
+  </div>
+
+  <div class="key-object-tab">
+    <div id="key-object-before-promotion" class="tabcontent">
+      <img src="{{ img_path }}/key-object-before-promotion.drawio.svg">
+    </div>
+    <div id="key-object-after-promotion" class="tabcontent">
+      <img src="{{ img_path }}/key-object-after-promotion.drawio.svg">
+    </div>
   </div>
 
   <h4>Problems</h4>

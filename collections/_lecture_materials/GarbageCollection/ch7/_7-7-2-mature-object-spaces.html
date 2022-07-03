@@ -81,13 +81,55 @@
 
   <h5>Four-step process</h5>
 
-  <div class="flex-container">
-    <img src="{{ img_path }}/train-0.drawio.svg">
-    <img src="{{ img_path }}/train-1.drawio.svg">
-    <img src="{{ img_path }}/train-2.drawio.svg">
-    <img src="{{ img_path }}/train-3.drawio.svg">
-    <img src="{{ img_path }}/train-4.drawio.svg">
-    <img src="{{ img_path }}/train-5.drawio.svg">
+  <div class="tab train-tab">
+    <button class="tablinks defaultTab" onclick="openTab(event, 'train-0')">Step.0</button>
+    <button class="tablinks" onclick="openTab(event, 'train-1')">Step.1</button>
+    <button class="tablinks" onclick="openTab(event, 'train-2')">Step.2</button>
+    <button class="tablinks" onclick="openTab(event, 'train-3')">Step.3</button>
+    <button class="tablinks" onclick="openTab(event, 'train-4')">Step.4</button>
+    <button class="tablinks" onclick="openTab(event, 'train-5')">Step.5</button>
+  </div>
+
+  <div class="train-tab">
+    <div id="train-0" class="tabcontent">
+      <div>
+        <p>
+          Choose a single <em>From-carriage</em> for collection.
+        </p>
+      </div>
+      <img src="{{ img_path }}/train-0.drawio.svg">
+    </div>
+    <div id="train-1" class="tabcontent">
+      <p>
+        Move any object that is referenced from outside into a fresh train (<code>A</code>).
+      </p>
+      <img src="{{ img_path }}/train-1.drawio.svg">
+    </div>
+    <div id="train-2" class="tabcontent">
+      <p>
+        Scan the moved objects in the usual copying collector way (<code>B</code>).
+      </p>
+      <img src="{{ img_path }}/train-2.drawio.svg">
+    </div>
+    <div id="train-3" class="tabcontent">
+      <p>
+        Move From-carriage objects referenced from other trains to those trains (<code>P</code>).<br>
+        Move From-carriage objects referenced from other carriages to the last carriage in this train (<code>X</code>).
+      </p>
+      <img src="{{ img_path }}/train-3.drawio.svg">
+    </div>
+    <div id="train-4" class="tabcontent">
+      <p>
+        Scavenge From-carriage.
+      </p>
+      <img src="{{ img_path }}/train-4.drawio.svg">
+    </div>
+    <div id="train-5" class="tabcontent">
+      <p>
+        If there are no external references to the train, scavenge it.
+      </p>
+      <img src="{{ img_path }}/train-5.drawio.svg">
+    </div>
   </div>
 
   <h5>Good Features</h5>

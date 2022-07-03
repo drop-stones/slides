@@ -10,8 +10,54 @@
         <li>&rarr; The number of entries is the number of store operations.</li>
       </ul>
     </li>
-    <img src="{{ img_path }}/introduce-entry-table.drawio.svg">
   </ul>
+
+  <div class="tab entry-table-tab">
+    <button class="tablinks defaultTab" onclick="openTab(event, 'inter-generational-pointer')">Inter-gen. pointers</button>
+    <button class="tablinks" onclick="openTab(event, 'entry-table')">Entry Table</button>
+  </div>
+
+  <div class="entry-table-tab">
+    <div id="inter-generational-pointer" class="tabcontent">
+      <img src="{{ img_path }}/inter-generational-pointer.drawio.svg">
+    </div>
+    <div id="entry-table" class="tabcontent">
+      <img src="{{ img_path }}/entry-table.drawio.svg">
+    </div>
+  </div>
+
+<!--
+  <div class="tabs">
+    <div class="tab">
+      <input type="radio" id="inter-generational-pointer" name="entry-table-group" checked>
+      <label for="inter-generational-pointer">Inter-gen. pointers</label>
+
+      <div class="content">
+        <img src="{{ img_path }}/inter-generational-pointer.drawio.svg">
+      </div>
+    </div>
+
+    <div class="tab">
+      <input type="radio" id="entry-table" name="entry-table-group">
+      <label for="entry-table">Entry Table</label>
+
+      <div class="content">
+        <p>AA</p>
+        <img src="{{ img_path }}/entry-table.drawio.svg">
+      </div>
+    </div>
+  </div>
+  <div class="tabbed">
+    <input type="radio" id="inter-generational-pointer-tab" name="entry-table-tabs" checked>
+    <input type="radio" id="entry-table-tab" name="entry-table-tabs">
+
+    <ul class="tabs">
+      <li class="tab">a</li>
+      <li class="tab">b</li>
+    </ul>
+  </div>
+-->
+
 
   <h5>Properties</h5>
   <ul>

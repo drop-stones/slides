@@ -48,8 +48,18 @@
     </li>
   </ul>
 
-  <div class="flex-container">
-    <img src="{{ img_path }}/hybrid-remset-card.drawio.svg">
+  <div class="tab hybrid-approach-tab">
+    <button class="tablinks defaultTab" onclick="openTab(event, 'hybrid-remset-card-write-barrier')">Write-barrier</button>
+    <button class="tablinks" onclick="openTab(event, 'hybrid-remset-card-collection')">Collection Time</button>
+  </div>
+
+  <div class="hybrid-approach-tab">
+    <div id="hybrid-remset-card-write-barrier" class="tabcontent">
+      <img src="{{ img_path }}/hybrid-remset-card-write-barrier.drawio.svg">
+    </div>
+    <div id="hybrid-remset-card-collection" class="tabcontent">
+      <img src="{{ img_path }}/hybrid-remset-card-collection.drawio.svg">
+    </div>
   </div>
 
   <ul>

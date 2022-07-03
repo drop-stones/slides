@@ -45,7 +45,12 @@
         <li>
           Role: To save past <code>Dirty</code> bits 
           <ul>
-            <li>To archive virtual memory purpose</li>
+            <li>
+              To make virtual memory work
+              <ul>
+                <li><code>Original_Dirty</code> = <code>Dirty</code> &or; <code>Old_Dirty</code></li>
+              </ul>
+            </li>
           </ul>
         </li>
         <li>
@@ -70,11 +75,26 @@
     </li>
   </ul>
 
-  <div class="flex-container">
-    <img src="{{ img_path }}/dirty-bit-0.drawio.svg">
-    <img src="{{ img_path }}/dirty-bit-1.drawio.svg">
-    <img src="{{ img_path }}/dirty-bit-2.drawio.svg">
-    <img src="{{ img_path }}/dirty-bit-3.drawio.svg">
+  <div class="tab virtual-memory-page-marking-tab">
+    <button class="tablinks defaultTab" onclick="openTab(event, 'dirty-bit-0')">Before modification</button>
+    <button class="tablinks" onclick="openTab(event, 'dirty-bit-1')">After modification</button>
+    <button class="tablinks" onclick="openTab(event, 'dirty-bit-2')">At collection</button>
+    <button class="tablinks" onclick="openTab(event, 'dirty-bit-3')">After page swapping</button>
+  </div>
+
+  <div class="virtual-memory-page-marking-tab">
+    <div id="dirty-bit-0" class="tabcontent">
+      <img src="{{ img_path }}/dirty-bit-0.drawio.svg">
+    </div>
+    <div id="dirty-bit-1" class="tabcontent">
+      <img src="{{ img_path }}/dirty-bit-1.drawio.svg">
+    </div>
+    <div id="dirty-bit-2" class="tabcontent">
+      <img src="{{ img_path }}/dirty-bit-2.drawio.svg">
+    </div>
+    <div id="dirty-bit-3" class="tabcontent">
+      <img src="{{ img_path }}/dirty-bit-3.drawio.svg">
+    </div>
   </div>
 
   <h4>Problems</h4>
@@ -107,6 +127,9 @@
       <ul>
         <li>
           Large page size in modern systems
+          <ul>
+            <li>&rarr; Need to scan the entire pages</li>
+          </ul>
         </li>
         <li>
           Dirty bits records any modification of the page
