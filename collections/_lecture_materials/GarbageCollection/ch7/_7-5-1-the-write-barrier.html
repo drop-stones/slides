@@ -14,8 +14,10 @@
     <li>
       Pointer stores in older generation
       <ul>
-        <li>Pointer stores must be trapped and recorded.</li>
-        <li>&rarr; <em>Write-barrier</em></li>
+        <li>
+          Pointer stores must be trapped and recorded.<br>
+          &rarr; <em>Write-barrier</em>
+        </li>
       </ul>
     </li>
   </ul>
@@ -29,7 +31,7 @@
         <li>
           Compiler supports
           <ul>
-            <li>Record instructions before each pointer read or write</li>
+            <li>Record pointers before each pointer writes</li>
             <li>Compile-time analysis to reduce the number of pointer operation to be instrumented</li>
           </ul>
         </li>
@@ -53,9 +55,24 @@
   <h4>Evaluation factors</h4>
   Three factors to be considered in software approaches:
   <ul>
-    <li>How the cost to the mutator can be minimized</li>
-    <li>The space overhead of recording pointer store</li>
-    <li>How efficiently old-young pointers can be identified at scavenge time</li>
+    <li>
+      Write-barrier cost:
+      <ul>
+        <li>How the cost to the mutator can be minimized</li>
+      </ul>
+    </li>
+    <li>
+      Memory overhead:
+      <ul>
+        <li>The space overhead of recording pointer store</li>
+      </ul>
+    </li>
+    <li>
+      Collection-time cost:
+      <ul>
+        <li>How efficiently old-young pointers can be identified at scavenge time</li>
+      </ul>
+    </li>
   </ul>
 
   <h4>Percentage of pointer stores</h4>
@@ -85,7 +102,12 @@
           Other memory references: 90 ~ 95 %
           <ul>
             <li>Pointer store to the root set</li>
-            <li>Alloc-and-Initializing store</li>
+            <li>
+              Alloc-and-Initializing store
+              <ul>
+                <li>&because; A new allocated object is always in the youngest generation.</li>
+              </ul>
+            </li>
           </ul>
         </li>
       </ul>
@@ -97,10 +119,9 @@
     Ex) 1 % pointer store &times; 10 additional instructions = 10 % overhead
   </p>
 
-<!--
   <p>
-    <strong>Goal for the rest of this section</strong>: More precise methods of trapping and recording inter-generational pointers.
+    <strong>Goal for the rest of this section</strong>: <br>
+    More precise and efficient methods of trapping and recording inter-generational pointers.
   </p>
--->
 
 </div>

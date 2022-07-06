@@ -4,12 +4,34 @@
   <em>Entry Table</em> records inter-generational pointers:
   <ul>
     <li>
-      Each entry records pointers from older to younger generation.
+      Entry: An indirection of an inter-generational pointer.
       <ul>
-        <li>A new entry is added when inter-generational pointers are stored.</li>
-        <li>&rarr; The number of entries is the number of store operations.</li>
+        <li>
+          Add timing: When inter-generational pointers are stored
+        </li>
+        <li>
+          Points-to relations: (See example below)
+          <ul>
+            <li>An old-pointer points-to the entry in <em>entry table</em></li>
+            <li>The entry in <em>entry table</em> points-to a young-object.</li>
+          </ul>
+        </li>
+        <li>
+          At collection time: Search its entry table rather than every older generation.
+        </li>
       </ul>
     </li>
+<!--
+    <li>
+      Each entry records pointers from older to younger generation.
+      <ul>
+        <li>
+          A new entry is added when inter-generational pointers are stored.<br>
+          &rarr; The number of entries is the number of store operations.
+        </li>
+      </ul>
+    </li>
+-->
   </ul>
 
   <div class="tab entry-table-tab">
@@ -76,9 +98,16 @@
       Disadvantage
       <ul>
         <li>
-          Duplicate references to a single object
+          Duplicate references to a single object<br>
+          &rarr; The scanning cost becomes high.
           <ul>
-            <li>&rarr; The scanning cost becomes high</li>
+            <li>
+              Reason for duplication:
+              <ul>
+                <li>Multiple old-pointers may points-to a single object</li>
+                <li>Add a new entry at each old-pointer stores</li>
+              </ul>
+            </li>
           </ul>
         </li>
         <img src="{{ img_path }}/duplicate-entry.drawio.svg">
@@ -97,5 +126,18 @@
   <p>
     Result: Most modern generational garbage collection schemes don't use <em>Entry Table</em>.
   </p>
+
+  <div class="question">
+    <h4>Question</h4>
+    <details>
+      <summary>Q. Answer the points-to relations after executing the following code.</summary>
+      <img src="{{ img_path }}/answer-entry-table.drawio.svg">
+    </details>
+
+    <div class="flex-container">
+      {% highlight c linenos %}{{ assign-inter-gen-pointers }}{% endhighlight %}
+      <img src="{{ img_path }}/question-entry-table.drawio.svg" style="width: 60%">
+    </div>
+  </div>
 
 </div>

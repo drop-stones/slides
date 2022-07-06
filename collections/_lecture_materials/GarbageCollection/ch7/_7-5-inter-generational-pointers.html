@@ -3,8 +3,10 @@
 
   Generational garbage collector must identify <em>inter-generational pointers</em> because:
   <ul>
-    <li>Minor garbage collection search only the youngest generation.</li>
-    <li>&rarr; Minor garbage collection may scavenge cells that should be alive by mistake.</li>
+    <li>
+      Minor garbage collection search only the youngest generation.<br>
+      &rarr; Minor garbage collection may scavenge cells that should be alive by mistake.
+    </li>
   </ul>
   <div class="flex-container">
     <img src="{{ img_path }}/scavenge_by_mistake.drawio.svg">

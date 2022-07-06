@@ -4,6 +4,28 @@
   <em>Remembered set</em> records inter-generational pointers:
   <ul>
     <li>
+      A bit in each object header
+      <ul>
+        <li>Represent whether the object is a member of <em>remembered set</em>.</li>
+      </ul>
+    </li>
+    <li>
+      Entry: Record the address of an old-object which has inter-generational pointers.
+      <ul>
+        <li>
+          Add timing: A new entry is added if:
+          <ul>
+            <li>An Old-to-young-pointers are stored, and</li>
+            <li>
+              The object's header is not set<br>
+              &rarr; No duplicate entries
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+<!--
+    <li>
       Each entry records the address of the old object which has inter-generational pointers.
       <ul>
         <li>
@@ -11,35 +33,55 @@
           <ul>
             <li>whether a pointer was being stored, and</li>
             <li>whether the pointer is from a old to a young object.</li>
-            <!-- <li>whether a reference to a young object was being stored into an old object.</li> -->
           </ul>
         </li>
       </ul>
     </li>
     <li>
-      <!--Each object in memory has a bit in its header indicating whether the object is a member of remembered set.-->
       A bit in each object header represents whether the object is a member of remembered set.
       <ul>
         <li>&rarr; No duplicate entries</li>
       </ul>
     </li>
+-->
   </ul>
   <img src="{{ img_path }}/remembered-set.drawio.svg">
+
+  <div class="question">
+    <h4>Question</h4>
+    <details>
+      <summary>Q. Answer the points-to relations after executing the following code.</summary>
+      <img src="{{ img_path }}/answer-remembered-set.drawio.svg">
+    </details>
+
+    <div class="flex-container">
+      {% highlight c linenos %}{{ assign-inter-gen-pointers }}{% endhighlight %}
+      <img src="{{ img_path }}/question-remembered-set.drawio.svg">
+    </div>
+  </div>
 
   <h4>Properties</h4>
   <ul>
     <li>
-      Costs:
+      Write-barrier costs:
       <ul>
         <li>&plus; No indirection of pointers</li>
         <li>
-          &plus; No duplicate entries
+          &minus; High overhead of store checking
           <ul>
-            <li>&rarr; Better than <em>entry table</em></li>
+            <li>Lower than costs of <em>entry table</em> but still high</li>
           </ul>
         </li>
+      </ul>
+    </li>
+    <li>
+      Collection-time costs:
+      <ul>
         <li>
-          &minus; High overhead of store checking
+          &plus; No duplicate entries
+          <ul>
+            <li>Better than <em>entry table</em></li>
+          </ul>
         </li>
         <li>
           &minus; High overhead of scanning large objects
@@ -49,7 +91,7 @@
   </ul>
 
   <h5>Slot recording</h5>
-  Remembered sets records the address of the slot rather than the object:
+  Remembered sets records <strong>the address of the slot</strong> rather than the object:
   <ul>
     <li>Purpose: To avoid the high overhead of scanning large objects</li>
     <li>
@@ -75,8 +117,10 @@
     <li>
       Entries of remembered set:
       <ul>
-        <li>All pointer stores</li>
-        <li>&rarr; Duplicate entries</li>
+        <li>
+          A new entry is added at each pointer store<br>
+          &rarr; Duplicate entries
+        </li>
       </ul>
     </li>
     <li>
