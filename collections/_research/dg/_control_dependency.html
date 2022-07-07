@@ -1,0 +1,31 @@
+<div id="{{ control-dependency-id }}">
+  <h3>{{ control-dependency-title }}</h3>
+
+  <h4>Control dependency(制御依存)とは</h4>
+
+  <h4>Post-dominator</h4>
+
+  <h4>Post-dominance frontier</h4>
+
+  <strong>定義</strong><br>
+  ノードxのPost-dominance frontierは，以下を満たすノードyの集合である:
+  <ul>
+    <li>xはyの次ノードのpost-dominatorである</li>
+    <li>xはyのpost-dominatorでない</li>
+  </ul>
+
+  <strong>直感的理解</strong><br>
+  ノードyはノードxのPost-dominance frontierである<br>
+  &hArr; yがxを実行するかどうかを決定する
+  <ul>
+    <li>yの次ノードは，必ずxを通る</li>
+    <li>yは，必ずxを通るわけではない</li>
+  </ul>
+
+  <strong>具体例</strong><br>
+
+  <strong>意味</strong><br>
+  ノードxのPost-dominance frontier<br>
+  &hArr; ノードxが制御依存するノードの集合
+
+</div>

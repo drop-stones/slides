@@ -1,0 +1,42 @@
+<div id="{{ data-dependency-id }}">
+  <h3>{{ data-dependency-title }}</h3>
+
+  <h4>アルゴリズム</h4>
+
+  <strong>Given</strong>: CFG, Points-to関係<br>
+  <ol>
+    <li>
+      CFGから，Def-Useに関わる命令のみで構成されたサブグラフを作成
+      <ul>
+        <li>e.g., store, load, call, return, malloc</li>
+      </ul>
+    </li>
+    <li>
+      サブグラフ上でReaching definitions解析
+      <ol>
+        <li>
+          各ノード毎に以下の集合を用意
+          <ul>
+            <li>Def-set: そのノードで定義される変数の集合</li>
+            <li>
+              Kill-set: そのノードで上書きされる変数の集合
+              <ul>
+                <li>もし命令がどの変数を更新するか一つに特定できない場合(Weak-update)，Kill-set = &phi;</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          EntryノードからTransfer functionを適用
+        </li>
+        <li>Fix-pointに到達するまで繰り返す</li>
+      </ol>
+    </li>
+    <li>
+      Def-Useを結ぶ
+      <ul>
+        <li>変数を使用する命令 &larr; 到達した変数の定義命令</li>
+      </ul>
+    </li>
+  </ol>
+</div>
