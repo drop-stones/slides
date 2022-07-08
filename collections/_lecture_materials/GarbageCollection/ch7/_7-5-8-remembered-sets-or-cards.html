@@ -11,17 +11,17 @@
     <tr>
       <th>Write-barrier cost</th>
       <td>2 instructions<br>(SSB may overflow)</td>
-      <td>2 instructions</td>
+      <td class="background-green">2 instructions</td>
     </tr>
     <tr>
       <th>Granularity of recording</th>
-      <td>Pointer<br>(Duplicate entries in SSB)</td>
-      <td>Card</td>
+      <td class="background-green">Pointer<br>(Duplicate entries in SSB)</td>
+      <td class="background-red">Card</td>
     </tr>
     <tr>
       <th>Factors of collection-time cost</th>
-      <td>The number of stores performed between scavenges</td>
-      <td>The number of dirty pages<br>(Dirty pages must be scanned at every scavenge)</td>
+      <td class="background-red">The number of stores performed between scavenges</td>
+      <td class="background-green">The number of dirty pages<br>(Dirty pages must be scanned at every scavenge)</td>
     </tr>
   </table>
 

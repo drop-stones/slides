@@ -1,9 +1,42 @@
 <div id="{{ 7-5-5-id }}">
   <h3>{{ 7-5-5-title }}</h3>
 
+  <h4>Store recording vs. Marking</h4>
+
+  Store recording: Record each pointer store.
+  <ul>
+    <li>&plus; Low memory overhead</li>
+    <li>&minus; Duplicate entries</li>
+  </ul>
+
+  Marking:
+  <ul>
+    <li>&plus; No duplicate entries</li>
+    <li>
+      &minus; High memory overhead
+      <ul>
+        <li>
+          Solution: Coarser granularity to mark
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/store-recording-vs-marking.drawio.svg">
+  </div>
+
+<!--
   <p>
     Symbolics 3600 provides the following functions with hardware support.
   </p>
+-->
+
+  The Symbolics 3600 (Lisp machine) provides <strong>page marking</strong> with hardware support:
+  <ul>
+    <li>Garbage Collector Page Table(GCPT): Record a bit per physical page</li>
+    <li>Ephemeral Space Reference Table(ESRT): Record bits per swapped-out page</li>
+  </ul>
 
   <h4>Garbage Collector Page Table (GCPT)</h4>
   <em>GCPT</em> records the physical pages where the pointer write was performed.

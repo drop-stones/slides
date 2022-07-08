@@ -48,6 +48,10 @@
     </li>
   </ul>
 
+  <div class="flex-container">
+    <img src="{{ img_path }}/gen-mark-sweep.drawio.svg">
+  </div>
+
   <h5>Copying vs. Mark-Sweep generational garbage collection</h5>
 
   <table>
@@ -58,23 +62,23 @@
     </tr>
     <tr>
       <th>Total CPU overhead</th>
-      <td>Low</td>
-      <td>Middle</td>
+      <td class="background-green">Low</td>
+      <td class="background-yellow">Middle</td>
     </tr>
     <tr>
       <th>Memory overhead</th>
-      <td>High</td>
-      <td>Low<br>(- 30~40%)</td>
+      <td class="background-red">High<br>(&because; Semi-space Copying)</td>
+      <td class="background-green">Low<br>(- 30~40%)</td>
     </tr>
     <tr>
       <th>Cache miss rate</th>
-      <td>Middle<br>(Compaction may give no advantage)</td>
-      <td>Low<br>(&because; Mark bitmap)</td>
+      <td class="background-yellow">Middle<br>(Compaction may give no advantage)</td>
+      <td class="background-green">Low<br>(&because; Mark bitmap)</td>
     </tr>
     <tr>
       <th>Promotion rate</th>
-      <td>Low</td>
-      <td>High<br>(&because; <em>em masse</em> promotion)</td>
+      <td class="background-green">Low</td>
+      <td class="background-red">High<br>(&because; <em>em masse</em> promotion)</td>
     </tr>
   </table>
 
