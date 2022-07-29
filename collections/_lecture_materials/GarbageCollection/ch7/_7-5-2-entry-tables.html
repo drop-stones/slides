@@ -8,6 +8,36 @@
       <ul>
         <li>
           Add timing: When inter-generational pointers are stored
+          <ul>
+            <li><strong>If the pointer already points to an entry in entry table: Remove the old entry</strong></li>
+            <li>
+              Other approaches (my understanding):
+              <ul>
+                <li>
+                  Overwrite the old entry
+                  <ul>
+                    <li>
+                      &plus; An entry can be reused<br>
+                      &rarr; Small size of entry table
+                    </li>
+                    <li>
+                      &minus; More checking in write-barrier
+                      &rarr; High costs of write-barrier
+                      <ul>
+                        <li>
+                          e.g., If there are more than 2 generations:
+                          <ul>
+                            <li>If gen. of old-contents == gen. of new-contents: Overwrite the entry</li>
+                            <li>If gen. of old-contenst != gen. of new-contents: Remove the entry</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </li>
         <li>
           Points-to relations: (See example below)
@@ -105,7 +135,7 @@
               Reason for duplication:
               <ul>
                 <li>Multiple old-pointers may points-to a single object</li>
-                <li>Add a new entry at each old-pointer stores</li>
+                <li><del>Add a new entry at each old-pointer stores</del></li>
               </ul>
             </li>
           </ul>
