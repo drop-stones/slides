@@ -55,6 +55,9 @@
   <ul>
     <li>
       <em>Train</em>: A linked list of <em>carriages</em>
+      <ul>
+        <li>Contains a single cluster</li>
+      </ul>
     </li>
     <li>
       <em>Carriage</em>: A fixed size area 
@@ -66,6 +69,7 @@
     <li>
       Collection of <em>carriage</em>
       <ul>
+<!--
         <li>
           Timing: When the remembered set is empty
           <ul>
@@ -74,6 +78,16 @@
         </li>
         <li>
           Target: All objects in the carriage
+        </li>
+      -->
+        <li>
+          Timing: At each collection
+        </li>
+        <li>
+          Target: A single carriage
+        </li>
+        <li>
+          Process: Four-step process (See below)
         </li>
       </ul>
     </li>

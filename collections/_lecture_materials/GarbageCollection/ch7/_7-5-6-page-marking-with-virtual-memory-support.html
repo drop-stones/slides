@@ -17,9 +17,16 @@
   <ul>
     <li>Virtual memory: Dirty bit determine whether a page needs to be written back to disk</li>
     <li>
-      Page marking GC: Dirty bit determine whether there has been a pointer write in <strong>interval</strong>
+      Page marking GC: Dirty bit determine whether there has been pointer writes in <strong>interval</strong>
       <ul>
         <li>Garbage collection interval: Period from the last GC to next GC.</li>
+        <li>
+          A copying GC wants to know about <strong>interval</strong> because:
+          <ul>
+            <li>Objects may be moved(copied)</li>
+            <li>The dirty bits have no sense</li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -78,8 +85,8 @@
   <div class="tab virtual-memory-page-marking-tab">
     <button class="tablinks defaultTab" onclick="openTab(event, 'dirty-bit-0')">Before modification</button>
     <button class="tablinks" onclick="openTab(event, 'dirty-bit-1')">After modification</button>
-    <button class="tablinks" onclick="openTab(event, 'dirty-bit-2')">At collection</button>
-    <button class="tablinks" onclick="openTab(event, 'dirty-bit-3')">After page swapping</button>
+    <button class="tablinks" onclick="openTab(event, 'dirty-bit-2')">Pattern-1: At collection</button>
+    <button class="tablinks" onclick="openTab(event, 'dirty-bit-3')">Pattern-2: At page swapping</button>
   </div>
 
   <div class="virtual-memory-page-marking-tab">
@@ -93,7 +100,7 @@
       <img src="{{ img_path }}/dirty-bit-2.drawio.svg">
     </div>
     <div id="dirty-bit-3" class="tabcontent">
-      <img src="{{ img_path }}/dirty-bit-3.drawio.svg">
+      <img src="{{ img_path }}/dirty-bit-2-swap.drawio.svg">
     </div>
   </div>
 
