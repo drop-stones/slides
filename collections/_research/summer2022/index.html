@@ -1,0 +1,324 @@
+---
+title: 夏ゼミ 2022
+date: 2022-10-03
+---
+
+{% include_relative _code_blocks.html %}
+{% assign img_path = '/assets/img/research/summer2022' | relative_url %}
+
+<div class="section">
+  <div class="subsection">
+    <h2>提案手法の概要</h2>
+
+    <h5>目的: データの保護</h5>
+
+    <h5>手法: </h5>
+  </div>
+
+  <div class="subsection">
+    <h2>Field-sensitive DFIの問題点</h2>
+    <h4>問題点1: 全データ保護は重い</h4>
+    <table>
+      <tr>
+        <th></th>
+        <th>Time overhead</th>
+        <th>Memory overhead</th>
+      </tr>
+      <tr>
+        <td>DFI[OSDI'06]</td>
+        <td>+104%</td>
+        <td>+50%</td>
+      </tr>
+      <tr>
+        <td>AddressSanitizer<br>[USENIX ATC'12]</td>
+        <td>+73~93%</td>
+        <td>x1.5-3</td>
+      </tr>
+      <tr>
+        <td>Smatus[ISSTA'21]</td>
+        <td>x8-15</td>
+        <td>x2</td>
+      </tr>
+    </table>
+
+    <h4>問題点2: メタデータの粒度を細かくしなければならない</h4>
+    <h5>Field-<text style="color:red">in</text>sensitive DFIの場合</h5>
+    <p>
+      "複数バイト &harr; 1 定義ID" の粒度で定義IDを付与<br>
+      例) DFI: 4 byte &harr; 1 定義ID
+    </p>
+    <div class="flex-container">
+      <div>{% highlight c %}{{ aligned }}{% endhighlight %}</div>
+      <div>{% highlight c %}{{ unaligned }}{% endhighlight %}</div>
+    </div>
+    <div class="flex-container">
+      <div>
+        <img src="{{ img_path }}/field_insensitive_dfi_shadow_mapping.drawio.svg">
+      </div>
+    </div>
+
+    <ul>
+      <li>メリット: 1つの定義IDで，複数バイトの安全性チェックが可能 &rarr; 効率的な保護</li>
+      <li>デメリット: 複数のデータに対して，一つの定義IDを付与する &rarr; 保護精度が低い</li>
+    </ul>
+
+    <h5>Field-sensitive DFIの場合</h5>
+    <p>
+      "1 byte &harr; 1 定義ID" の粒度で定義IDを付与
+    </p>
+    <div class="flex-container">
+      <div>
+        <img src="{{ img_path }}/field_sensitive_dfi_shadow_mapping.drawio.svg">
+      </div>
+    </div>
+
+    <ul>
+      <li>メリット: 1つのデータに対して，少なくとも１つのメタデータを付与 &rarr; 保護精度が高い</li>
+      <li>
+        デメリット: 1つのデータの安全性チェックに，複数の定義IDチェックが必要 &rarr; 非効率な保護
+        <ul>
+          <li>例) aligned.x &harr; 4 定義ID が付与されてしまう</li> 
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="subsection">
+    <h2>解決案</h2>
+    <h4>解決案1: 4-byte Alignment計装 (中間発表以前)</h4>
+    <p>全データを4 byte境界に配置するように計装</p>
+    <div class="flex-container">
+      <div>
+        <img src="{{ img_path }}/4-byte-alignment.drawio.svg">
+      </div>
+    </div>
+    <p>
+      結果: 外部ライブラリとのリンク時にエラー多発 &rarr; Compatibilityが低い<br>
+      &because; 構造体のメモリレイアウトを変更してしまうため
+    </p>
+
+    <h4>解決案2: 2つの領域への割り振り (現在取り組み中)</h4>
+    <p>
+      データを
+      <ul>
+        <li>4-byte境界に配置されているデータ</li>
+        <li>それ以外</li>
+      </ul>
+      に分類し，それぞれを
+      <ul>
+        <li>4-byte Aligned Region: "4-byte &harr; 1 定義ID" の粒度でメタデータを持つ領域</li>
+        <li>Unaligned Region: "1-byte &harr; 1 定義ID" の粒度でメタデータを持つ領域</li>
+      </ul>
+      に割り当てる
+    </p>
+    <div class="flex-container">
+      <div>
+        <img src="{{ img_path }}/two_regions.drawio.svg">
+      </div>
+    </div>
+    <p>
+      結果予想:
+      <ul>
+        <li>4-byte境界に配置されているデータ: "4-byte &harr; 1 定義ID" &rarr; 効率的な保護</li>
+        <li>それ以外: "1-byte &harr; 1 定義ID" &rarr; 高精度な保護</li>
+      </ul>
+    </p>
+  </div>
+
+  <div class="subsection">
+    <h2>手法の流れ + 実装</h2>
+
+    手法概要
+    <ol>
+      <li>保護データの指定</li>
+      <li>2領域への割り振り</li>
+      <li>各領域毎のデータフロー保護</li>
+    </ol>
+
+    <h4>Step.1 保護データの指定</h4>
+    <p>
+      保護データを以下で指定:
+      <ul>
+        <li>グローバル変数, ローカル変数: アノテーションを追加</li>
+        <li>
+          ヒープ変数: mallocをsafe_mallocに書き換え
+        </li>
+      </ul>
+    </p>
+
+    例)
+    <div class="flex-container">
+      <div>
+        {% highlight c linenos %}{{ protection-targets }}{% endhighlight %}
+      </div>
+    </div>
+
+    <h4>Step.2 2領域への割り振り</h4>
+    <p>
+      保護データを4-byte境界に配置されているかどうかで，以下の2領域に割り振る:
+      <ul>
+        <li>4-byte Aligned Region</li>
+        <li>Unaligned Region</li>
+      </ul>
+    </p>
+
+    <h5>ローカル変数の割り振り</h5>
+    <p>
+      ローカル変数のメモリ確保を領域毎のメモリ確保に置き換え
+    </p>
+
+    例)
+    <div class="flex-container">
+      <div>
+        割り振り前
+        {% highlight c linenos %}{{ local-targets }}{% endhighlight %}
+      </div>
+      <div>
+        割り振り後
+        {% highlight c linenos %}{{ local-targets-replaced }}{% endhighlight %}
+      </div>
+      <div>
+        <img src="{{ img_path }}/local_targets.drawio.svg">
+      </div>
+    </div>
+
+    <h5>ヒープ変数の割り振り</h5>
+    <p>safe_malloc()を領域毎のメモリ確保に置き換え</p>
+
+    例)
+    <div class="flex-container">
+      <div>
+        割り振り前
+        {% highlight c linenos %}{{ heap-targets }}{% endhighlight %}
+      </div>
+      <div>
+        割り振り後
+        {% highlight c linenos %}{{ heap-targets-replaced }}{% endhighlight %}
+      </div>
+      <div>
+        <img src="{{ img_path }}/heap_targets.drawio.svg">
+      </div>
+    </div>
+
+    <h5>グローバル変数の割り振り</h5>
+    <p>リンカースクリプトによるセクションの追加 + グローバル変数のセクション指定</p>
+
+    例)
+    <div class="flex-container">
+      <div>
+        割り振り前
+        {% highlight c linenos %}{{ global-targets }}{% endhighlight %}
+      </div>
+      <div>
+        割り振り後
+        {% highlight c linenos %}{{ global-targets-replaced }}{% endhighlight %}
+      </div>
+      <div>
+        <img src="{{ img_path }}/global_targets.drawio.svg">
+      </div>
+    </div>
+
+    <h4>Step.3 各領域毎のデータフロー保護</h4>
+    <p>
+      各領域に用意されたメタデータを用いてデータフロー保護
+    </p>
+
+    <h5>4-byte Aligned Region</h5>
+    <p>4-byte &harr; 1 定義ID の粒度で保護</p>
+    例)
+    <div class="flex-container">
+      <div>{% highlight c linenos %}{{ 4-byte-aligned-region-def-use }}{% endhighlight %}</div>
+      <div><img src="{{ img_path }}/aligned_region_def_use.drawio.svg"></div>
+    </div>
+
+    <h5>Unaligned Region</h5>
+    <p>1-byte &harr; 1 定義ID の粒度で保護</p>
+    例)
+    <div class="flex-container">
+      <div>{% highlight c linenos %}{{ unaligned-region-def-use }}{% endhighlight %}</div>
+      <div><img src="{{ img_path }}/unaligned_region_def_use.drawio.svg"></div>
+    </div>
+
+    <h5>非保護領域</h5>
+    <p>保護データ領域にアクセスしないようにチェック</p>
+    例) <code>l.5: arr[i];</code>にて，保護データを不正に読み込まないようチェック
+    <div class="flex-container">
+      <div>{% highlight c linenos %}{{ unsafe-access-check }}{% endhighlight %}</div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <h2>実装進捗</h2>
+    <ul>
+      <li>Step.1 保護データの指定 &check;</li>
+      <li>Step.2 2領域への割り振り &check;</li>
+      <li>
+        Step.3 各領域毎のデータフロー保護
+        <ul>
+          <li>4-byte Aligned Region</li>
+          <li>Unaligned Region</li>
+          <li>非保護領域</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="subsection">
+    <h2>今後の予定</h2>
+    <ul>
+      <li>
+        領域毎のデータフロー保護 実装
+        <ul>
+          <li>4-byte Aligned Region</li>
+          <li>Unaligned Region</li>
+          <li>非保護領域</li>
+        </ul>
+      </li>
+      <li>
+        リアル検体解析
+        <ul>
+          <li>オーバーヘッド計測: SPEC CPU2006</li>
+          <li>
+            攻撃検知:
+            <ul>
+              <li>
+                mbed TLS: CVE-2015-5291
+                <ul>
+                  <li>cf. DataShield[CCS'17]</li>
+                </ul>
+              </li>
+              <li>
+                Sub-object overflow bugを含む検体
+              </li>
+              <li>
+                Use-After-Freeを含む検体
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        実験結果より，今後の方針を決定
+        <ol>
+          <li>
+            Sandboxingによるデータ隔離
+            <ul>
+              <li>目的: 非保護データが保護データを破壊しないよう保証</li>
+              <li>メリット: より効率的な保護が可能</li>
+              <li>cf. DataShield[CCS'17]</li>
+            </ul>
+          </li>
+          <li>
+            スレッドインターリーブを考慮したフロー保護
+            <ul>
+              <li>目的: Inter-thread value flow bugの検知</li>
+              <li>メリット: スレッド安全性も保証できそう</li>
+              <li>cf. Canary[PLDI'21]</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ul>
+  </div>
+
+</div>

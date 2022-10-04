@@ -1,0 +1,100 @@
+{% assign aligned = '
+struct Aligned {
+  int x, y;
+};
+'%}
+
+{% assign unaligned = '
+struct Unaligned {
+  char c1, c2, c3, c4;
+};
+'%}
+
+{% assign protection-targets = '
+// global
+int g __attribute__((annotate("dfi_protection")));
+
+int main(void) {
+  // local
+  int l __attribute__((annotate("dfi_protection")));
+
+  // heap
+  int *p = (int *)safe_malloc(sizeof(int));
+}
+'%}
+
+{% assign local-targets = '
+int main(void) {
+  struct Aligned aligned     __attribute__((annotate("dfi_protection")));
+  struct Unaligned unaligned __attribute__((annotate("dfi_protection")));
+  ...
+}
+'%}
+
+{% assign local-targets-replaced = '
+int main(void) {
+  struct Aligned *aligned
+    = (struct Aligned *)aligned_malloc(sizeof(struct Aligned));
+  struct Unaligned *unaligned
+    = (struct Unaligned *)unaligned_malloc(sizeof(struct Unaligned));
+  ...
+  free(aligned);
+  free(unaligned);
+}
+'%}
+
+{% assign heap-targets = '
+int main(void) {
+  struct Aligned *aligned
+    = (struct Aligned *)safe_malloc(sizeof(struct Aligned));
+  struct Unaligned *unaligned
+    = (struct Unaligned *)safe_malloc(sizeof(struct Unaligned));
+  ...
+}
+'%}
+
+{% assign heap-targets-replaced = '
+int main(void) {
+  struct Aligned *aligned
+    = (struct Aligned *)aligned_malloc(sizeof(struct Aligned));
+  struct Unaligned *unaligned
+    = (struct Unaligned *)unaligned_malloc(sizeof(struct Unaligned));
+  ...
+}
+'%}
+
+{% assign global-targets = '
+// global
+struct Aligned aligned     __attribute__((annotate("dfi_protection")));
+struct Unaligned unaligned __attribute__((annotate("dfi_protection")));
+'%}
+
+{% assign global-targets-replaced = '
+// global
+struct Aligned aligned,     section "aligned_global";
+struct Unaligned unaligned, section "unaligned_global";
+'%}
+
+{% assign 4-byte-aligned-region-def-use = '
+aligned->x = 100;
+aligned_set_id(&aligned->x, ID1);   // inserted
+...
+aligned_check_id(&aligned->x, ID1); // inserted
+aligned->x;
+'%}
+
+{% assign unaligned-region-def-use = "
+unaligned->c1 = 'a';
+unaligned_set_id(&unaligned->c1, ID2);    // inserted
+...
+unaligned_check_id(&unaligned->c1, ID2);  // inserted
+unaligned->c1;
+"%}
+
+{% assign unsafe-access-check = '
+int i, arr[100];
+...
+if (AddrIsInSafeRegion(&arr[i]))  // inserted
+  report_error(&arr[i]);          // inserted
+arr[i];
+'%}
