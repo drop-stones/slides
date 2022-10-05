@@ -10,13 +10,117 @@ date: 2022-10-03
   <div class="subsection">
     <h2>提案手法の概要</h2>
 
-    <h5>目的: データの保護</h5>
+    <ul>
+      <li>
+        目的: データの保護
+        <ul>
+          <li>Buffer overflowの検知</li>
+          <li>未初期化変数の使用</li>
+          <li>Use after freeの検知</li>
+          <li>etc</li>
+        </ul>
+      </li>
+      <li>
+        特徴(目標):
+        <ul>
+          <li>
+            構造体のメンバ変数を保護<br>
+            &rarr; 高精度な保護
+          </li>
+          <li>
+            選択的データ保護<br>
+            &rarr; 高効率な保護
+          </li>
+        </ul>
+      </li>
+    </ul>
 
-    <h5>手法: </h5>
+    <h5>保護手法: Data-Flow Integrity</h5>
+    <ul>
+      <li>
+        保護のアイデア: プログラム実行中に以下を監視
+        <ul>
+          <li>データが<strong>正しく</strong>書き込まれる</li>
+          <li>データが<strong>正しく</strong>読み込まれる</li>
+        </ul>
+      </li>
+      <li>
+        保護の流れ
+        <ol>
+          <li>Use-Def解析: <strong>正しい</strong>データの読み書きの関係を求める</li>
+          <li>チェック関数の挿入</li>
+          <li>実行時チェック</li>
+        </ol>
+      </li>
+    </ul>
+
+    <div class="flex-container">
+      <div>
+        例)
+        {% highlight c linenos %}{{ dfi-example }}{% endhighlight %}
+      </div>
+    </div>
+
+    <p>Step.1 Use-Def解析</p>
+    正しい定義と使用の関係を求める
+    <div class="flex-container">
+      <div>
+        {% highlight c linenos %}{{ dfi-example }}{% endhighlight %}
+      </div>
+      <div>
+        Use-Def解析の結果
+        <table>
+          <tr>
+            <th></th>
+            <th>Use</th>
+            <th>Def</th>
+          </tr>
+          <tr>
+            <th>v.x</th>
+            <td>L.4</td>
+            <td>L.7</td>
+          </tr>
+          <tr>
+            <th>v.y</th>
+            <td>L.5</td>
+            <td>L.8</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <p>Step.2 チェック関数の挿入</p>
+    Step.1の結果に沿ったデータの読み書きが行われるかをチェックする関数を挿入
+    <ul>
+      <li><code>set_id()</code>: データの書き込み情報を取得 + メタデータに保存</li>
+      <li><code>check_id()</code>: メタデータから正しい読み込みかどうか確認</li>
+    </ul>
+    <div class="flex-container">
+      <div>
+        {% highlight c linenos %}{{ dfi-example-instrumented }}{% endhighlight %}
+      </div>
+    </div>
+
+    <p>Step.3 実行時チェック</p>
+    プログラムを実行し，正しく読み書きされているかどうかをチェック
+    <div class="flex-container">
+      <div class="width-half">
+        {% highlight c linenos %}{{ dfi-example-instrumented }}{% endhighlight %}
+      </div>
+      <div class="width-half">
+        <img src="{{ img_path }}/dfi_example.drawio.svg">
+      </div>
+    </div>
   </div>
+
+  <p>
+    上記の例でのポイント: メンバ変数に対して，<strong>別々</strong>のIDを付与している<br>
+    &rarr; メンバ変数を区別して保護可能
+  </p>
 
   <div class="subsection">
     <h2>Field-sensitive DFIの問題点</h2>
+<!--
     <h4>問題点1: 全データ保護は重い</h4>
     <table>
       <tr>
@@ -40,8 +144,9 @@ date: 2022-10-03
         <td>x2</td>
       </tr>
     </table>
+-->
 
-    <h4>問題点2: メタデータの粒度を細かくしなければならない</h4>
+    <h4>問題点: メタデータの粒度を細かくしなければならない</h4>
     <h5>Field-<text style="color:red">in</text>sensitive DFIの場合</h5>
     <p>
       "複数バイト &harr; 1 定義ID" の粒度で定義IDを付与<br>

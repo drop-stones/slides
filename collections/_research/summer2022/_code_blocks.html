@@ -1,3 +1,29 @@
+{% assign dfi-example = '
+struct Vec2D { int x, y; };
+
+struct Vec2D v;
+v.x = 100;
+v.y = 200;
+
+v.x;
+v.y;
+'%}
+
+{% assign dfi-example-instrumented = '
+struct Vec2D { int x, y; };
+
+struct Vec2D v;
+v.x = 100;
+set_id(&v.x, ID1);
+v.y = 200;
+set_id(&v.y, ID2);
+
+check_id(&v.x, ID1);
+v.x;
+check_id(&v.y, ID2);
+v.y;
+'%}
+
 {% assign aligned = '
 struct Aligned {
   int x, y;
