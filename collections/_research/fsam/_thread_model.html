@@ -1,3 +1,155 @@
 <div class="subsection" id="thread-model">
   <h3>{{ thread-model-title }}</h3>
+
+  <p>
+    スレッドの作成/合流(fork/join)を考慮するため，モデル化を行う．
+  </p>
+
+  行うモデル化は以下:
+  <ul>
+    <li>
+      スレッドのモデル化: スレッド $t$ をどう表現するか
+    </li>
+    <li>
+      fork/joinのモデル化: スレッド間のfork/joinをどう表現するか
+    </li>
+  </ul>
+
+  <h5>Abstract Threads</h5>
+  
+  <p>
+    スレッドの抽象化 $t$ は<i>context-sensitive fork sites</i>で表現・区別される．<br>
+    $t$: (c : call-stack, fk : fork site)
+  </p>
+
+  例: スレッド<code>t0, t1, t2</code>のモデル化
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ thread-model-example-main }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ thread-model-example-foo }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ thread-model-example-bar }}{% endhighlight %}
+    </div>
+  </div>
+
+  <ul>
+    <li>
+      <code>t0: ([], null)</code>
+      <ul>
+        <li>mainスレッドのみ，fork siteがない</li>
+      </ul>
+    </li>
+    <li>
+      <code>t1: ([], L.3)</code>
+    </li>
+    <li>
+      <code>t2: ([L.3], L.9)</code>
+    </li>
+  </ul>
+
+  <h5>Fork/Joinのモデル化</h5>
+
+  <p>
+    fork/joinは2スレッド間の関係として表現される．<br>
+    $t \Longrightarrow^{(c, fk)} t'$: context$(c, fk)$にて，スレッド $t$ が新たなスレッド $t'$ を作成<br>
+    $t \Longleftarrow^{(c, jn)} t'$ : context$(c, jn)$にて，スレッド $t'$ がスレッド $t$ へと合流
+  </p>
+  <p>
+    この関係は推移律を満たす(後述)．
+  </p>
+
+  例: スレッド<code>t0, t1, t2</code>間のfork/join関係
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ thread-model-example-main }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ thread-model-example-foo }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ thread-model-example-bar }}{% endhighlight %}
+    </div>
+  </div>
+
+  Fork関係:
+  <ul>
+    <li>
+      <code>t0 &rarr; t1 ([], L.3)</code>
+    </li>
+    <li>
+      <code>t1 &rarr; t2 ([L.3], L.9)</code>
+    </li>
+    <li>
+      <code>t0 &rarr; t2 ([], L.3)</code>
+      <ul>
+        <li>上記2つのfork関係による推移律より</li>
+      </ul>
+    </li>
+  </ul>
+
+  Join関係:
+  <ul>
+    <li>
+      <code>t0 &larr; t1 ([L.3], L.5)</code>
+    </li>
+    <li>
+      <code>t1 &larr; t2 ([L.3, L.9), L.11)</code>
+    </li>
+    <li>
+      <code>t0 &larr; t2 ([L.3], L.5)</code>
+      <ul>
+        <li>上記2つのjoin関係による推移律より</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>Siblingスレッド</h5>
+
+  以下の条件が成り立つ場合，2スレッドを<i>Siblingスレッド</i> $t \bowtie t'$ と定義する:
+  <ul>
+    <li>2スレッドは同じ親スレッド $t$ を持つ</li>
+    <li>2スレッドのcontext$(c, fk)$が異なる</li>
+  </ul>
+
+  例: Siblingスレッド<code>t1, t2</code>
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ siblings-main }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ siblings-foo }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ siblings-bar }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/siblings.drawio.svg">
+  </div>
+
+  <p>
+    また，Siblingスレッド $t \bowtie t'$ に対して，$t$が合流(join)した後$t'$が生成(fork)される場合，<i>Happens-Before(HB)関係</i> $t > t'$ が成り立つ．
+  </p>
+
+  例: <code>t1 > t2</code>
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ siblings-hb-main }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ siblings-foo }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ siblings-bar }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/siblings-hb.drawio.svg">
+  </div>
+
+  <h5>まとめ</h5>
+
+  <p>
+    スレッドやfork/joinの抽象化により，スレッド間の関係(親子関係，HB関係)が求まる．<br>
+    以下では，これらの関係を元により詳細な解析を行う．
+  </p>
 </div>

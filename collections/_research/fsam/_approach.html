@@ -1,6 +1,29 @@
 <div class="section" id="approach">
   <h2>{{ approach-title }}</h2>
 
+  <p>
+    FSAMは，Sparse解析の手順に従って解析を行う．<br>
+    マルチスレッドプログラムを解析する際のポイントは<strong>同期処理(fork/join, lock/unlock)の扱い</strong>である．
+  </p>
+
+  FSAMによるSparse解析の流れ:
+  <ol>
+    <li>
+      事前解析: Flow-<span style="color:red">in</span>sensitive Andersen's pointer analysis
+    </li>
+    <li>
+      Value-Flowグラフの構築
+      <ul>
+        <li>スレッドのモデル化</li>
+        <li>fork/joinを考慮したエッジの追加</li>
+        <li>lock/unlockを考慮したエッジの削除</li>
+      </ul>
+    </li>
+    <li>
+      Sparse解析: Flow-sensitiveポインタ解析 on Value-Flowグラフ
+    </li>
+  </ol>
+
   {% include_relative _thread_model.html %}
   {% include_relative _thread_oblivious.html %}
   {% include_relative _thread_aware.html %}

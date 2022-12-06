@@ -1,3 +1,96 @@
 <div class="section" id="background">
   <h2>{{ background-title }}</h2>
+
+  <h4>ポインタ解析</h4>
+
+  <p>ポインタ<code>p</code>がどのオブジェクトを指しうるかを解析</p>
+
+  例: <code>p</code>は何を指す？
+  <div class="flex-container">
+    {% highlight c linenos %}{{ pta-example }}{% endhighlight %}
+  </div>
+
+
+  <h5>Flow-<span style="color:red">in</span>sensitive (Compositional style)</h5>
+
+  <p>
+    プログラムポイントを区別せず，<strong>コード全体に対して1つ</strong>の結果を求める
+  </p>
+
+  例: <code>p</code> points-to <code>{ x, y }</code>
+  <div class="flex-container">
+    {% highlight c linenos %}{{ pta-example }}{% endhighlight %}
+  </div>
+
+  <h5>Flow-sensitive (Transitional style)</h5>
+
+  <p>
+    <strong>プログラムポイント毎</strong>に結果を求める
+  </p>
+
+  例: <code>L.6: p</code> points-to <code>{ y }</code>
+  <div class="flex-container">
+    {% highlight c linenos %}{{ pta-example }}{% endhighlight %}
+  </div>
+
+  <!--
+  <h4>Context-Sensitivity</h4>
+  -->
+
+  <h4>Value-Flowグラフ (Sparse解析)</h4>
+
+  <p>
+    <i>Def-use chain</i>情報を元に Def &rarr; Use へとエッジを貼ったグラフ<br>
+    Value-Flowグラフを辿ることで，<strong>Sparse解析</strong>が可能になる．
+  </p>
+
+  例: ポインタ<code>p</code>に関するvalue-flowグラフ
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ pta-example }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/value-flow-graph.drawio.svg">
+  </div>
+
+  <h5>Sparse解析の流れ</h5>
+
+  <ol>
+    <li>
+      事前解析(pre-analysis): 高速だが精度の低い解析
+      <ul>
+        <li>e.g., Flow-<span style="color:red">in</span>sensitiveなポインタ解析</li>
+      </ul>
+    </li>
+    <li>
+      Value-Flowグラフの構築: 事前解析の結果より<i>def-use chain</i>を求め，グラフを構築
+    </li>
+    <li>
+      Sparse解析: Value-Flowグラフ上でより精度の高い解析を実行
+      <ul>
+        <li>e.g., Flow-sensitiveなポインタ解析</li>
+      </ul>
+    </li>
+  </ol>
+
+  例:
+  <div class="flex-container">
+    <div>
+      {% highlight c linenos %}{{ pta-example }}{% endhighlight %}
+    </div>
+    <div>
+      <p>
+        Step.1: Flow-<span style="color:red">in</span>sensitiveなポインタ解析<br>
+        <code>p</code> points-to <code>{ x, y }</code>
+      </p>
+      <p>
+        Step.2: Value-Flowグラフの構築<br>
+        <img src="{{ img_path }}/value-flow-graph.drawio.svg">
+      </p>
+      <p>
+        Step.3: Flow-sensitiveなポインタ解析 on Value-Flowグラフ<br>
+        <code>p</code> points-to <code>{ y }</code>
+      </p>
+    </div>
+  </div>
+
 </div>
