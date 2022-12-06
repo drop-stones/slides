@@ -1,3 +1,76 @@
 <div class="section" id="abstract">
   <h2>{{ abst-title }}</h2>
+
+  <h4>FSAMのゴール</h4>
+
+  <p>
+    <strong>マルチスレッド</strong>プログラムを対象とした<strong>Flow-sensitive</strong>なポインタ解析<br>
+    (<strong>F</strong>low-<strong>S</strong>ensitive pointer <strong>A</strong>nalysis for <strong>M</strong>ultithreaded C programs)
+  </p>
+
+  <h4>困難</h4>
+
+  <ul>
+    <li>無数にあるスレッドインターリーブの扱い</li>
+    <li>
+      並列実行されうるコード部分の算出 in <strong>C</strong>
+      <ul>
+        <li>pthreadを用いた同期処理には豊富な表現力がある</li>
+        <li>&rarr; 正確な解析が困難</li>
+      </ul>
+    </li>
+    <li>大規模マルチスレッドプログラムを解析するためのスケーラビリティ</li>
+  </ul>
+
+  <h4>解決策</h4>
+
+  上記の困難を解決するため，以下の解析アルゴリズムを提案:
+  <ul>
+    <li>
+      May-Happen-in-Parallel(MHP)解析 in C
+      <ul>
+        <li>目的: 並列実行されうるコード部分の算出</li>
+        <li>扱う命令: スレッドの作成/合流(fork/join)</li>
+        <li>精度: Flow-, Context-sensitive</li>
+      </ul>
+    </li>
+    <li>
+      Lock解析
+      <ul>
+        <li>
+          目的: 他スレッドから干渉されないコード領域の算出
+          <ul>
+            <li>考慮すべきスレッドインターリーブを減らせる</li>
+          </ul>
+        </li>
+        <li>扱う命令: mutexロックの獲得/解放(lock/unlock)</li>
+        <li>精度: Flow- Context-sensitive</li>
+      </ul>
+    </li>
+    <li>
+      Sparse解析
+      <ul>
+        <li>目的: 解析に必要な命令のみ訪問し，解析効率を向上</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>結果</h4>
+
+  <ul>
+    <li>
+      既存手法と比較して
+      <ul>
+        <li>解析時間: x12減少</li>
+        <li>メモリ使用量: x28減少</li>
+      </ul>
+    </li>
+    <li>
+      10万行を超える検体に対してスケール
+      <ul>
+        <li>既存手法ではタイムアウト</li>
+      </ul>
+    </li>
+  </ul>
+
 </div>
