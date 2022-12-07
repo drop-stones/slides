@@ -7,6 +7,50 @@ p = &y;
 *p;
 "%}
 
+{% assign motivating-example = "
+1 : int *p, a, b, c, d, e;
+2 : 
+3 : // Thread t0
+4 : void main() {
+5 :   p = &a;
+6 :   fork(t1, foo);
+7 :   lock(m);
+8 :   p = &b;
+9 :   p = &c;
+10:   unlock(m);
+11:   join(t1);
+12:   *p;
+13: }
+"%}
+
+{% assign motivating-example-foo = "
+
+
+14: // Thread t1
+15: void foo() {
+16:   lock(m);
+17:   p = &d;
+18:   p = &e;
+19:   unlock(m);
+20: }
+"%}
+
+{% assign motivating-example-seq = "
+1 : int *p, a, b, c, d, e;
+2 : 
+3 : // Thread t0
+4 : void main() {
+5 :   p = &a;
+6 :   foo();  // <--
+7 :   lock(m);
+8 :   p = &b;
+9 :   p = &c;
+10:   unlock(m);
+11:   join(t1);
+12:   *p;
+13: }
+"%}
+
 {% assign thread-model-example-main = "
 1: // Thread t0
 2: void main() {
@@ -66,4 +110,21 @@ p = &y;
 6:   fork(t2, bar);
 7:   join(t2);
 8: }
+"%}
+
+{% assign interleaving-example = "
+1: // Thread t0
+2: void main() {
+3:   s1;
+4:   fork(t1, foo);
+5:   s2;
+6:   join(t1);
+7:   s3;
+8: }
+"%}
+{% assign interleaving-example-foo = "
+9 : // Thread t1
+10: void foo() {
+11:   s4;
+12: }
 "%}

@@ -93,4 +93,24 @@
     </div>
   </div>
 
+  <h4>Motivating Example: マルチスレッドプログラムのポインタ解析</h4>
+
+  <p>
+    マルチスレッドプログラムに対してSparse解析を行う際，<strong>同期処理(fork/join, lock/unlock)の扱い</strong>が鍵となる．
+  </p>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ motivating-example }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ motivating-example-foo }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/motivating-example-vfg.svg">
+  </div>
+
+  <p>
+    次節では，fork/join, lock/unlockを考慮したValue-Flowグラフ作成アルゴリズムを見ていく．
+  </p>
+
 </div>

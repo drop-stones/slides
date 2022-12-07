@@ -1,3 +1,77 @@
 <div class="section" id="value-flow-analysis">
   <h3>{{ value-flow-analysis-title }}</h3>
+
+  <p>
+    MHP関係を用いて，Value-Flowグラフにinterleaveを考慮したDef-Useエッジを追加する．
+  </p>
+
+  以下の条件に合致するノード間にDef-Useエッジを追加する:
+  <ul>
+    <li>
+      2命令が同じ変数へのアクセス命令であり，少なくとも片方が定義
+    </li>
+    <li>
+      2命令が並列実行されうる
+    </li>
+  </ul>
+
+  <p>
+    例: Motivating Example
+  </p>
+  <div class="flex-container">
+    <div class="width-half">
+      <p>
+        作成途中のValue-Flowグラフ
+      </p>
+      <img src="{{ img_path }}/motivating-example-before-interleave.svg">
+    </div>
+    <div class="width-half">
+      <p>
+        Interleaving解析の結果
+      </p>
+      <img src="{{ img_path }}/interleaving-ans.svg">
+    </div>
+  </div>
+
+  上記の解析結果より，{ <code>p = &b</code>, <code>p = &c</code> } &rlarr; { <code>p = &d</code>, <code>p = &e</code> } というエッジが張られる．
+  <div class="flex-container">
+    <div>
+      <p>
+        Interleaveによるエッジを追加
+      </p>
+      <img src="{{ img_path }}/motivating-example-after-interleave.svg">
+    </div>
+  </div>
+
+  <p>
+    しかし，実はこのValue-Flowグラフには余計なエッジが含まれている．
+  </p>
+
+  <div class="question">
+    <strong>Q.</strong> 余計なエッジはどれ？ (ヒント: lock内はアトミックに実行される)<br>
+    <div class="tab value-flow-analysis-question">
+      <button class="tablinks defaultTab" onclick="openTab(event, 'Question')">Question</button>
+      <button class="tablinks" onclick="openTab(event, 'Answer')">Answer</button>
+      <button class="tablinks" onclick="openTab(event, 'PreciseVFG')">Precise VFG</button>
+    </div>
+
+    <div class="value-flow-analysis-question">
+      <div id="Question" class="tabcontent">
+        <img src="{{ img_path }}/value-flow-analysis-question.svg">
+      </div>
+      <div id="Answer" class="tabcontent">
+        <img src="{{ img_path }}/value-flow-analysis-answer.svg">
+        <p>
+          計6本
+        </p>
+      </div>
+      <div id="PreciseVFG" class="tabcontent">
+        <img src="{{ img_path }}/precise-value-flow-graph.svg">
+      </div>
+    </div>
+  </div>
+
+  <p>
+    冗長なエッジを削除するため，mutexロックの確保/解放(lock/unlock)を解析する．
+  </p>
 </div>

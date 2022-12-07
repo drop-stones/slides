@@ -1,6 +1,23 @@
 <div class="subsection" id="thread-aware-def-use">
   <h3>{{ thread-aware-def-use-title }}</h3>
 
+  <p>
+    Interleaveを考慮した(Thread-aware) Def-Useエッジを求める．
+  </p>
+
+  Thread-aware Def-Useエッジを求める3 Step:
+  <ul>
+    <li>
+      Interleaving解析 (May-Happen-in-Parallel解析): 並列実行される命令列を求める
+    </li>
+    <li>
+      Value-Flow解析: interleaveを考慮したDef-Useエッジを張る
+    </li>
+    <li>
+      Lock解析: lock/unlockを考慮して，余分なDef-Useエッジを削除
+    </li>
+  </ul>
+
   {% include_relative _interleaving_analysis.html %}
   {% include_relative _value_flow_analysis.html %}
   {% include_relative _lock_analysis.html %}

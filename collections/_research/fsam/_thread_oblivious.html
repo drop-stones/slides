@@ -1,3 +1,55 @@
 <div class="subsection" id="thread-oblivious-def-use">
   <h3>{{ thread-oblivious-def-use-title }}</h3>
+
+  <p>
+    スレッド間の関係を用いてfork/join命令の前後にあるDef-Useを求める．
+  </p>
+
+  明らかな(Thread-Oblivious) Def-Useは以下の3パターン:
+  <ul>
+    <li>
+      <code>fork(t1, foo)</code>を関数呼び出し<code>foo()</code>と解釈して得られるDef-Use
+    </li>
+    <li>
+      <code>fork(t1, foo)</code>の前後にあるDef-Use
+    </li>
+    <li>
+      スレッド<code>t1</code>内のDefと<code>join(t1)</code>以降のUseで形成されるDef-Use
+    </li>
+  </ul>
+
+  例: Motivating Example
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ motivating-example }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ motivating-example-foo }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/motivating-example-threads.drawio.svg">
+    <img src="{{ img_path }}/motivating-example-vfg.svg">
+  </div>
+
+  パターン1: <code>fork(t1, foo)</code>を関数呼び出し<code>foo()</code>と解釈して得られるDef-Use
+  <div class="flex-container">
+    <img src="{{ img_path }}/thread-oblivious-pattern-1.drawio.svg">
+    <img src="{{ img_path }}/fork-to-call.svg">
+  </div>
+
+  パターン2: <code>fork(t1, foo)</code>前後にあるDef-Use (fallthroughエッジ)
+  <div class="flex-container">
+    <img src="{{ img_path }}/thread-oblivious-pattern-2.drawio.svg">
+    <img src="{{ img_path }}/fallthrough.svg">
+  </div>
+
+  パターン3: スレッド<code>t1</code>内のDefと<code>join(t1)</code>以降のUseで形成されるDef-Use
+  <div class="flex-container">
+    <img src="{{ img_path }}/thread-oblivious-pattern-3.drawio.svg">
+    <img src="{{ img_path }}/join.svg">
+  </div>
+
+  <p>
+    今節ではfork/joinから明らかなDef-Useエッジを作成した．<br>
+    次節ではより細かいinterleaveを考慮したエッジを作成する．<br>
+  </p>
 </div>

@@ -1,3 +1,130 @@
 <div class="section" id="interleaving-analysis">
   <h3>{{ interleaving-analysis-title }}</h3>
+
+  <p>
+    並列実行される (<i>May-Happen-in-Parallel(MHP)関係</i>にある) 命令列を求める．
+  </p>
+
+  <h5>アルゴリズム</h5>
+
+  制御フロー(CFG + fork/join関係)に沿った，データフロー解析:
+  <ul>
+    <li>
+      方向: 前向き
+    </li>
+    <li>
+      Domain: スレッドの集合
+      <ul>
+        <li>収集する情報: 並列実行されるスレッド</li>
+      </ul>
+    </li>
+    <li>
+      Transfer functions: 以下の具体例で説明
+    </li>
+  </ul>
+
+  例: 単純なfork/join (Motivating Exampleと同様)
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ interleaving-example }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ interleaving-example-foo }}{% endhighlight %}
+    </div>
+    <img src="{{ img_path }}/motivating-example-threads.drawio.svg">
+    <div>
+      <p>CFG + fork/join関係</p>
+      <img src="{{ img_path }}/interleaving-cfg.svg">
+    </div>
+  </div>
+
+  Transfer function.1: 初期集合
+  <div class="flex-container">
+    <div>
+      初期集合: $\phi$<br>
+      意味: 並列実行されるスレッドなし
+    </div>
+    <div>
+      <img src="{{ img_path }}/interleaving-init.svg">
+    </div>
+  </div>
+
+  Transfer function.2: fork
+  <div class="flex-container">
+    <div>
+      <p>
+        $ t \Longrightarrow t' $:<br>
+        <ul>
+          <li>
+            $ OUT_t = IN_t \cup \{t'\} $<br>
+          </li>
+          <li>
+            $ IN_{t'} = IN_t \cup \{t\} $
+          </li>
+        </ul>
+      </p>
+      <p>
+        例: <code>t0: fork(t1, foo)</code><br>
+        <ul>
+          <li>
+            $ IN_{s2} = \{ \} \cup \{ t1 \} $
+          </li>
+          <li>
+            $ IN_{s4} = \{ \} \cup \{ t0 \} $
+          </li>
+        </ul>
+      </p>
+    </div>
+    <div>
+      <img src="{{ img_path }}/interleaving-fork.svg">
+    </div>
+  </div>
+
+  Transfer function.3: join
+  <div class="flex-container">
+    <div>
+      <p>
+        $ t \Longleftarrow t' $
+        <ul>
+          <li>
+            $ OUT_t = IN_t \setminus \{ t' \} $
+          </li>
+        </ul>
+      </p>
+      <p>
+        例: <code>t0: join(t1)</code><br>
+        <ul>
+          <li>
+            $ OUT_{join(t1)} = \{ t1 \} \setminus \{ t1 \} = \phi $
+          </li>
+        </ul>
+      </p>
+    </div>
+    <div>
+      <img src="{{ img_path }}/interleaving-join.svg">
+    </div>
+  </div>
+
+
+  <div class="question">
+    <strong>Q.</strong> Motivating Exampleに対してInterleaving解析をせよ<br>
+    <div class="tab interleaving-analsys-question">
+      <button class="tablinks defaultTab" onclick="openTab(event, 'Q1')">Q.1</button>
+      <button class="tablinks" onclick="openTab(event, 'Q2')">Q.2</button>
+      <button class="tablinks" onclick="openTab(event, 'Ans')">Answer</button>
+    </div>
+
+    <div class="interleaving-analsys-question">
+      <div id="Q1" class="tabcontent">
+        <img src="{{ img_path }}/interleaving-q1.svg">
+      </div>
+      <div id="Q2" class="tabcontent">
+        <img src="{{ img_path }}/interleaving-q2.svg">
+      </div>
+      <div id="Ans" class="tabcontent">
+        <img src="{{ img_path }}/interleaving-ans.svg">
+      </div>
+    </div>
+  </div>
+
 </div>
