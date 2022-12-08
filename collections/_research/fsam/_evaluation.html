@@ -1,3 +1,217 @@
 <div class="section" id="evaluation">
   <h2>{{ evaluation-title }}</h2>
+
+  <ul>
+    <li>
+      実験環境: 2.70GHz Intel Xeon Quad Core CPU, 64GB memory, Ubuntu Linux
+    </li>
+    <li>
+      実装: LLVM-3.5ベース, Andersenのポインタ解析(事前解析)
+    </li>
+    <li>
+      比較研究: マルチスレッドプログラムを対象としたFlow-sensitiveなポインタ解析がないため，NonSpase解析を自作
+      <ul>
+        <li>
+          RR[PLDI'99]: Cilk(並列計算用の拡張C)を対象としたFlow-sensitiveなポインタ解析
+        </li>
+        <li>
+          PCG[POPL'11]: MHP解析 for pthread
+        </li>
+      </ul>
+    </li>
+    <li>
+      検体: 10個のCプログラム
+    </li>
+  </ul>
+
+  <table>
+    <tr>
+      <th>Benchmark</th>
+      <th>LOC</th>
+    </tr>
+    <tr>
+      <td>work_count</td>
+      <td>6330</td>
+    </tr>
+    <tr>
+      <td>kmeans</td>
+      <td>6008</td>
+    </tr>
+    <tr>
+      <td>radiosity</td>
+      <td>12781</td>
+    </tr>
+    <tr>
+      <td>automount</td>
+      <td>13170</td>
+    </tr>
+    <tr>
+      <td>ferret</td>
+      <td>15735</td>
+    </tr>
+    <tr>
+      <td>bodytrack</td>
+      <td>19063</td>
+    </tr>
+    <tr>
+      <td>httpd_server</td>
+      <td>52616</td>
+    </tr>
+    <tr>
+      <td>mt_daapd</td>
+      <td>57102</td>
+    </tr>
+    <tr>
+      <td>raytrace</td>
+      <td>86373</td>
+    </tr>
+    <tr>
+      <td>x264</td>
+      <td>113481</td>
+    </tr>
+  </table>
+
+  <ul>
+    <li>
+      RQ.1: 既存研究(NonSparse)と比較し，FSAMの解析時間・メモリ使用量はどの程度か？
+    </li>
+    <li>
+      RQ.2: FSAMが提案する3つの解析アルゴリズムは解析時間にどう影響するか？
+      <ul>
+        <li>Interleaving解析: 既存研究PCG[POPL'11]と比較</li>
+        <li>Value-Flow解析: 解析あり と なし を比較</li>
+        <li>Lock解析: 解析あり と なし を比較</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h5>実験1 FSAM vs. NonSparse(RR + PCG)</h5>
+
+  <table>
+    <tr>
+      <th rowspan="2">Program</th>
+      <th colspan="2">Time(s)</th>
+      <th colspan="2">Memory(MB)</th>
+    </tr>
+    <tr>
+      <th>FSAM</th>
+      <th>NonSparse</th>
+      <th>FSAM</th>
+      <th>NonSparse</th>
+    </tr>
+    <tr>
+      <td>word_count</td>
+      <td>3.04</td>
+      <td>17.40</td>
+      <td>13.79</td>
+      <td>53.76</td>
+    </tr>
+    <tr>
+      <td>kmeans</td>
+      <td>2.50</td>
+      <td>18.19</td>
+      <td>18.27</td>
+      <td>53.19</td>
+    </tr>
+    <tr>
+      <td>radiosity</td>
+      <td>6.77</td>
+      <td>29.29</td>
+      <td>38.65</td>
+      <td>95.00</td>
+    </tr>
+    <tr>
+      <td>automount</td>
+      <td>8.66</td>
+      <td>83.82</td>
+      <td>27.56</td>
+      <td>364.67</td>
+    </tr>
+    <tr>
+      <td>ferret</td>
+      <td>13.49</td>
+      <td>87.10</td>
+      <td>52.14</td>
+      <td>934.57</td>
+    </tr>
+    <tr>
+      <td>bodytrack</td>
+      <td>128.80</td>
+      <td>2809.89</td>
+      <td>313.66</td>
+      <td>12410.16</td>
+    </tr>
+    <tr>
+      <td>httpd_server</td>
+      <td>191.22</td>
+      <td>2079.43</td>
+      <td>55.78</td>
+      <td>6578.46</td>
+    </tr>
+    <tr>
+      <td>mt_daapd</td>
+      <td>90.67</td>
+      <td>2667.55</td>
+      <td>37.92</td>
+      <td>3403.26</td>
+    </tr>
+    <tr>
+      <td>raytrace</td>
+      <td>284.61</td>
+      <td>OOT</td>
+      <td>135.06</td>
+      <td>OOT</td>
+    </tr>
+    <tr>
+      <td>x264</td>
+      <td>531.55</td>
+      <td>OOT</td>
+      <td>129.58</td>
+      <td>OOT</td>
+    </tr>
+    <tr>
+      <th>Ave.</th>
+      <td colspan="2">12x faster</td>
+      <td colspan="2">28x less</td>
+    </tr>
+  </table>
+
+  <p>
+    まとめ: 10万行程度のCプログラムに対して，効率よく解析可能
+  </p>
+
+  <h5>実験2: FSAMが提案する3つの解析による影響</h5>
+
+  <ul>
+    <li>
+      No-Interleaving(MHP解析): 既存手法PCGによるMHP解析で代替
+    </li>
+    <li>
+      No-Value-Flow: Value-Flowを考慮せず，エッジを張る
+      <ul>
+        <li>本来はDef-Use関係にないノード間にもエッジが張られてしまう</li>
+      </ul>
+    </li>
+    <li>
+      No-Lock: mutexロックを考慮せず，冗長なDef-Useエッジが含まれる
+    </li>
+  </ul>
+
+  <div class="flex-container">
+    <img src="{{ img_path }}/fsam-analysis-impact.png">
+  </div>
+
+  上記の結果が得られた理由:
+  <ul>
+    <li>
+      No-Interleaving: 既存手法と比較し，fork/joinを適切に対処し，正確なMHP関係が求められる
+    </li>
+    <li>
+      No-Value-Flow: Def-Use関係にあるノード間にのみエッジを張ることで，大部分のインターリーブを削減できる
+    </li>
+    <li>
+      No-Lock: mutexロックを考慮し，冗長なインターリーブを削減できる
+    </li>
+  </ul>
+  
 </div>

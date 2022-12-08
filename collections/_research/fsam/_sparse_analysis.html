@@ -1,3 +1,33 @@
 <div class="section" id="sparse-analysis">
   <h3>{{ sparse-analysis-title }}</h3>
+
+  <p>
+    求まったValue-Flowグラフ上で，Flow-sensitiveなポインタ解析を行う．<br>
+    アルゴリズムはsequentialプログラムに対するものと同じ．
+  </p>
+
+  例: Motivating Exampleに対するSparse解析
+  <div class="tab sparse-analysis">
+    <button class="tablinks defaultTab" onclick="openTab(event, 'Step0')">Step.0</button>
+    <button class="tablinks" onclick="openTab(event, 'Step1')">Step.1</button>
+    <button class="tablinks" onclick="openTab(event, 'Step2')">Step.2</button>
+    <button class="tablinks" onclick="openTab(event, 'Step3')">Step.3</button>
+  </div>
+
+  <div class="sparse-analysis">
+    <div id="Step0" class="tabcontent">
+      <img src="{{ img_path }}/precise-value-flow-graph.svg">
+    </div>
+    <div id="Step1" class="tabcontent">
+      <img src="{{ img_path }}/sparse-analysis-step1.svg">
+    </div>
+    <div id="Step2" class="tabcontent">
+      <img src="{{ img_path }}/sparse-analysis-step2.svg">
+    </div>
+    <div id="Step3" class="tabcontent">
+      <img src="{{ img_path }}/sparse-analysis-step3.svg">
+    </div>
+  </div>
+
+  以上で，マルチスレッドプログラムに対するFlow-sensitiveなポインタ解析が実現できる．
 </div>

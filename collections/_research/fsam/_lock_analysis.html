@@ -1,3 +1,152 @@
 <div class="section" id="lock-analysis">
   <h3>{{ lock-analysis-title }}</h3>
+
+  <p>
+    mutexロックで保護された命令列はアトミック(他スレッドから非干渉)である性質を考慮し，冗長なDef-Useエッジを削除する．
+  </p>
+
+  mutexロックで保護された命令列は，以下の3つで定義される:
+  <ul>
+    <li>
+      Lock-Release Span $sp_m$: <code>lock(m)</code>から<code>unlock(m)</code>までの範囲
+    </li>
+    <li>
+      Span Head $HD(sp_m, o)$: $sp_m$の先頭時点のオブジェクト$o$にアクセスする命令の集合
+    </li>
+    <li>
+      Span Tail $TL(sp_m, o)$: $sp_m$の末尾時点のオブジェクト$o$を定義する命令の集合
+    </li>
+  </ul>
+
+  <p>
+    3つの定義を用いて，$sp_m$内の命令列を<strong>1つのノード</strong>として見なし，
+    <ul>
+      <li>
+        どの変数を使用($HD(sp_m, o)$)し，
+      </li>
+      <li>
+        どの変数を定義($TL(sp_m, o)$)するか
+      </li>
+    </ul>
+    を求める．
+  </p>
+
+  例: Motivating ExampleのCFG
+  <div class="flex-container">
+    <img class="width-half" src="{{ img_path }}/lock-release-init.svg">
+  </div>
+
+  <h5>Lock-Release Span</h5>
+  <div class="flex-container">
+    <div class="width-half">
+      <p>
+        目的: <code>lock(m)</code>から<code>unlock(m)</code>までの命令列<br>
+        性質: context-sensitiveなスレッド$t: (c, fk)$で解析<br>
+            &rarr; context-sensitive
+      </p>
+    </div>
+    <div class="width-half">
+      <img src="{{ img_path }}/lock-release-span.svg">
+    </div>
+  </div>
+
+  <h5>Span Head</h5>
+  <div class="flex-container">
+    <div class="width-half">
+      <p>
+        目的: Spanの先頭時点のオブジェクトにアクセスする命令の集合
+      </p>
+      例: <code>p = &b;</code> in t0<br>
+      含まれない例: <code>p = &c;</code> in t0<br>
+      &because; 先頭時点の<code>p</code>にはアクセスしないため
+    </div>
+    <div class="width-half">
+      <img src="{{ img_path }}/lock-release-span-head.svg">
+    </div>
+  </div>
+
+  <h5>Span Tail</h5>
+  <div class="flex-container">
+    <div class="width-half">
+      <p>
+        目的: Spanの末尾時点のオブジェクトを定義する命令の集合
+      </p>
+      例: <code>p = &c;</code> in t0<br>
+      含まれない例: <code>p = &b;</code> in t0<br>
+      &because; 末尾時点では上書きされ，到達しないため
+    </div>
+    <div class="width-half">
+      <img src="{{ img_path }}/lock-release-span-tail.svg">
+    </div>
+  </div>
+
+  <h5>冗長なDef-Useエッジ</h5>
+
+  以下の条件が成立する場合，Def-Useエッジが冗長:
+  <ul>
+    <li>
+      同じmutexロックで保護されている and
+    </li>
+    <li>
+      どちらかが成り立つ:
+      <ul>
+        <li>
+          DefがSpan Tailに含まれない or
+        </li>
+        <li>
+          UseがSpan Headに含まれない
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    定義が末尾に到達しないDef or 先頭で使用しないUseによるDef-Useエッジを冗長として削除する．
+  </p>
+
+  <div class="flex-container">
+    <div style="width: 40%">
+      例: 冗長なDef-Useエッジ:
+      <ul>
+        <li>
+          <code>p = &b</code> &rarr; <code>{ p = &d, p = &e }</code>
+          <ul>
+            <li>&because; <code>p = &b</code> $\notin$ <code>TL(p) in t0</code></li>
+          </ul>
+        </li>
+        <li>
+          <code>p = &d</code> &rarr; <code>{ p = &b, p = &c }</code>
+          <ul>
+            <li>&because; <code>p = &d</code> $\notin$ <code>TL(p) in t1</code></li>
+          </ul>
+        </li>
+        <li>
+          <code>p = &c</code> &rarr; <code>p = &e</code>
+          <ul>
+            <li>&because; <code>p = e</code> $\notin$ <code>HD(p) in t1</code></li>
+          </ul>
+        </li>
+        <li>
+          <code>p = &e</code> &rarr; <code>p = &c</code>
+          <ul>
+            <li>&because; <code>p = &c</code> $\notin$ <code>HD(p) in t0</code></li>
+          </ul>
+        </li>
+      </ul>
+
+      残るDef-Useエッジは<code>TL(p)</code> &rarr; <code>HD(p)</code>:
+      <ul>
+        <li>
+          <code>p = &c</code> &rarr; <code>p = &d</code>
+        </li>
+        <li>
+          <code>p = &e</code> &rarr; <code>p = &b</code>
+        </li>
+      </ul>
+    </div>
+    <div style="width: 60%">
+      <img src="{{ img_path }}/motivating-example-lock-release.svg">
+    </div>
+  </div>
+
 </div>

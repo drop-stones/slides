@@ -54,8 +54,8 @@
 
   <p>
     fork/joinは2スレッド間の関係として表現される．<br>
-    $t \Longrightarrow^{(c, fk)} t'$: スレッド $t$ が新たなスレッド $t': (c, fk)$ を作成<br>
-    $t \Longleftarrow^{(c, jn)} t'$ : スレッド $t'$ がスレッド $t: (c, jn)$ へと合流
+    $t \Longrightarrow^{(c, fk)} t'$: コンテクスト$(c, fk)$において，スレッド $t$ が新たなスレッド $t'$ を作成<br>
+    $t \Longleftarrow^{(c, jn)} t'$ : コンテクスト$(c, jn)$において，スレッド $t'$ がスレッド $t$ へと合流
   </p>
   <p>
     この関係は推移律を満たす(後述)．
@@ -77,13 +77,13 @@
   Fork関係:
   <ul>
     <li>
-      <code>t0 &rarr; t1 ([], L.3)</code>
+      <code>t0 ([], L.3) &rarr; t1</code>
     </li>
     <li>
-      <code>t1 &rarr; t2 ([L.3], L.9)</code>
+      <code>t1 ([L.3], L.9) &rarr; t2</code>
     </li>
     <li>
-      <code>t0 &rarr; t2 ([], L.3)</code>
+      <code>t0 ([], L.3) &rarr; t2</code>
       <ul>
         <li>上記2つのfork関係による推移律より</li>
       </ul>
