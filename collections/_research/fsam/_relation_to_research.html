@@ -1,3 +1,50 @@
 <div class="section" id="relation-to-research">
   <h2>{{ relation-title }}</h2>
+
+  提案手法の目的: メモリ保護 + 並行バグ検知<br>
+  提案手法の流れ:
+  <ol>
+    <li>
+      静的Def-Use解析: 合法なDef-Use関係を計算
+    </li>
+    <li>
+      保護プログラムの計装: 実行時のDef-Use関係を監視するチェックコードを挿入
+    </li>
+    <li>
+      実行時チェック: 実行時に違法なDef-Useを検知
+    </li>
+  </ol>
+
+  提案手法は，<b>静的Def-Use解析</b>ステップでFSAMを利用している:
+  <ul>
+    <li>
+      利用する解析結果1: Value-Flowグラフ for Multithreaded Programs
+      <ul>
+        <li>SoundなValue-Flowグラフ上で，Reaching Definitions解析を行い，合法なDef-Use関係を得る</li>
+        <li>SVFフレームワーク上に実装されており，Field-sensitivityもある</li>
+      </ul>
+    </li>
+    <li>
+      利用する解析結果2: MHP解析 + Lock解析
+      <ul>
+        <li>
+          データレースの関係にあるDef-Useを以下の条件より判定:
+          <ul>
+            <li>
+              2命令がMHP関係にある
+            </li>
+            <li>
+              同一のロックで保護されていない
+            </li>
+          </ul>
+        </li>
+        <li>
+          データレースであるDef-Useを非合法として扱い，実行時にはデータレース検知も行う
+          <ul>
+            <li>データレースの誤検知が多くなる恐れあり</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>

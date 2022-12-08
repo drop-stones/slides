@@ -1,3 +1,41 @@
 <div class="section" id="summary">
   <h2>{{ summary-title }}</h2>
+
+  <ul>
+    <li>
+      目的: マルチスレッドプログラムを対象としたFlow-sensitiveなポインタ解析
+      <ul>
+        <li><b>F</b>low-<b>S</b>ensitive pointer <b>A</b>nalysis for <b>M</b>ultithreaded C programs</li>
+      </ul>
+    </li>
+    <li>
+      マルチスレッドプログラムに対応したValue-Flowグラフを作る3つのアルゴリズム:
+      <ul>
+        <li>
+          Interleaving解析(MHP解析): 並列実行される命令列を特定
+        </li>
+        <li>
+          Value-Flow解析: MHP関係にある and Def-Use関係にあるノード間にエッジ追加
+        </li>
+        <li>
+          Lock解析: mutexロックを考慮し，冗長なエッジを削除
+        </li>
+      </ul>
+    </li>
+    <li>
+      結果
+      <ul>
+        <li>
+          既存手法と比較して
+          <ul>
+            <li>解析時間: x12 faster</li>
+            <li>メモリ使用量: x28 less</li>
+          </ul>
+        </li>
+        <li>
+          10万行を超える検体に対してスケール
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
