@@ -52,7 +52,7 @@
 
   <h5>Span Head</h5>
   <div class="flex-container">
-    <div class="width-half">
+    <div style="width:40%">
       <p>
         目的: Spanの先頭時点のオブジェクトにアクセスする命令の集合
       </p>
@@ -60,14 +60,14 @@
       含まれない例: <code>p = &c;</code> in t0<br>
       &because; 先頭時点の<code>p</code>にはアクセスしないため
     </div>
-    <div class="width-half">
+    <div style="width:60%">
       <img src="{{ img_path }}/lock-release-span-head.svg">
     </div>
   </div>
 
   <h5>Span Tail</h5>
   <div class="flex-container">
-    <div class="width-half">
+    <div style="width:40%">
       <p>
         目的: Spanの末尾時点のオブジェクトを定義する命令の集合
       </p>
@@ -75,7 +75,7 @@
       含まれない例: <code>p = &b;</code> in t0<br>
       &because; 末尾時点では上書きされ，到達しないため
     </div>
-    <div class="width-half">
+    <div style="width:60%">
       <img src="{{ img_path }}/lock-release-span-tail.svg">
     </div>
   </div>

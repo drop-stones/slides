@@ -62,6 +62,9 @@
       <div id="Answer" class="tabcontent">
         <img src="{{ img_path }}/value-flow-analysis-answer.svg">
         <p>
+          <code>p = &b</code> &rarr; <code>{ p = &d, p = &e }</code><br>
+          <code>p = &d</code> &rarr; <code>{ p = &b, p = &c }</code><br>
+          <code>p = &c</code> &lrarr; <code>p = &e</code><br>
           計6本
         </p>
       </div>

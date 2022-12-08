@@ -19,7 +19,7 @@
   
   <p>
     スレッドの抽象化 $t$ は<i>context-sensitive fork sites</i>で表現・区別される．<br>
-    $t$: (c : call-stack, fk : fork site)
+    $t: (c : \text{call-stack}, fk : \text{fork site})$
   </p>
 
   例: スレッド<code>t0, t1, t2</code>のモデル化
@@ -150,6 +150,6 @@
 
   <p>
     スレッドやfork/joinの抽象化により，スレッド間の関係(親子関係，HB関係)が求まる．<br>
-    以下では，これらの関係を元により詳細な解析を行う．
+    以下では，これらの関係を元にValue-Flowグラフを構築していく．
   </p>
 </div>

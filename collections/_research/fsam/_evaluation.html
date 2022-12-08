@@ -9,13 +9,16 @@
       実装: LLVM-3.5ベース, Andersenのポインタ解析(事前解析)
     </li>
     <li>
-      比較研究: マルチスレッドプログラムを対象としたFlow-sensitiveなポインタ解析がないため，NonSpase解析を自作
+      比較研究: 既存研究を組み合わせたNonSpase解析の再現実装
       <ul>
         <li>
           RR[PLDI'99]: Cilk(並列計算用の拡張C)を対象としたFlow-sensitiveなポインタ解析
         </li>
         <li>
           PCG[POPL'11]: MHP解析 for pthread
+        </li>
+        <li>
+          自作した理由: C言語，pthread対応のFlow-sensitiveなポインタ解析がないため
         </li>
       </ul>
     </li>
