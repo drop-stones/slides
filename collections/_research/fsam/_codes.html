@@ -128,3 +128,34 @@ p = &y;
 11:   s4;
 12: }
 "%}
+
+{% assign call-stack-example = "
+1 : // Thread t0
+2 : void main() {
+3 :   foo();  // create t1
+4 :   foo();  // create t2
+5 : }
+6 : 
+7 : void foo() {
+8 :   fork(t);
+9 :   join(t);
+10: }
+"%}
+
+{% assign multi-forked-example = "
+0: // Thread t0
+1: void main() {
+2:   for (int i = 0; i < 8; i++)
+3:     fork(t[i], foo);
+4:   
+5:   for (int i = 0; i < 8; i++)
+6:     join(t[i]);
+7: }
+"%}
+{% assign multi-forked-foo = "
+8 : // Thread t[i] (Multi-Forked)
+9 : void foo() {
+10:   p = &x;
+11:   p = &y;
+12: }
+"%}

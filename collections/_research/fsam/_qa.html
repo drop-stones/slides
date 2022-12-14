@@ -1,0 +1,102 @@
+<div class="section" id="qa">
+  <h3>Q&A</h3>
+
+  <h5>Q. なぜスレッドモデルにcall-stackが必要？</h5>
+
+  <p>
+    <b>A.</b> スレッドを正確に区別したいため
+  </p>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ call-stack-example }}{% endhighlight %}
+    </div>
+    <div>
+      <p>
+        同じfork-siteだが，2つのスレッドを区別:
+        <ul>
+          <li>
+            <code>t1: ([L.3], L.8)</code>
+          </li>
+          <li>
+            <code>t2: ([L.4], L.8)</code>
+          </li>
+        </ul>
+      </p>
+    </div>
+  </div>
+
+  <h5>Q. forループ内の<code>fork</code>はどう扱う？</h5>
+
+  <p>
+    <b>A.</b> スレッドに<i>Multi-Forked</i>である情報を持たせ，そのスレッド内にある命令列は全てMHP関係にあると判定
+  </p>
+
+  <div class="flex-container">
+    <div>
+      {% highlight c %}{{ multi-forked-example }}{% endhighlight %}
+    </div>
+    <div>
+      {% highlight c %}{{ multi-forked-foo }}{% endhighlight %}
+    </div>
+  </div>
+
+  <p>
+    スレッドモデル: LLVM SCEV(ScalarEvolutionAliasAnalysis)により，固定数スレッドに対して，正確にfork/joinを算出
+  </p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/multi-forked-threads.drawio.svg">
+  </div>
+
+  <p>
+    MHP関係: スレッド<code>t[i]</code>内のコードは全て相互にMHP関係<br>
+    (Interleave解析において，並列実行されるスレッドに自身のスレッド<code>t[i]</code>を加えたと解釈しても良い)
+  </p>
+  <ul>
+    <li>L.10 || L.10</li>
+    <li>L.10 || L.11</li>
+    <li>L.11 || L.11</li>
+  </ul>
+
+  <p>
+    Value-Flowグラフ
+  </p>
+  <div class="flex-container">
+    <img src="{{ img_path }}/multi-forked-vfg.drawio.svg">
+  </div>
+
+  <h5>Q. 多段fork/joinの扱い</h5>
+
+  <p>
+    <b>A.</b> 多段fork/joinを考慮したスレッド間の関係を用いて，MHP関係にあるスレッドを収集
+  </p>
+
+  <div class="flex-container">
+    <div>
+      <code>t0</code>のfork関係:
+      <ul>
+        <li><code>t0</code> $\Longrightarrow$ <code>t1</code></li>
+        <li>
+          <code>t0</code> $\Longrightarrow$ <code>t2</code>
+          <ul>
+            <li>
+              <code>t1</code> $\Longrightarrow$ <code>t2</code> との推移律より
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <img src="{{ img_path }}/indirect-fork-join-threads.drawio.svg">
+  </div>
+
+  <div class="flex-container">
+    <div>
+      <code>t1</code>のfork関係:
+      <ul>
+        <li><code>t1</code> $\Longrightarrow$ <code>t2</code></li>
+      </ul>
+    </div>
+    <img src="{{ img_path }}/indirect-fork-join-threads-2.drawio.svg">
+  </div>
+
+</div>
